@@ -1,0 +1,70 @@
+{
+  "project_info": {
+    "project_number": "279495486865",
+    "project_id": "bryan-155ca",
+    "storage_bucket": "bryan-155ca.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:279495486865:android:6ac1ab2d967247aa293e30",
+        "android_client_info": {
+          "package_name": "com.kiki.liveprod"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "279495486865-fgo060aqjprli50vm8hjjcfer19ldpb7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kiki.liveprod",
+            "certificate_hash": "a1b7f2f99b856c183d54a7da32673fb9cf2a4bb9"
+          }
+        },
+        {
+          "client_id": "279495486865-oh376abig57q3o6lpg03gvhfk1gk773r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kiki.liveprod",
+            "certificate_hash": "9bbb3186b2189ef16d8f272bdab59362c395cbb4"
+          }
+        },
+        {
+          "client_id": "279495486865-p449jusb4j15jdif3cboefl6b7cfri0r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kiki.liveprod",
+            "certificate_hash": "beefc9f5b7e26ecc6453f68c49a42fa8d828c876"
+          }
+        },
+        {
+          "client_id": "279495486865-7cb6rvkk2gl0h5s50uundumckop2k9tt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEuxVl37sSv5B6EjdIQxhyy2V4uKU7OEg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "279495486865-7cb6rvkk2gl0h5s50uundumckop2k9tt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "279495486865-03j7htc1a2eggeqg39t3mhg6oq320vvj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bryan"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
