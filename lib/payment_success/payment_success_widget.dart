@@ -63,7 +63,7 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                 : null;
         return Scaffold(
           key: scaffoldKey,
-          backgroundColor: FlutterFlowTheme.of(context).customColor4,
+          backgroundColor: FlutterFlowTheme.of(context).paymentbg,
           body: SafeArea(
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -78,10 +78,10 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                         borderColor: Colors.transparent,
                         borderRadius: 30,
                         buttonSize: 46,
-                        fillColor: FlutterFlowTheme.of(context).button,
+                        fillColor: FlutterFlowTheme.of(context).primaryColor,
                         icon: Icon(
                           Icons.close_rounded,
-                          color: FlutterFlowTheme.of(context).primaryBackground,
+                          color: FlutterFlowTheme.of(context).secondaryColor,
                           size: 20,
                         ),
                         onPressed: () async {
@@ -99,7 +99,7 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                         width: MediaQuery.of(context).size.width,
                         height: 150,
                         decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).customColor4,
+                          color: FlutterFlowTheme.of(context).paymentbg,
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
@@ -138,9 +138,9 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                                         .override(
                                           fontFamily: 'Roboto',
                                           color: FlutterFlowTheme.of(context)
-                                              .tertiary400,
+                                              .primaryText,
                                           fontSize: 22,
-                                          fontWeight: FontWeight.bold,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                   ),
                                 ),
@@ -159,7 +159,7 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                         width: MediaQuery.of(context).size.width,
                         height: 150,
                         decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).customColor4,
+                          color: FlutterFlowTheme.of(context).paymentbg,
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
@@ -198,9 +198,9 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                                         .override(
                                           fontFamily: 'Roboto',
                                           color: FlutterFlowTheme.of(context)
-                                              .customColor3,
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.bold,
+                                              .primaryText,
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                   ),
                                 ],
@@ -215,7 +215,7 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                   width: MediaQuery.of(context).size.width * 0.9,
                   height: 50,
                   decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).tertiaryColor,
+                    color: FlutterFlowTheme.of(context).bottomSheet,
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Padding(
@@ -246,7 +246,7 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                     width: MediaQuery.of(context).size.width * 0.9,
                     height: 140,
                     decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).tertiaryColor,
+                      color: FlutterFlowTheme.of(context).bottomSheet,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Column(
@@ -305,7 +305,7 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                                   fontFamily: 'Roboto',
                                   color:
                                       FlutterFlowTheme.of(context).primaryText,
-                                  fontSize: 12,
+                                  fontSize: 13.5,
                                   lineHeight: 1.5,
                                 ),
                           ),
@@ -366,14 +366,15 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                               options: FFButtonOptions(
                                 width: 340,
                                 height: 50,
-                                color: FlutterFlowTheme.of(context).button,
+                                color:
+                                    FlutterFlowTheme.of(context).primaryColor,
                                 textStyle: FlutterFlowTheme.of(context)
                                     .subtitle2
                                     .override(
                                       fontFamily: 'Lexend Deca',
                                       color: FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                      fontSize: 16,
+                                          .secondaryColor,
+                                      fontSize: 15,
                                       fontWeight: FontWeight.w500,
                                     ),
                                 borderSide: BorderSide(

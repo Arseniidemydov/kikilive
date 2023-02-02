@@ -150,6 +150,14 @@ class _OrderManagementWidgetState extends State<OrderManagementWidget> {
                                           listViewOrderListRecord.shopRef,
                                           ParamType.DocumentReference,
                                         ),
+                                        'userRef': serializeParam(
+                                          listViewOrderListRecord.userRef,
+                                          ParamType.DocumentReference,
+                                        ),
+                                        'addressRef': serializeParam(
+                                          listViewOrderListRecord.addressRef,
+                                          ParamType.DocumentReference,
+                                        ),
                                       }.withoutNulls,
                                     );
                                   },

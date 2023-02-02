@@ -1304,20 +1304,21 @@ class _OrderDetailsEditWidgetState extends State<OrderDetailsEditWidget> {
                                                     final ordersUpdateData =
                                                         createOrdersRecordData(
                                                       orderStatus:
-                                                          orderDetailsEditOrdersRecord
-                                                              .orderStatus,
+                                                          dropDownValue,
                                                       shippingCompany: orderDetailsEditOrdersRecord
                                                                   .shippingCompany ==
                                                               ''
-                                                          ? orderDetailsEditOrdersRecord
-                                                              .shippingCompany
+                                                          ? (txtShipCompController
+                                                                  ?.text ??
+                                                              '')
                                                           : orderDetailsEditOrdersRecord
                                                               .shippingCompany,
                                                       shippingNo: orderDetailsEditOrdersRecord
                                                                   .shippingNo ==
                                                               ''
-                                                          ? orderDetailsEditOrdersRecord
-                                                              .shippingNo
+                                                          ? (txtShipNoController
+                                                                  ?.text ??
+                                                              '')
                                                           : orderDetailsEditOrdersRecord
                                                               .shippingNo,
                                                     );

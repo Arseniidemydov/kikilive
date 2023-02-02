@@ -122,7 +122,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                   ),
                   actions: [],
                   centerTitle: true,
-                  elevation: 2,
+                  elevation: 1,
                 )
               : null,
           body: Stack(
@@ -276,7 +276,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                       Container(
                                         width:
                                             MediaQuery.of(context).size.width,
-                                        height: 40,
+                                        height: 45,
                                         decoration: BoxDecoration(
                                           color: Color(0xA4DDD4EE),
                                         ),
@@ -345,7 +345,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                 width: MediaQuery.of(context)
                                                     .size
                                                     .width,
-                                                height: 50,
+                                                height: 55,
                                                 decoration: BoxDecoration(
                                                   color: FlutterFlowTheme.of(
                                                           context)
@@ -387,19 +387,13 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                     color: FlutterFlowTheme.of(
                                                                             context)
                                                                         .button,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500,
                                                                   ),
                                                             ),
                                                           ],
                                                         ),
-                                                      ),
-                                                      Divider(
-                                                        thickness: 0.5,
-                                                        indent: 16,
-                                                        endIndent: 16,
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
                                                       ),
                                                     ],
                                                   ),
@@ -420,7 +414,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                 width: MediaQuery.of(context)
                                                     .size
                                                     .width,
-                                                height: 140,
+                                                height: 160,
                                                 decoration: BoxDecoration(
                                                   color: FlutterFlowTheme.of(
                                                           context)
@@ -496,7 +490,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                             context)
                                                                         .size
                                                                         .width,
-                                                                    height: 125,
+                                                                    height: 160,
                                                                     decoration:
                                                                         BoxDecoration(
                                                                       color: FlutterFlowTheme.of(
@@ -548,20 +542,24 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                                   text: 'Home',
                                                                                   options: FFButtonOptions(
                                                                                     width: 80,
-                                                                                    height: 30,
-                                                                                    color: FlutterFlowTheme.of(context).button,
+                                                                                    height: 35,
+                                                                                    color: Color(0x00D0BCFF),
                                                                                     textStyle: FlutterFlowTheme.of(context).subtitle2.override(
                                                                                           fontFamily: 'Roboto',
-                                                                                          color: FlutterFlowTheme.of(context).tertiaryColor,
+                                                                                          color: FlutterFlowTheme.of(context).secondaryColor,
                                                                                           fontSize: 12,
                                                                                         ),
+                                                                                    borderSide: BorderSide(
+                                                                                      color: FlutterFlowTheme.of(context).secondaryColor,
+                                                                                      width: 1.4,
+                                                                                    ),
                                                                                     borderRadius: BorderRadius.circular(30),
                                                                                   ),
                                                                                 ),
                                                                               ],
                                                                             ),
                                                                             Padding(
-                                                                              padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                                                              padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
                                                                               child: Row(
                                                                                 mainAxisSize: MainAxisSize.max,
                                                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -574,36 +572,21 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                                     ),
                                                                                     child: Row(
                                                                                       mainAxisSize: MainAxisSize.max,
-                                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                      mainAxisAlignment: MainAxisAlignment.start,
                                                                                       children: [
                                                                                         Text(
                                                                                           containerAddressRecord!.shipUser!,
-                                                                                          style: FlutterFlowTheme.of(context).bodyText1,
+                                                                                          style: FlutterFlowTheme.of(context).bodyText1.override(
+                                                                                                fontFamily: 'Roboto',
+                                                                                                fontWeight: FontWeight.w500,
+                                                                                              ),
                                                                                         ),
-                                                                                      ],
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ),
-                                                                            Padding(
-                                                                              padding: EdgeInsetsDirectional.fromSTEB(0, 3, 0, 0),
-                                                                              child: Row(
-                                                                                mainAxisSize: MainAxisSize.max,
-                                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                children: [
-                                                                                  Container(
-                                                                                    width: 250,
-                                                                                    height: 30,
-                                                                                    decoration: BoxDecoration(
-                                                                                      color: FlutterFlowTheme.of(context).primaryBackground,
-                                                                                    ),
-                                                                                    child: Row(
-                                                                                      mainAxisSize: MainAxisSize.max,
-                                                                                      children: [
-                                                                                        Text(
-                                                                                          containerAddressRecord!.shipPhone!.toString(),
-                                                                                          style: FlutterFlowTheme.of(context).bodyText1,
+                                                                                        Padding(
+                                                                                          padding: EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
+                                                                                          child: Text(
+                                                                                            containerAddressRecord!.shipPhone!.toString(),
+                                                                                            style: FlutterFlowTheme.of(context).bodyText1,
+                                                                                          ),
                                                                                         ),
                                                                                       ],
                                                                                     ),
@@ -651,11 +634,6 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                                 ],
                                                                               ),
                                                                             ),
-                                                                            Divider(
-                                                                              height: 20,
-                                                                              thickness: 2,
-                                                                              color: Color(0x88DBE2E7),
-                                                                            ),
                                                                           ],
                                                                         ),
                                                                       ),
@@ -674,6 +652,12 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                             ),
                                           ),
                                         ],
+                                      ),
+                                      Divider(
+                                        height: 10,
+                                        thickness: 10,
+                                        color: FlutterFlowTheme.of(context)
+                                            .black600,
                                       ),
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
@@ -815,218 +799,48 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                           MainAxisSize
                                                                               .max,
                                                                       children: [
-                                                                        Row(
-                                                                          mainAxisSize:
-                                                                              MainAxisSize.max,
-                                                                          children: [
-                                                                            Padding(
-                                                                              padding: EdgeInsetsDirectional.fromSTEB(2, 10, 0, 0),
-                                                                              child: Column(
-                                                                                mainAxisSize: MainAxisSize.max,
-                                                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                                                children: [
-                                                                                  Container(
-                                                                                    width: 100,
-                                                                                    height: 80,
-                                                                                    decoration: BoxDecoration(
-                                                                                      color: FlutterFlowTheme.of(context).primaryBackground,
-                                                                                    ),
-                                                                                    child: Stack(
-                                                                                      alignment: AlignmentDirectional(0, 0),
-                                                                                      children: [
-                                                                                        ClipRRect(
-                                                                                          borderRadius: BorderRadius.circular(8),
-                                                                                          child: Image.asset(
-                                                                                            'assets/images/default.png',
-                                                                                            width: 90,
-                                                                                            height: MediaQuery.of(context).size.height * 0.6,
-                                                                                            fit: BoxFit.cover,
-                                                                                          ),
-                                                                                        ),
-                                                                                        ClipRRect(
-                                                                                          borderRadius: BorderRadius.circular(8),
-                                                                                          child: Image.network(
-                                                                                            listViewUserOrderRecord.productImage!,
-                                                                                            width: 90,
-                                                                                            height: MediaQuery.of(context).size.height * 0.6,
-                                                                                            fit: BoxFit.cover,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ),
-                                                                            Expanded(
-                                                                              child: Padding(
-                                                                                padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 0),
+                                                                        Padding(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
+                                                                              0,
+                                                                              0,
+                                                                              0,
+                                                                              2),
+                                                                          child:
+                                                                              Row(
+                                                                            mainAxisSize:
+                                                                                MainAxisSize.max,
+                                                                            children: [
+                                                                              Padding(
+                                                                                padding: EdgeInsetsDirectional.fromSTEB(2, 10, 0, 0),
                                                                                 child: Column(
                                                                                   mainAxisSize: MainAxisSize.max,
-                                                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                  mainAxisAlignment: MainAxisAlignment.start,
                                                                                   children: [
-                                                                                    Padding(
-                                                                                      padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                                                                      child: Row(
-                                                                                        mainAxisSize: MainAxisSize.max,
-                                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                    Container(
+                                                                                      width: 100,
+                                                                                      height: 80,
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: FlutterFlowTheme.of(context).primaryBackground,
+                                                                                      ),
+                                                                                      child: Stack(
+                                                                                        alignment: AlignmentDirectional(0, 0),
                                                                                         children: [
-                                                                                          Text(
-                                                                                            listViewUserOrderRecord.shopName!,
-                                                                                            style: FlutterFlowTheme.of(context).bodyText1.override(
-                                                                                                  fontFamily: 'Roboto',
-                                                                                                  fontWeight: FontWeight.w300,
-                                                                                                ),
-                                                                                          ),
-                                                                                          Container(
-                                                                                            width: 100,
-                                                                                            height: 20,
-                                                                                            decoration: BoxDecoration(
-                                                                                              color: FlutterFlowTheme.of(context).primaryBackground,
-                                                                                            ),
-                                                                                            child: Row(
-                                                                                              mainAxisSize: MainAxisSize.max,
-                                                                                              children: [
-                                                                                                Text(
-                                                                                                  'Price',
-                                                                                                  style: FlutterFlowTheme.of(context).bodyText1,
-                                                                                                ),
-                                                                                                Text(
-                                                                                                  formatNumber(
-                                                                                                    listViewUserOrderRecord.productPrice!,
-                                                                                                    formatType: FormatType.decimal,
-                                                                                                    decimalType: DecimalType.periodDecimal,
-                                                                                                    currency: 'THB',
-                                                                                                  ),
-                                                                                                  style: FlutterFlowTheme.of(context).bodyText2.override(
-                                                                                                        fontFamily: 'Roboto',
-                                                                                                        fontWeight: FontWeight.w300,
-                                                                                                      ),
-                                                                                                ),
-                                                                                              ],
+                                                                                          ClipRRect(
+                                                                                            borderRadius: BorderRadius.circular(8),
+                                                                                            child: Image.asset(
+                                                                                              'assets/images/default.png',
+                                                                                              width: 80,
+                                                                                              height: MediaQuery.of(context).size.height * 0.5,
+                                                                                              fit: BoxFit.cover,
                                                                                             ),
                                                                                           ),
-                                                                                        ],
-                                                                                      ),
-                                                                                    ),
-                                                                                    Padding(
-                                                                                      padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                                                                                      child: Text(
-                                                                                        listViewUserOrderRecord.productName!,
-                                                                                        style: FlutterFlowTheme.of(context).bodyText1,
-                                                                                      ),
-                                                                                    ),
-                                                                                    Padding(
-                                                                                      padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
-                                                                                      child: Row(
-                                                                                        mainAxisSize: MainAxisSize.min,
-                                                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                                                        children: [
-                                                                                          Expanded(
-                                                                                            child: Text(
-                                                                                              formatNumber(
-                                                                                                functions.itemTotal(listViewUserOrderRecord.productQuantity, listViewUserOrderRecord.productPrice),
-                                                                                                formatType: FormatType.decimal,
-                                                                                                decimalType: DecimalType.periodDecimal,
-                                                                                                currency: 'THB',
-                                                                                              ),
-                                                                                              style: FlutterFlowTheme.of(context).bodyText1.override(
-                                                                                                    fontFamily: 'Roboto',
-                                                                                                    fontSize: 16,
-                                                                                                    fontWeight: FontWeight.w600,
-                                                                                                  ),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ],
-                                                                                      ),
-                                                                                    ),
-                                                                                    Padding(
-                                                                                      padding: EdgeInsetsDirectional.fromSTEB(0, 8, 16, 0),
-                                                                                      child: Row(
-                                                                                        mainAxisSize: MainAxisSize.max,
-                                                                                        mainAxisAlignment: MainAxisAlignment.end,
-                                                                                        children: [
-                                                                                          Container(
-                                                                                            width: 300,
-                                                                                            height: 50,
-                                                                                            decoration: BoxDecoration(
-                                                                                              color: FlutterFlowTheme.of(context).primaryBackground,
-                                                                                            ),
-                                                                                            child: Row(
-                                                                                              mainAxisSize: MainAxisSize.max,
-                                                                                              children: [
-                                                                                                if (listViewUserOrderRecord.productQuantity == 0)
-                                                                                                  InkWell(
-                                                                                                    onTap: () async {
-                                                                                                      await listViewUserOrderRecord.reference.delete();
-                                                                                                    },
-                                                                                                    child: Icon(
-                                                                                                      Icons.delete,
-                                                                                                      color: Color(0xFFD12523),
-                                                                                                      size: 24,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                if (listViewUserOrderRecord.productQuantity! > 0)
-                                                                                                  InkWell(
-                                                                                                    onTap: () async {
-                                                                                                      final userOrderUpdateData = {
-                                                                                                        ...createUserOrderRecordData(
-                                                                                                          subtotal: functions.minusclick(listViewUserOrderRecord.subtotal, listViewUserOrderRecord.productPrice),
-                                                                                                        ),
-                                                                                                        'productQuantity': FieldValue.increment(-1),
-                                                                                                      };
-                                                                                                      await listViewUserOrderRecord.reference.update(userOrderUpdateData);
-                                                                                                    },
-                                                                                                    child: Icon(
-                                                                                                      Icons.remove_circle,
-                                                                                                      color: FlutterFlowTheme.of(context).button,
-                                                                                                      size: 24,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                Padding(
-                                                                                                  padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
-                                                                                                  child: Text(
-                                                                                                    listViewUserOrderRecord.productQuantity!.toString(),
-                                                                                                    style: FlutterFlowTheme.of(context).bodyText2.override(
-                                                                                                          fontFamily: 'Roboto',
-                                                                                                          color: FlutterFlowTheme.of(context).primaryText,
-                                                                                                          fontWeight: FontWeight.w300,
-                                                                                                        ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                                InkWell(
-                                                                                                  onTap: () async {
-                                                                                                    final userOrderUpdateData = {
-                                                                                                      ...createUserOrderRecordData(
-                                                                                                        subtotal: functions.plusClick(listViewUserOrderRecord.subtotal, listViewUserOrderRecord.productPrice),
-                                                                                                      ),
-                                                                                                      'productQuantity': FieldValue.increment(1),
-                                                                                                    };
-                                                                                                    await listViewUserOrderRecord.reference.update(userOrderUpdateData);
-                                                                                                  },
-                                                                                                  child: Icon(
-                                                                                                    Icons.add_circle,
-                                                                                                    color: FlutterFlowTheme.of(context).button,
-                                                                                                    size: 24,
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Expanded(
-                                                                                                  child: Text(
-                                                                                                    formatNumber(
-                                                                                                      functions.itemTotal(listViewUserOrderRecord.productQuantity, listViewUserOrderRecord.productPrice),
-                                                                                                      formatType: FormatType.decimal,
-                                                                                                      decimalType: DecimalType.periodDecimal,
-                                                                                                      currency: 'THB',
-                                                                                                    ),
-                                                                                                    style: FlutterFlowTheme.of(context).bodyText1.override(
-                                                                                                          fontFamily: 'Roboto',
-                                                                                                          fontSize: 16,
-                                                                                                          fontWeight: FontWeight.w600,
-                                                                                                        ),
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
+                                                                                          ClipRRect(
+                                                                                            borderRadius: BorderRadius.circular(8),
+                                                                                            child: Image.network(
+                                                                                              listViewUserOrderRecord.productImage!,
+                                                                                              width: 80,
+                                                                                              height: MediaQuery.of(context).size.height * 0.5,
+                                                                                              fit: BoxFit.cover,
                                                                                             ),
                                                                                           ),
                                                                                         ],
@@ -1035,10 +849,158 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                                   ],
                                                                                 ),
                                                                               ),
-                                                                            ),
-                                                                          ],
+                                                                              Expanded(
+                                                                                child: Padding(
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(12, 0, 12, 0),
+                                                                                  child: Column(
+                                                                                    mainAxisSize: MainAxisSize.max,
+                                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                    children: [
+                                                                                      Padding(
+                                                                                        padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                                                                                        child: Row(
+                                                                                          mainAxisSize: MainAxisSize.max,
+                                                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                          children: [
+                                                                                            Text(
+                                                                                              listViewUserOrderRecord.shopName!,
+                                                                                              style: FlutterFlowTheme.of(context).bodyText1.override(
+                                                                                                    fontFamily: 'Roboto',
+                                                                                                    fontSize: 13,
+                                                                                                    fontWeight: FontWeight.w300,
+                                                                                                  ),
+                                                                                            ),
+                                                                                            Container(
+                                                                                              width: 100,
+                                                                                              height: 20,
+                                                                                              decoration: BoxDecoration(
+                                                                                                color: FlutterFlowTheme.of(context).primaryBackground,
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                      Padding(
+                                                                                        padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                                                                                        child: Text(
+                                                                                          listViewUserOrderRecord.productName!,
+                                                                                          style: FlutterFlowTheme.of(context).bodyText1.override(
+                                                                                                fontFamily: 'Roboto',
+                                                                                                fontSize: 13,
+                                                                                              ),
+                                                                                        ),
+                                                                                      ),
+                                                                                      Padding(
+                                                                                        padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
+                                                                                        child: Row(
+                                                                                          mainAxisSize: MainAxisSize.min,
+                                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                                          children: [
+                                                                                            Expanded(
+                                                                                              child: Padding(
+                                                                                                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
+                                                                                                child: Text(
+                                                                                                  formatNumber(
+                                                                                                    functions.itemTotal(listViewUserOrderRecord.productQuantity, listViewUserOrderRecord.productPrice),
+                                                                                                    formatType: FormatType.decimal,
+                                                                                                    decimalType: DecimalType.periodDecimal,
+                                                                                                    currency: 'THB ',
+                                                                                                  ),
+                                                                                                  style: FlutterFlowTheme.of(context).bodyText1.override(
+                                                                                                        fontFamily: 'Roboto',
+                                                                                                        fontSize: 14,
+                                                                                                        fontWeight: FontWeight.w600,
+                                                                                                      ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                      Row(
+                                                                                        mainAxisSize: MainAxisSize.max,
+                                                                                        mainAxisAlignment: MainAxisAlignment.end,
+                                                                                        children: [
+                                                                                          if (listViewUserOrderRecord.productQuantity == 0)
+                                                                                            InkWell(
+                                                                                              onTap: () async {
+                                                                                                await listViewUserOrderRecord.reference.delete();
+                                                                                              },
+                                                                                              child: Icon(
+                                                                                                Icons.delete,
+                                                                                                color: Color(0xFFD12523),
+                                                                                                size: 22,
+                                                                                              ),
+                                                                                            ),
+                                                                                          if (listViewUserOrderRecord.productQuantity! > 0)
+                                                                                            InkWell(
+                                                                                              onTap: () async {
+                                                                                                final userOrderUpdateData = {
+                                                                                                  ...createUserOrderRecordData(
+                                                                                                    subtotal: functions.minusclick(listViewUserOrderRecord.subtotal, listViewUserOrderRecord.productPrice),
+                                                                                                  ),
+                                                                                                  'productQuantity': FieldValue.increment(-1),
+                                                                                                };
+                                                                                                await listViewUserOrderRecord.reference.update(userOrderUpdateData);
+                                                                                              },
+                                                                                              child: Icon(
+                                                                                                Icons.remove_circle,
+                                                                                                color: FlutterFlowTheme.of(context).button,
+                                                                                                size: 22,
+                                                                                              ),
+                                                                                            ),
+                                                                                          Padding(
+                                                                                            padding: EdgeInsetsDirectional.fromSTEB(8, 0, 8, 0),
+                                                                                            child: Text(
+                                                                                              listViewUserOrderRecord.productQuantity!.toString(),
+                                                                                              style: FlutterFlowTheme.of(context).bodyText2.override(
+                                                                                                    fontFamily: 'Roboto',
+                                                                                                    color: FlutterFlowTheme.of(context).primaryText,
+                                                                                                    fontSize: 13,
+                                                                                                    fontWeight: FontWeight.w300,
+                                                                                                  ),
+                                                                                            ),
+                                                                                          ),
+                                                                                          InkWell(
+                                                                                            onTap: () async {
+                                                                                              final userOrderUpdateData = {
+                                                                                                ...createUserOrderRecordData(
+                                                                                                  subtotal: functions.plusClick(listViewUserOrderRecord.subtotal, listViewUserOrderRecord.productPrice),
+                                                                                                ),
+                                                                                                'productQuantity': FieldValue.increment(1),
+                                                                                              };
+                                                                                              await listViewUserOrderRecord.reference.update(userOrderUpdateData);
+                                                                                            },
+                                                                                            child: Icon(
+                                                                                              Icons.add_circle,
+                                                                                              color: FlutterFlowTheme.of(context).button,
+                                                                                              size: 22,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                        Container(
+                                                                          width:
+                                                                              100,
+                                                                          height:
+                                                                              30,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                Color(0x00313033),
+                                                                          ),
                                                                         ),
                                                                         Divider(
+                                                                          height:
+                                                                              10,
                                                                           thickness:
                                                                               0.5,
                                                                           indent:
@@ -1067,7 +1029,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                       ),
                                       Divider(
                                         height: 10,
-                                        thickness: 3,
+                                        thickness: 10,
                                         color: FlutterFlowTheme.of(context)
                                             .black600,
                                       ),
@@ -1146,6 +1108,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                 color: FlutterFlowTheme.of(
                                                                         context)
                                                                     .primaryText,
+                                                                fontSize: 15,
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .w500,
@@ -1184,10 +1147,11 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                     'Roboto',
                                                                 color: FlutterFlowTheme.of(
                                                                         context)
-                                                                    .primaryText,
+                                                                    .greyText,
+                                                                fontSize: 13,
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .w300,
+                                                                        .normal,
                                                               ),
                                                         ),
                                                         Text(
@@ -1204,7 +1168,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                             decimalType:
                                                                 DecimalType
                                                                     .automatic,
-                                                            currency: 'THB',
+                                                            currency: 'THB ',
                                                           ),
                                                           textAlign:
                                                               TextAlign.end,
@@ -1217,10 +1181,10 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                 color: FlutterFlowTheme.of(
                                                                         context)
                                                                     .primaryText,
-                                                                fontSize: 14,
+                                                                fontSize: 13,
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .w300,
+                                                                        .normal,
                                                               ),
                                                         ),
                                                       ],
@@ -1249,10 +1213,11 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                     'Roboto',
                                                                 color: FlutterFlowTheme.of(
                                                                         context)
-                                                                    .primaryText,
+                                                                    .greyText,
+                                                                fontSize: 13,
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .w300,
+                                                                        .normal,
                                                               ),
                                                         ),
                                                         Text(
@@ -1271,7 +1236,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                             decimalType:
                                                                 DecimalType
                                                                     .automatic,
-                                                            currency: 'THB',
+                                                            currency: 'THB ',
                                                           ),
                                                           textAlign:
                                                               TextAlign.end,
@@ -1284,10 +1249,10 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                 color: FlutterFlowTheme.of(
                                                                         context)
                                                                     .primaryText,
-                                                                fontSize: 14,
+                                                                fontSize: 13,
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .w300,
+                                                                        .normal,
                                                               ),
                                                         ),
                                                       ],
@@ -1315,10 +1280,11 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                     'Roboto',
                                                                 color: FlutterFlowTheme.of(
                                                                         context)
-                                                                    .primaryText,
+                                                                    .greyText,
+                                                                fontSize: 13,
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .w300,
+                                                                        .normal,
                                                               ),
                                                         ),
                                                         Text(
@@ -1335,7 +1301,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                             decimalType:
                                                                 DecimalType
                                                                     .automatic,
-                                                            currency: 'THB',
+                                                            currency: 'THB ',
                                                           ),
                                                           textAlign:
                                                               TextAlign.end,
@@ -1348,10 +1314,10 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                 color: FlutterFlowTheme.of(
                                                                         context)
                                                                     .primaryText,
-                                                                fontSize: 14,
+                                                                fontSize: 13,
                                                                 fontWeight:
                                                                     FontWeight
-                                                                        .w300,
+                                                                        .normal,
                                                               ),
                                                         ),
                                                       ],
@@ -1363,7 +1329,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                     endIndent: 16,
                                                     color: FlutterFlowTheme.of(
                                                             context)
-                                                        .grayIcon,
+                                                        .dimLine,
                                                   ),
                                                   Padding(
                                                     padding:
@@ -1387,7 +1353,8 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                                     'Roboto',
                                                                 color: FlutterFlowTheme.of(
                                                                         context)
-                                                                    .primaryText,
+                                                                    .greyText,
+                                                                fontSize: 13,
                                                               ),
                                                         ),
                                                         Text(
@@ -1417,13 +1384,18 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                             decimalType:
                                                                 DecimalType
                                                                     .periodDecimal,
-                                                            currency: 'THB',
+                                                            currency: 'THB ',
                                                           ),
                                                           textAlign:
                                                               TextAlign.end,
                                                           style: FlutterFlowTheme
                                                                   .of(context)
-                                                              .subtitle1,
+                                                              .subtitle1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                fontSize: 13,
+                                                              ),
                                                         ),
                                                       ],
                                                     ),
@@ -1629,6 +1601,8 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                 shopRef:
                                                     containerUserOrderRecord!
                                                         .shopRef,
+                                                addressRef: FFAppState()
+                                                    .addressReference,
                                               );
                                               await OrderListRecord.collection
                                                   .doc()
@@ -1747,7 +1721,7 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                             width: double.infinity,
                                             height: 50,
                                             color: FlutterFlowTheme.of(context)
-                                                .button,
+                                                .primaryColor,
                                             textStyle: FlutterFlowTheme.of(
                                                     context)
                                                 .subtitle2
@@ -1755,8 +1729,8 @@ class _ShoppingCartWidgetState extends State<ShoppingCartWidget> {
                                                   fontFamily: 'Lexend Deca',
                                                   color: FlutterFlowTheme.of(
                                                           context)
-                                                      .primaryBackground,
-                                                  fontSize: 16,
+                                                      .secondaryColor,
+                                                  fontSize: 14,
                                                   fontWeight: FontWeight.normal,
                                                 ),
                                             elevation: 0,

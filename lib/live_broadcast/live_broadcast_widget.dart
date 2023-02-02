@@ -1,4 +1,5 @@
 import '../auth/auth_util.dart';
+import '../backend/api_requests/api_calls.dart';
 import '../backend/backend.dart';
 import '../backend/cloud_functions/cloud_functions.dart';
 import '../components/product_pop_widget.dart';
@@ -7,6 +8,7 @@ import '../flutter_flow/flutter_flow_mux_broadcast.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
+import '../flutter_flow/custom_functions.dart' as functions;
 import 'dart:async';
 import 'dart:io' show Platform;
 import 'package:apivideo_live_stream/apivideo_live_stream.dart';
@@ -27,7 +29,7 @@ class LiveBroadcastWidget extends StatefulWidget {
   }) : super(key: key);
 
   final String? videoName;
-  final DocumentReference? channelRef;
+  final List<DocumentReference>? channelRef;
 
   @override
   _LiveBroadcastWidgetState createState() => _LiveBroadcastWidgetState();
@@ -50,7 +52,9 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
   final _stopwatch = Stopwatch();
   String? _durationString;
   Timer? _timer;
-  StreamsRecord? liveOutput;
+  ApiCallResponse? apiResult1;
+  StreamsRecord? liveOutput2;
+  ApiCallResponse? apiResult2;
   PagingController<DocumentSnapshot?, StreamingCommentsRecord>?
       _pagingController;
   Query? _pagingQuery;
@@ -186,19 +190,41 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                             onStartButtonTap: () async {
                               await startStreaming();
 
-                              final streamsCreateData = createStreamsRecordData(
-                                isLive: true,
-                                playbackName: widget.videoName,
-                                playbackUrl: muxBroadcastPlaybackUrl,
-                                timestamp: getCurrentTimestamp,
-                                channelReference: widget.channelRef,
-                              );
+                              final streamsCreateData = {
+                                ...createStreamsRecordData(
+                                  isLive: true,
+                                  playbackName: widget.videoName,
+                                  playbackUrl: muxBroadcastPlaybackUrl,
+                                  timestamp: getCurrentTimestamp,
+                                  userRef: currentUserReference,
+                                  streamViewOnline: 1,
+                                  streamViewOffline: 1,
+                                ),
+                                'channel_reference': widget.channelRef,
+                              };
                               var streamsRecordReference =
                                   StreamsRecord.collection.doc();
                               await streamsRecordReference
                                   .set(streamsCreateData);
-                              liveOutput = StreamsRecord.getDocumentFromData(
+                              liveOutput2 = StreamsRecord.getDocumentFromData(
                                   streamsCreateData, streamsRecordReference);
+                              apiResult1 = await GetLiveStreamIdCall.call(
+                                playbackId: functions.getPlaybackIdFromUrl(
+                                    liveOutput2!.playbackUrl),
+                              );
+                              apiResult2 = await GetPastLiveStreamCall.call(
+                                streamId: GetLiveStreamIdCall.playBackID(
+                                  (apiResult1?.jsonBody ?? ''),
+                                ).toString(),
+                              );
+
+                              final streamsUpdateData = createStreamsRecordData(
+                                streamId: GetPastLiveStreamCall.playbackID(
+                                  (apiResult2?.jsonBody ?? ''),
+                                ).toString(),
+                              );
+                              await liveOutput2!.reference
+                                  .update(streamsUpdateData);
 
                               setState(() {});
                             },
@@ -208,7 +234,7 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                               final streamsUpdateData = createStreamsRecordData(
                                 isLive: false,
                               );
-                              await liveOutput!.reference
+                              await liveOutput2!.reference
                                   .update(streamsUpdateData);
                               context.pop();
                             },
@@ -221,7 +247,7 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                                     10, 0, 10, 16),
                                 child: StreamBuilder<StreamsRecord>(
                                   stream: StreamsRecord.getDocument(
-                                      liveOutput!.reference),
+                                      liveOutput2!.reference),
                                   builder: (context, snapshot) {
                                     // Customize what your widget looks like when it's loading.
                                     if (!snapshot.hasData) {
@@ -533,7 +559,7 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                                                           (_) async {
                                                         final streamingCommentsCreateData =
                                                             createStreamingCommentsRecordData(
-                                                          streamID: liveOutput!
+                                                          streamID: liveOutput2!
                                                               .reference,
                                                           comment:
                                                               textController!

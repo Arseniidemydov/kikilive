@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import '../../flutter_flow/flutter_flow_util.dart';
-import '../cloud_functions/cloud_functions.dart';
 
 import 'api_manager.dart';
 
@@ -13,17 +12,23 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 class GetLiveStreamIdCall {
   static Future<ApiCallResponse> call({
     String? playbackId = '\$.data[0].playback_ids[0].id',
-  }) async {
-    final response = await makeCloudCall(
-      _kPrivateApiFunctionName,
-      {
-        'callName': 'GetLiveStreamIdCall',
-        'variables': {
-          'playbackId': playbackId,
-        },
+  }) {
+    return ApiManager.instance.makeApiCall(
+      callName: 'getLiveStreamId',
+      apiUrl: 'https://api.mux.com/video/v1/playback-ids/${playbackId}',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization':
+            'Basic NzFhM2NlMWMtMDM2Yy00MGQ5LWI3ZmItY2Q4ODg3ODY2MzdmOmk3TDZ3M2x2bGdoa1Q0WGw0bGpjTXVXaDhkR0VGZk9STlNqYVcxRUhBMnBiczk3WlBsb2RjcCtUOVR4RGpXSnBGcEJweWM0aUcrQQ==',
       },
+      params: {
+        'PLAYBACK_ID': playbackId,
+      },
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
     );
-    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   static dynamic playBackID(dynamic response) => getJsonField(
@@ -58,17 +63,21 @@ class GetPastLiveStreamCall {
       );
 }
 
-class StartStreamCall {
-  static Future<ApiCallResponse> call() {
+class GetLiveStreamIdCopyCall {
+  static Future<ApiCallResponse> call({
+    String? playbackId = '\$.data[0].playback_ids[0].id',
+  }) {
     return ApiManager.instance.makeApiCall(
-      callName: 'StartStream',
-      apiUrl: 'https://api.mux.com/video/v1/live-streams',
+      callName: 'getLiveStreamId Copy',
+      apiUrl: 'https://api.mux.com/video/v1/playback-ids/${playbackId}',
       callType: ApiCallType.GET,
       headers: {
         'Authorization':
             'Basic NzFhM2NlMWMtMDM2Yy00MGQ5LWI3ZmItY2Q4ODg3ODY2MzdmOmk3TDZ3M2x2bGdoa1Q0WGw0bGpjTXVXaDhkR0VGZk9STlNqYVcxRUhBMnBiczk3WlBsb2RjcCtUOVR4RGpXSnBGcEJweWM0aUcrQQ==',
       },
-      params: {},
+      params: {
+        'PLAYBACK_ID': playbackId,
+      },
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
@@ -76,57 +85,9 @@ class StartStreamCall {
     );
   }
 
-  static dynamic playbackID(dynamic response) => getJsonField(
+  static dynamic playBackID(dynamic response) => getJsonField(
         response,
-        r'''$.data[0].playback_ids[0].id''',
-      );
-}
-
-class RetrieveLiveListCall {
-  static Future<ApiCallResponse> call() {
-    return ApiManager.instance.makeApiCall(
-      callName: 'RetrieveLiveList',
-      apiUrl: 'https://api.mux.com/video/v1/live-streams',
-      callType: ApiCallType.GET,
-      headers: {
-        'Authorization':
-            'Basic NzFhM2NlMWMtMDM2Yy00MGQ5LWI3ZmItY2Q4ODg3ODY2MzdmOmk3TDZ3M2x2bGdoa1Q0WGw0bGpjTXVXaDhkR0VGZk9STlNqYVcxRUhBMnBiczk3WlBsb2RjcCtUOVR4RGpXSnBGcEJweWM0aUcrQQ==',
-      },
-      params: {},
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
-    );
-  }
-
-  static dynamic playbackID(dynamic response) => getJsonField(
-        response,
-        r'''$.data[0].playback_ids[0].id''',
-      );
-}
-
-class RetrieveLiveListCopyCall {
-  static Future<ApiCallResponse> call() {
-    return ApiManager.instance.makeApiCall(
-      callName: 'RetrieveLiveList Copy',
-      apiUrl: 'https://api.mux.com/video/v1/live-streams',
-      callType: ApiCallType.GET,
-      headers: {
-        'Authorization':
-            'Basic NzFhM2NlMWMtMDM2Yy00MGQ5LWI3ZmItY2Q4ODg3ODY2MzdmOmk3TDZ3M2x2bGdoa1Q0WGw0bGpjTXVXaDhkR0VGZk9STlNqYVcxRUhBMnBiczk3WlBsb2RjcCtUOVR4RGpXSnBGcEJweWM0aUcrQQ==',
-      },
-      params: {},
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
-    );
-  }
-
-  static dynamic playbackID(dynamic response) => getJsonField(
-        response,
-        r'''$.data[0].playback_ids[0].id''',
+        r'''$.data.object.id''',
       );
 }
 

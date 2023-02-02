@@ -23,8 +23,19 @@ abstract class StreamsRecord
 
   String? get uid;
 
+  @BuiltValueField(wireName: 'stream_id')
+  String? get streamId;
+
   @BuiltValueField(wireName: 'channel_reference')
-  DocumentReference? get channelReference;
+  BuiltList<DocumentReference>? get channelReference;
+
+  DocumentReference? get userRef;
+
+  @BuiltValueField(wireName: 'stream_view_offline')
+  int? get streamViewOffline;
+
+  @BuiltValueField(wireName: 'stream_view_online')
+  int? get streamViewOnline;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
@@ -34,7 +45,11 @@ abstract class StreamsRecord
     ..isLive = false
     ..playbackName = ''
     ..playbackUrl = ''
-    ..uid = '';
+    ..uid = ''
+    ..streamId = ''
+    ..channelReference = ListBuilder()
+    ..streamViewOffline = 0
+    ..streamViewOnline = 0;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('streams');
@@ -63,7 +78,10 @@ Map<String, dynamic> createStreamsRecordData({
   String? playbackUrl,
   DateTime? timestamp,
   String? uid,
-  DocumentReference? channelReference,
+  String? streamId,
+  DocumentReference? userRef,
+  int? streamViewOffline,
+  int? streamViewOnline,
 }) {
   final firestoreData = serializers.toFirestore(
     StreamsRecord.serializer,
@@ -74,7 +92,11 @@ Map<String, dynamic> createStreamsRecordData({
         ..playbackUrl = playbackUrl
         ..timestamp = timestamp
         ..uid = uid
-        ..channelReference = channelReference,
+        ..streamId = streamId
+        ..channelReference = null
+        ..userRef = userRef
+        ..streamViewOffline = streamViewOffline
+        ..streamViewOnline = streamViewOnline,
     ),
   );
 

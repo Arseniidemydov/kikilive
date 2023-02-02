@@ -23,6 +23,7 @@ class AddressDetailsWidget extends StatefulWidget {
 }
 
 class _AddressDetailsWidgetState extends State<AddressDetailsWidget> {
+  AddressRecord? addressOutput;
   TextEditingController? txtAddress2Controller;
   TextEditingController? txtAddressController;
   TextEditingController? txtAddressLabelController;
@@ -1292,10 +1293,24 @@ class _AddressDetailsWidgetState extends State<AddressDetailsWidget> {
                                                             .withoutNulls
                                                             .toList(),
                                                   };
-                                                  await AddressRecord.collection
-                                                      .doc()
+                                                  var addressRecordReference =
+                                                      AddressRecord.collection
+                                                          .doc();
+                                                  await addressRecordReference
                                                       .set(addressCreateData);
+                                                  addressOutput = AddressRecord
+                                                      .getDocumentFromData(
+                                                          addressCreateData,
+                                                          addressRecordReference);
+                                                  FFAppState().update(() {
+                                                    FFAppState()
+                                                            .addressReference =
+                                                        addressOutput!
+                                                            .reference;
+                                                  });
                                                   context.pop();
+
+                                                  setState(() {});
                                                 },
                                                 text: 'Save Address',
                                                 options: FFButtonOptions(

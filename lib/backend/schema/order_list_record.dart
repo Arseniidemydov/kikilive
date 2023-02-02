@@ -26,6 +26,8 @@ abstract class OrderListRecord
   @BuiltValueField(wireName: 'shop_Ref')
   DocumentReference? get shopRef;
 
+  DocumentReference? get addressRef;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -61,6 +63,7 @@ Map<String, dynamic> createOrderListRecordData({
   double? orderTotal,
   DocumentReference? userRef,
   DocumentReference? shopRef,
+  DocumentReference? addressRef,
 }) {
   final firestoreData = serializers.toFirestore(
     OrderListRecord.serializer,
@@ -70,7 +73,8 @@ Map<String, dynamic> createOrderListRecordData({
         ..orderDate = orderDate
         ..orderTotal = orderTotal
         ..userRef = userRef
-        ..shopRef = shopRef,
+        ..shopRef = shopRef
+        ..addressRef = addressRef,
     ),
   );
 

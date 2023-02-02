@@ -55,13 +55,42 @@ class _$StreamsRecordSerializer implements StructuredSerializer<StreamsRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.streamId;
+    if (value != null) {
+      result
+        ..add('stream_id')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.channelReference;
     if (value != null) {
       result
         ..add('channel_reference')
         ..add(serializers.serialize(value,
+            specifiedType: const FullType(BuiltList, const [
+              const FullType(
+                  DocumentReference, const [const FullType.nullable(Object)])
+            ])));
+    }
+    value = object.userRef;
+    if (value != null) {
+      result
+        ..add('userRef')
+        ..add(serializers.serialize(value,
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
+    }
+    value = object.streamViewOffline;
+    if (value != null) {
+      result
+        ..add('stream_view_offline')
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
+    }
+    value = object.streamViewOnline;
+    if (value != null) {
+      result
+        ..add('stream_view_online')
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
     value = object.ffRef;
     if (value != null) {
@@ -106,11 +135,30 @@ class _$StreamsRecordSerializer implements StructuredSerializer<StreamsRecord> {
           result.uid = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
+        case 'stream_id':
+          result.streamId = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
         case 'channel_reference':
-          result.channelReference = serializers.deserialize(value,
+          result.channelReference.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(
+                    DocumentReference, const [const FullType.nullable(Object)])
+              ]))! as BuiltList<Object?>);
+          break;
+        case 'userRef':
+          result.userRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
+          break;
+        case 'stream_view_offline':
+          result.streamViewOffline = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int?;
+          break;
+        case 'stream_view_online':
+          result.streamViewOnline = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int?;
           break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
@@ -137,7 +185,15 @@ class _$StreamsRecord extends StreamsRecord {
   @override
   final String? uid;
   @override
-  final DocumentReference<Object?>? channelReference;
+  final String? streamId;
+  @override
+  final BuiltList<DocumentReference<Object?>>? channelReference;
+  @override
+  final DocumentReference<Object?>? userRef;
+  @override
+  final int? streamViewOffline;
+  @override
+  final int? streamViewOnline;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -150,7 +206,11 @@ class _$StreamsRecord extends StreamsRecord {
       this.playbackUrl,
       this.timestamp,
       this.uid,
+      this.streamId,
       this.channelReference,
+      this.userRef,
+      this.streamViewOffline,
+      this.streamViewOnline,
       this.ffRef})
       : super._();
 
@@ -170,7 +230,11 @@ class _$StreamsRecord extends StreamsRecord {
         playbackUrl == other.playbackUrl &&
         timestamp == other.timestamp &&
         uid == other.uid &&
+        streamId == other.streamId &&
         channelReference == other.channelReference &&
+        userRef == other.userRef &&
+        streamViewOffline == other.streamViewOffline &&
+        streamViewOnline == other.streamViewOnline &&
         ffRef == other.ffRef;
   }
 
@@ -180,11 +244,21 @@ class _$StreamsRecord extends StreamsRecord {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, isLive.hashCode), playbackName.hashCode),
-                        playbackUrl.hashCode),
-                    timestamp.hashCode),
-                uid.hashCode),
-            channelReference.hashCode),
+                    $jc(
+                        $jc(
+                            $jc(
+                                $jc(
+                                    $jc(
+                                        $jc($jc(0, isLive.hashCode),
+                                            playbackName.hashCode),
+                                        playbackUrl.hashCode),
+                                    timestamp.hashCode),
+                                uid.hashCode),
+                            streamId.hashCode),
+                        channelReference.hashCode),
+                    userRef.hashCode),
+                streamViewOffline.hashCode),
+            streamViewOnline.hashCode),
         ffRef.hashCode));
   }
 
@@ -196,7 +270,11 @@ class _$StreamsRecord extends StreamsRecord {
           ..add('playbackUrl', playbackUrl)
           ..add('timestamp', timestamp)
           ..add('uid', uid)
+          ..add('streamId', streamId)
           ..add('channelReference', channelReference)
+          ..add('userRef', userRef)
+          ..add('streamViewOffline', streamViewOffline)
+          ..add('streamViewOnline', streamViewOnline)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -226,10 +304,31 @@ class StreamsRecordBuilder
   String? get uid => _$this._uid;
   set uid(String? uid) => _$this._uid = uid;
 
-  DocumentReference<Object?>? _channelReference;
-  DocumentReference<Object?>? get channelReference => _$this._channelReference;
-  set channelReference(DocumentReference<Object?>? channelReference) =>
+  String? _streamId;
+  String? get streamId => _$this._streamId;
+  set streamId(String? streamId) => _$this._streamId = streamId;
+
+  ListBuilder<DocumentReference<Object?>>? _channelReference;
+  ListBuilder<DocumentReference<Object?>> get channelReference =>
+      _$this._channelReference ??=
+          new ListBuilder<DocumentReference<Object?>>();
+  set channelReference(
+          ListBuilder<DocumentReference<Object?>>? channelReference) =>
       _$this._channelReference = channelReference;
+
+  DocumentReference<Object?>? _userRef;
+  DocumentReference<Object?>? get userRef => _$this._userRef;
+  set userRef(DocumentReference<Object?>? userRef) => _$this._userRef = userRef;
+
+  int? _streamViewOffline;
+  int? get streamViewOffline => _$this._streamViewOffline;
+  set streamViewOffline(int? streamViewOffline) =>
+      _$this._streamViewOffline = streamViewOffline;
+
+  int? _streamViewOnline;
+  int? get streamViewOnline => _$this._streamViewOnline;
+  set streamViewOnline(int? streamViewOnline) =>
+      _$this._streamViewOnline = streamViewOnline;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -247,7 +346,11 @@ class StreamsRecordBuilder
       _playbackUrl = $v.playbackUrl;
       _timestamp = $v.timestamp;
       _uid = $v.uid;
-      _channelReference = $v.channelReference;
+      _streamId = $v.streamId;
+      _channelReference = $v.channelReference?.toBuilder();
+      _userRef = $v.userRef;
+      _streamViewOffline = $v.streamViewOffline;
+      _streamViewOnline = $v.streamViewOnline;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -269,15 +372,32 @@ class StreamsRecordBuilder
   StreamsRecord build() => _build();
 
   _$StreamsRecord _build() {
-    final _$result = _$v ??
-        new _$StreamsRecord._(
-            isLive: isLive,
-            playbackName: playbackName,
-            playbackUrl: playbackUrl,
-            timestamp: timestamp,
-            uid: uid,
-            channelReference: channelReference,
-            ffRef: ffRef);
+    _$StreamsRecord _$result;
+    try {
+      _$result = _$v ??
+          new _$StreamsRecord._(
+              isLive: isLive,
+              playbackName: playbackName,
+              playbackUrl: playbackUrl,
+              timestamp: timestamp,
+              uid: uid,
+              streamId: streamId,
+              channelReference: _channelReference?.build(),
+              userRef: userRef,
+              streamViewOffline: streamViewOffline,
+              streamViewOnline: streamViewOnline,
+              ffRef: ffRef);
+    } catch (_) {
+      late String _$failedField;
+      try {
+        _$failedField = 'channelReference';
+        _channelReference?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            r'StreamsRecord', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

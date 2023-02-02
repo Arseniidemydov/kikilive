@@ -1,8 +1,9 @@
+import '../backend/api_requests/api_calls.dart';
 import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_video_player.dart';
+import '../flutter_flow/custom_functions.dart' as functions;
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,6 +23,8 @@ class ChannelListWidget extends StatefulWidget {
 }
 
 class _ChannelListWidgetState extends State<ChannelListWidget> {
+  ApiCallResponse? apiResulto0b;
+  ApiCallResponse? apiResultvaf;
   TextEditingController? textController;
   final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -299,30 +302,86 @@ class _ChannelListWidgetState extends State<ChannelListWidget> {
                                                             alignment:
                                                                 AlignmentDirectional(
                                                                     0, 0.05),
-                                                            child: Text(
-                                                              columnChannelsRecord
-                                                                  .channelViews!
-                                                                  .toString(),
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyText1
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Roboto',
-                                                                    color: FlutterFlowTheme.of(
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0,
+                                                                          0,
+                                                                          5,
+                                                                          0),
+                                                              child: StreamBuilder<
+                                                                  List<
+                                                                      StreamsRecord>>(
+                                                                stream:
+                                                                    queryStreamsRecord(
+                                                                  queryBuilder: (streamsRecord) => streamsRecord
+                                                                      .where(
+                                                                          'channel_reference',
+                                                                          arrayContains: columnChannelsRecord
+                                                                              .reference)
+                                                                      .where(
+                                                                          'is_live',
+                                                                          isEqualTo:
+                                                                              true),
+                                                                ),
+                                                                builder: (context,
+                                                                    snapshot) {
+                                                                  // Customize what your widget looks like when it's loading.
+                                                                  if (!snapshot
+                                                                      .hasData) {
+                                                                    return Center(
+                                                                      child:
+                                                                          SizedBox(
+                                                                        width:
+                                                                            50,
+                                                                        height:
+                                                                            50,
+                                                                        child:
+                                                                            CircularProgressIndicator(
+                                                                          color:
+                                                                              FlutterFlowTheme.of(context).primaryColor,
+                                                                        ),
+                                                                      ),
+                                                                    );
+                                                                  }
+                                                                  List<StreamsRecord>
+                                                                      textStreamsRecordList =
+                                                                      snapshot
+                                                                          .data!;
+                                                                  return Text(
+                                                                    formatNumber(
+                                                                      functions.calcLiveViewrsChannel(
+                                                                          textStreamsRecordList
+                                                                              .toList(),
+                                                                          -1,
+                                                                          textStreamsRecordList
+                                                                              .length),
+                                                                      formatType:
+                                                                          FormatType
+                                                                              .compact,
+                                                                    ),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: FlutterFlowTheme.of(
                                                                             context)
-                                                                        .btnText,
-                                                                    fontSize:
-                                                                        12,
-                                                                    letterSpacing:
-                                                                        0.9,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                  ),
+                                                                        .bodyText1
+                                                                        .override(
+                                                                          fontFamily:
+                                                                              'Roboto',
+                                                                          color:
+                                                                              FlutterFlowTheme.of(context).btnText,
+                                                                          fontSize:
+                                                                              12,
+                                                                          letterSpacing:
+                                                                              0.9,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
+                                                                  );
+                                                                },
+                                                              ),
                                                             ),
                                                           ),
                                                           Align(
@@ -362,26 +421,6 @@ class _ChannelListWidgetState extends State<ChannelListWidget> {
                                             ),
                                           ),
                                           if (columnChannelsRecord
-                                                      .channelVideoUrl !=
-                                                  null &&
-                                              columnChannelsRecord
-                                                      .channelVideoUrl !=
-                                                  '')
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 0, 0, 15),
-                                              child: FlutterFlowVideoPlayer(
-                                                path:
-                                                    '${columnChannelsRecord.channelVideoUrl}',
-                                                videoType: VideoType.network,
-                                                autoPlay: false,
-                                                looping: true,
-                                                showControls: true,
-                                                allowFullScreen: true,
-                                                allowPlaybackSpeedMenu: false,
-                                              ),
-                                            ),
-                                          if (columnChannelsRecord
                                                       .channelVideoUrl ==
                                                   null ||
                                               columnChannelsRecord
@@ -402,7 +441,11 @@ class _ChannelListWidgetState extends State<ChannelListWidget> {
                                                   image: DecorationImage(
                                                     fit: BoxFit.cover,
                                                     image: Image.network(
-                                                      'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
+                                                      valueOrDefault<String>(
+                                                        columnChannelsRecord
+                                                            .channelImage,
+                                                        'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
+                                                      ),
                                                     ).image,
                                                   ),
                                                   borderRadius:
@@ -414,160 +457,199 @@ class _ChannelListWidgetState extends State<ChannelListWidget> {
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
                                               Expanded(
-                                                child: GridView(
-                                                  padding: EdgeInsets.zero,
-                                                  gridDelegate:
-                                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                                    crossAxisCount: 4,
-                                                    crossAxisSpacing: 10,
-                                                    mainAxisSpacing: 10,
-                                                    childAspectRatio: 1,
+                                                child: StreamBuilder<
+                                                    List<StreamsRecord>>(
+                                                  stream: queryStreamsRecord(
+                                                    queryBuilder: (streamsRecord) => streamsRecord
+                                                        .where(
+                                                            'channel_reference',
+                                                            arrayContains:
+                                                                columnChannelsRecord
+                                                                    .reference)
+                                                        .orderBy(
+                                                            'stream_view_online',
+                                                            descending: true)
+                                                        .orderBy('is_live'),
+                                                    limit: 4,
                                                   ),
-                                                  shrinkWrap: true,
-                                                  scrollDirection:
-                                                      Axis.vertical,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0, 0, 0, 15),
-                                                      child: Container(
-                                                        width: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width,
-                                                        height: 200,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryBackground,
-                                                          image:
-                                                              DecorationImage(
-                                                            fit: BoxFit.cover,
-                                                            image:
-                                                                Image.network(
-                                                              valueOrDefault<
-                                                                  String>(
-                                                                columnChannelsRecord
-                                                                    .channelImage,
-                                                                'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
-                                                              ),
-                                                            ).image,
+                                                  builder: (context, snapshot) {
+                                                    // Customize what your widget looks like when it's loading.
+                                                    if (!snapshot.hasData) {
+                                                      return Center(
+                                                        child: SizedBox(
+                                                          width: 50,
+                                                          height: 50,
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .primaryColor,
                                                           ),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
                                                         ),
+                                                      );
+                                                    }
+                                                    List<StreamsRecord>
+                                                        gridViewStreamsRecordList =
+                                                        snapshot.data!;
+                                                    return GridView.builder(
+                                                      padding: EdgeInsets.zero,
+                                                      gridDelegate:
+                                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                                        crossAxisCount: 4,
+                                                        crossAxisSpacing: 10,
+                                                        mainAxisSpacing: 10,
+                                                        childAspectRatio: 1,
                                                       ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0, 0, 0, 15),
-                                                      child: Container(
-                                                        width: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width,
-                                                        height: 200,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryBackground,
-                                                          image:
-                                                              DecorationImage(
-                                                            fit: BoxFit.cover,
-                                                            image:
-                                                                Image.network(
-                                                              valueOrDefault<
-                                                                  String>(
-                                                                columnChannelsRecord
-                                                                    .channelImage,
-                                                                'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
+                                                      shrinkWrap: true,
+                                                      scrollDirection:
+                                                          Axis.vertical,
+                                                      itemCount:
+                                                          gridViewStreamsRecordList
+                                                              .length,
+                                                      itemBuilder: (context,
+                                                          gridViewIndex) {
+                                                        final gridViewStreamsRecord =
+                                                            gridViewStreamsRecordList[
+                                                                gridViewIndex];
+                                                        return Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(0,
+                                                                      0, 0, 15),
+                                                          child: InkWell(
+                                                            onTap: () async {
+                                                              if (gridViewStreamsRecord
+                                                                  .isLive!) {
+                                                                context
+                                                                    .pushNamed(
+                                                                  'livestreamViewer',
+                                                                  queryParams: {
+                                                                    'url':
+                                                                        serializeParam(
+                                                                      gridViewStreamsRecord
+                                                                          .playbackUrl,
+                                                                      ParamType
+                                                                          .String,
+                                                                    ),
+                                                                    'streamID':
+                                                                        serializeParam(
+                                                                      gridViewStreamsRecord
+                                                                          .reference,
+                                                                      ParamType
+                                                                          .DocumentReference,
+                                                                    ),
+                                                                  }.withoutNulls,
+                                                                );
+                                                              } else {
+                                                                apiResultvaf =
+                                                                    await GetLiveStreamIdCall
+                                                                        .call(
+                                                                  playbackId: functions
+                                                                      .getPlaybackIdFromUrl(
+                                                                          gridViewStreamsRecord
+                                                                              .playbackUrl),
+                                                                );
+                                                                apiResulto0b =
+                                                                    await GetPastLiveStreamCall
+                                                                        .call(
+                                                                  streamId:
+                                                                      GetLiveStreamIdCall
+                                                                          .playBackID(
+                                                                    (apiResultvaf
+                                                                            ?.jsonBody ??
+                                                                        ''),
+                                                                  ).toString(),
+                                                                );
+
+                                                                context
+                                                                    .pushNamed(
+                                                                  'livestreamViewer',
+                                                                  queryParams: {
+                                                                    'url':
+                                                                        serializeParam(
+                                                                      functions.createUrlFromPlayId(
+                                                                          GetPastLiveStreamCall
+                                                                              .playbackID(
+                                                                        (apiResulto0b?.jsonBody ??
+                                                                            ''),
+                                                                      ).toString()),
+                                                                      ParamType
+                                                                          .String,
+                                                                    ),
+                                                                    'streamID':
+                                                                        serializeParam(
+                                                                      gridViewStreamsRecord
+                                                                          .reference,
+                                                                      ParamType
+                                                                          .DocumentReference,
+                                                                    ),
+                                                                  }.withoutNulls,
+                                                                );
+                                                              }
+
+                                                              setState(() {});
+                                                            },
+                                                            child: Container(
+                                                              width:
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                              height: 200,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryBackground,
+                                                                image:
+                                                                    DecorationImage(
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  image: Image
+                                                                      .network(
+                                                                    valueOrDefault<
+                                                                        String>(
+                                                                      'https://image.mux.com/${gridViewStreamsRecord.streamId}/animated.webp',
+                                                                      'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
+                                                                    ),
+                                                                  ).image,
+                                                                ),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
                                                               ),
-                                                            ).image,
-                                                          ),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0, 0, 0, 15),
-                                                      child: Container(
-                                                        width: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width,
-                                                        height: 200,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryBackground,
-                                                          image:
-                                                              DecorationImage(
-                                                            fit: BoxFit.cover,
-                                                            image:
-                                                                Image.network(
-                                                              valueOrDefault<
-                                                                  String>(
-                                                                columnChannelsRecord
-                                                                    .channelImage,
-                                                                'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
+                                                              child: Container(
+                                                                width: 15,
+                                                                height: 15,
+                                                                child: Stack(
+                                                                  children: [
+                                                                    if (gridViewStreamsRecord
+                                                                            .isLive ??
+                                                                        true)
+                                                                      Align(
+                                                                        alignment: AlignmentDirectional(
+                                                                            -0.85,
+                                                                            -0.85),
+                                                                        child:
+                                                                            FaIcon(
+                                                                          FontAwesomeIcons
+                                                                              .solidCircle,
+                                                                          color:
+                                                                              FlutterFlowTheme.of(context).customColor3,
+                                                                          size:
+                                                                              10,
+                                                                        ),
+                                                                      ),
+                                                                  ],
+                                                                ),
                                                               ),
-                                                            ).image,
+                                                            ),
                                                           ),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0, 0, 0, 15),
-                                                      child: Container(
-                                                        width: MediaQuery.of(
-                                                                context)
-                                                            .size
-                                                            .width,
-                                                        height: 200,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryBackground,
-                                                          image:
-                                                              DecorationImage(
-                                                            fit: BoxFit.cover,
-                                                            image:
-                                                                Image.network(
-                                                              valueOrDefault<
-                                                                  String>(
-                                                                columnChannelsRecord
-                                                                    .channelImage,
-                                                                'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
-                                                              ),
-                                                            ).image,
-                                                          ),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
                                                 ),
                                               ),
                                             ],

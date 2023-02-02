@@ -105,6 +105,16 @@ class _$ChannelsRecordSerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.channelMembers;
+    if (value != null) {
+      result
+        ..add('channel_members')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(BuiltList, const [
+              const FullType(
+                  DocumentReference, const [const FullType.nullable(Object)])
+            ])));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -178,6 +188,13 @@ class _$ChannelsRecordSerializer
           result.messageReason = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
+        case 'channel_members':
+          result.channelMembers.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(
+                    DocumentReference, const [const FullType.nullable(Object)])
+              ]))! as BuiltList<Object?>);
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -217,6 +234,8 @@ class _$ChannelsRecord extends ChannelsRecord {
   @override
   final String? messageReason;
   @override
+  final BuiltList<DocumentReference<Object?>>? channelMembers;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$ChannelsRecord([void Function(ChannelsRecordBuilder)? updates]) =>
@@ -235,6 +254,7 @@ class _$ChannelsRecord extends ChannelsRecord {
       this.channelStatus,
       this.channelImage,
       this.messageReason,
+      this.channelMembers,
       this.ffRef})
       : super._();
 
@@ -262,6 +282,7 @@ class _$ChannelsRecord extends ChannelsRecord {
         channelStatus == other.channelStatus &&
         channelImage == other.channelImage &&
         messageReason == other.messageReason &&
+        channelMembers == other.channelMembers &&
         ffRef == other.ffRef;
   }
 
@@ -279,19 +300,23 @@ class _$ChannelsRecord extends ChannelsRecord {
                                         $jc(
                                             $jc(
                                                 $jc(
-                                                    $jc(0,
-                                                        channelName.hashCode),
-                                                    channelType.hashCode),
-                                                channelOwner.hashCode),
-                                            shopType.hashCode),
-                                        channelDesc.hashCode),
-                                    channelViews.hashCode),
-                                channelVideoUrl.hashCode),
-                            channelCreatedOn.hashCode),
-                        channelPrice.hashCode),
-                    channelStatus.hashCode),
-                channelImage.hashCode),
-            messageReason.hashCode),
+                                                    $jc(
+                                                        $jc(
+                                                            0,
+                                                            channelName
+                                                                .hashCode),
+                                                        channelType.hashCode),
+                                                    channelOwner.hashCode),
+                                                shopType.hashCode),
+                                            channelDesc.hashCode),
+                                        channelViews.hashCode),
+                                    channelVideoUrl.hashCode),
+                                channelCreatedOn.hashCode),
+                            channelPrice.hashCode),
+                        channelStatus.hashCode),
+                    channelImage.hashCode),
+                messageReason.hashCode),
+            channelMembers.hashCode),
         ffRef.hashCode));
   }
 
@@ -310,6 +335,7 @@ class _$ChannelsRecord extends ChannelsRecord {
           ..add('channelStatus', channelStatus)
           ..add('channelImage', channelImage)
           ..add('messageReason', messageReason)
+          ..add('channelMembers', channelMembers)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -372,6 +398,12 @@ class ChannelsRecordBuilder
   set messageReason(String? messageReason) =>
       _$this._messageReason = messageReason;
 
+  ListBuilder<DocumentReference<Object?>>? _channelMembers;
+  ListBuilder<DocumentReference<Object?>> get channelMembers =>
+      _$this._channelMembers ??= new ListBuilder<DocumentReference<Object?>>();
+  set channelMembers(ListBuilder<DocumentReference<Object?>>? channelMembers) =>
+      _$this._channelMembers = channelMembers;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -395,6 +427,7 @@ class ChannelsRecordBuilder
       _channelStatus = $v.channelStatus;
       _channelImage = $v.channelImage;
       _messageReason = $v.messageReason;
+      _channelMembers = $v.channelMembers?.toBuilder();
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -416,21 +449,35 @@ class ChannelsRecordBuilder
   ChannelsRecord build() => _build();
 
   _$ChannelsRecord _build() {
-    final _$result = _$v ??
-        new _$ChannelsRecord._(
-            channelName: channelName,
-            channelType: channelType,
-            channelOwner: channelOwner,
-            shopType: shopType,
-            channelDesc: channelDesc,
-            channelViews: channelViews,
-            channelVideoUrl: channelVideoUrl,
-            channelCreatedOn: channelCreatedOn,
-            channelPrice: channelPrice,
-            channelStatus: channelStatus,
-            channelImage: channelImage,
-            messageReason: messageReason,
-            ffRef: ffRef);
+    _$ChannelsRecord _$result;
+    try {
+      _$result = _$v ??
+          new _$ChannelsRecord._(
+              channelName: channelName,
+              channelType: channelType,
+              channelOwner: channelOwner,
+              shopType: shopType,
+              channelDesc: channelDesc,
+              channelViews: channelViews,
+              channelVideoUrl: channelVideoUrl,
+              channelCreatedOn: channelCreatedOn,
+              channelPrice: channelPrice,
+              channelStatus: channelStatus,
+              channelImage: channelImage,
+              messageReason: messageReason,
+              channelMembers: _channelMembers?.build(),
+              ffRef: ffRef);
+    } catch (_) {
+      late String _$failedField;
+      try {
+        _$failedField = 'channelMembers';
+        _channelMembers?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            r'ChannelsRecord', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

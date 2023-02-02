@@ -47,6 +47,9 @@ abstract class ChannelsRecord
   @BuiltValueField(wireName: 'message_reason')
   String? get messageReason;
 
+  @BuiltValueField(wireName: 'channel_members')
+  BuiltList<DocumentReference>? get channelMembers;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -61,7 +64,8 @@ abstract class ChannelsRecord
     ..channelPrice = 0.0
     ..channelStatus = false
     ..channelImage = ''
-    ..messageReason = '';
+    ..messageReason = ''
+    ..channelMembers = ListBuilder();
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('channels');
@@ -113,7 +117,8 @@ Map<String, dynamic> createChannelsRecordData({
         ..channelPrice = channelPrice
         ..channelStatus = channelStatus
         ..channelImage = channelImage
-        ..messageReason = messageReason,
+        ..messageReason = messageReason
+        ..channelMembers = null,
     ),
   );
 

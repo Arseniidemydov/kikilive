@@ -1,9 +1,9 @@
 import '../auth/auth_util.dart';
+import '../backend/api_requests/api_calls.dart';
 import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_video_player.dart';
 import '../custom_code/actions/index.dart' as actions;
 import '../flutter_flow/custom_functions.dart' as functions;
 import 'package:easy_debounce/easy_debounce.dart';
@@ -20,6 +20,8 @@ class SearchResultsWidget extends StatefulWidget {
 }
 
 class _SearchResultsWidgetState extends State<SearchResultsWidget> {
+  ApiCallResponse? apiResulto0b;
+  ApiCallResponse? apiResultvaf;
   TextEditingController? textController;
   final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -217,379 +219,386 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                   Expanded(
                                     child: TabBarView(
                                       children: [
-                                        Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(15, 0, 15, 0),
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.stretch,
-                                                children: [
-                                                  Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(0, 10,
-                                                                    0, 0),
-                                                        child: Text(
-                                                          'Search Results for \"${textController!.text}\"',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyText1
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Roboto',
-                                                                fontSize: 16,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(0, 10,
-                                                                    0, 0),
-                                                        child: Text(
-                                                          searchResultsProductsRecordList
-                                                              .length
-                                                              .toString(),
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyText1
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Roboto',
-                                                                fontSize: 16,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Expanded(
-                                                  child: Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(
-                                                                10, 20, 10, 10),
-                                                    child: StreamBuilder<
-                                                        List<ProductsRecord>>(
-                                                      stream:
-                                                          queryProductsRecord(
-                                                        queryBuilder: (productsRecord) => productsRecord
-                                                            .where('status',
-                                                                isEqualTo:
-                                                                    'active')
-                                                            .where(
-                                                                'product_name',
-                                                                isEqualTo: textController!
-                                                                            .text !=
-                                                                        ''
-                                                                    ? textController!
-                                                                        .text
-                                                                    : null)
-                                                            .orderBy(
-                                                                'created_at',
-                                                                descending:
-                                                                    true),
-                                                      ),
-                                                      builder:
-                                                          (context, snapshot) {
-                                                        // Customize what your widget looks like when it's loading.
-                                                        if (!snapshot.hasData) {
-                                                          return Center(
-                                                            child: SizedBox(
-                                                              width: 50,
-                                                              height: 50,
-                                                              child:
-                                                                  CircularProgressIndicator(
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryColor,
-                                                              ),
-                                                            ),
-                                                          );
-                                                        }
-                                                        List<ProductsRecord>
-                                                            gridViewProductsRecordList =
-                                                            snapshot.data!;
-                                                        return GridView.builder(
+                                        SingleChildScrollView(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(15, 0, 15, 0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .stretch,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Padding(
                                                           padding:
-                                                              EdgeInsets.zero,
-                                                          gridDelegate:
-                                                              SliverGridDelegateWithFixedCrossAxisCount(
-                                                            crossAxisCount: 2,
-                                                            crossAxisSpacing:
-                                                                10,
-                                                            mainAxisSpacing: 10,
-                                                            childAspectRatio:
-                                                                0.73,
-                                                          ),
-                                                          shrinkWrap: true,
-                                                          scrollDirection:
-                                                              Axis.vertical,
-                                                          itemCount:
-                                                              gridViewProductsRecordList
-                                                                  .length,
-                                                          itemBuilder: (context,
-                                                              gridViewIndex) {
-                                                            final gridViewProductsRecord =
-                                                                gridViewProductsRecordList[
-                                                                    gridViewIndex];
-                                                            return Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          5,
-                                                                          0,
-                                                                          5,
-                                                                          0),
-                                                              child: StreamBuilder<
-                                                                  List<
-                                                                      OrderNoRecord>>(
-                                                                stream:
-                                                                    queryOrderNoRecord(
-                                                                  singleRecord:
-                                                                      true,
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(0,
+                                                                      10, 0, 0),
+                                                          child: Text(
+                                                            'Search Results for \"${textController!.text}\"',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  fontSize: 16,
                                                                 ),
-                                                                builder: (context,
-                                                                    snapshot) {
-                                                                  // Customize what your widget looks like when it's loading.
-                                                                  if (!snapshot
-                                                                      .hasData) {
-                                                                    return Center(
-                                                                      child:
-                                                                          SizedBox(
-                                                                        width:
-                                                                            50,
-                                                                        height:
-                                                                            50,
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(0,
+                                                                      10, 0, 0),
+                                                          child: Text(
+                                                            searchResultsProductsRecordList
+                                                                .length
+                                                                .toString(),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  fontSize: 16,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Expanded(
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(10, 20,
+                                                                  10, 10),
+                                                      child: StreamBuilder<
+                                                          List<ProductsRecord>>(
+                                                        stream:
+                                                            queryProductsRecord(
+                                                          queryBuilder: (productsRecord) => productsRecord
+                                                              .where('status',
+                                                                  isEqualTo:
+                                                                      'active')
+                                                              .where(
+                                                                  'product_name',
+                                                                  isEqualTo: textController!
+                                                                              .text !=
+                                                                          ''
+                                                                      ? textController!
+                                                                          .text
+                                                                      : null)
+                                                              .orderBy(
+                                                                  'created_at',
+                                                                  descending:
+                                                                      true),
+                                                        ),
+                                                        builder: (context,
+                                                            snapshot) {
+                                                          // Customize what your widget looks like when it's loading.
+                                                          if (!snapshot
+                                                              .hasData) {
+                                                            return Center(
+                                                              child: SizedBox(
+                                                                width: 50,
+                                                                height: 50,
+                                                                child:
+                                                                    CircularProgressIndicator(
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .primaryColor,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          }
+                                                          List<ProductsRecord>
+                                                              gridViewProductsRecordList =
+                                                              snapshot.data!;
+                                                          return GridView
+                                                              .builder(
+                                                            padding:
+                                                                EdgeInsets.zero,
+                                                            gridDelegate:
+                                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                                              crossAxisCount: 2,
+                                                              crossAxisSpacing:
+                                                                  10,
+                                                              mainAxisSpacing:
+                                                                  10,
+                                                              childAspectRatio:
+                                                                  0.73,
+                                                            ),
+                                                            shrinkWrap: true,
+                                                            scrollDirection:
+                                                                Axis.vertical,
+                                                            itemCount:
+                                                                gridViewProductsRecordList
+                                                                    .length,
+                                                            itemBuilder: (context,
+                                                                gridViewIndex) {
+                                                              final gridViewProductsRecord =
+                                                                  gridViewProductsRecordList[
+                                                                      gridViewIndex];
+                                                              return Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            5,
+                                                                            0,
+                                                                            5,
+                                                                            0),
+                                                                child: StreamBuilder<
+                                                                    List<
+                                                                        OrderNoRecord>>(
+                                                                  stream:
+                                                                      queryOrderNoRecord(
+                                                                    singleRecord:
+                                                                        true,
+                                                                  ),
+                                                                  builder: (context,
+                                                                      snapshot) {
+                                                                    // Customize what your widget looks like when it's loading.
+                                                                    if (!snapshot
+                                                                        .hasData) {
+                                                                      return Center(
                                                                         child:
-                                                                            CircularProgressIndicator(
-                                                                          color:
-                                                                              FlutterFlowTheme.of(context).primaryColor,
-                                                                        ),
-                                                                      ),
-                                                                    );
-                                                                  }
-                                                                  List<OrderNoRecord>
-                                                                      containerOrderNoRecordList =
-                                                                      snapshot
-                                                                          .data!;
-                                                                  // Return an empty Container when the item does not exist.
-                                                                  if (snapshot
-                                                                      .data!
-                                                                      .isEmpty) {
-                                                                    return Container();
-                                                                  }
-                                                                  final containerOrderNoRecord = containerOrderNoRecordList
-                                                                          .isNotEmpty
-                                                                      ? containerOrderNoRecordList
-                                                                          .first
-                                                                      : null;
-                                                                  return InkWell(
-                                                                    onTap:
-                                                                        () async {
-                                                                      context
-                                                                          .pushNamed(
-                                                                        'productDetails',
-                                                                        queryParams:
-                                                                            {
-                                                                          'productDetails':
-                                                                              serializeParam(
-                                                                            gridViewProductsRecord.reference,
-                                                                            ParamType.DocumentReference,
+                                                                            SizedBox(
+                                                                          width:
+                                                                              50,
+                                                                          height:
+                                                                              50,
+                                                                          child:
+                                                                              CircularProgressIndicator(
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).primaryColor,
                                                                           ),
-                                                                        }.withoutNulls,
-                                                                      );
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      width:
-                                                                          200,
-                                                                      height:
-                                                                          20,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        color: FlutterFlowTheme.of(context)
-                                                                            .secondaryBackground,
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          bottomLeft:
-                                                                              Radius.circular(10),
-                                                                          bottomRight:
-                                                                              Radius.circular(10),
-                                                                          topLeft:
-                                                                              Radius.circular(20),
-                                                                          topRight:
-                                                                              Radius.circular(20),
                                                                         ),
-                                                                      ),
+                                                                      );
+                                                                    }
+                                                                    List<OrderNoRecord>
+                                                                        containerOrderNoRecordList =
+                                                                        snapshot
+                                                                            .data!;
+                                                                    // Return an empty Container when the item does not exist.
+                                                                    if (snapshot
+                                                                        .data!
+                                                                        .isEmpty) {
+                                                                      return Container();
+                                                                    }
+                                                                    final containerOrderNoRecord = containerOrderNoRecordList
+                                                                            .isNotEmpty
+                                                                        ? containerOrderNoRecordList
+                                                                            .first
+                                                                        : null;
+                                                                    return InkWell(
+                                                                      onTap:
+                                                                          () async {
+                                                                        context
+                                                                            .pushNamed(
+                                                                          'productDetails',
+                                                                          queryParams:
+                                                                              {
+                                                                            'productDetails':
+                                                                                serializeParam(
+                                                                              gridViewProductsRecord.reference,
+                                                                              ParamType.DocumentReference,
+                                                                            ),
+                                                                          }.withoutNulls,
+                                                                        );
+                                                                      },
                                                                       child:
-                                                                          Stack(
-                                                                        children: [
-                                                                          Stack(
-                                                                            children: [
-                                                                              Column(
-                                                                                mainAxisSize: MainAxisSize.max,
-                                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                children: [
-                                                                                  Stack(
-                                                                                    children: [
-                                                                                      ClipRRect(
-                                                                                        borderRadius: BorderRadius.circular(15),
-                                                                                        child: Image.asset(
-                                                                                          'assets/images/default.png',
-                                                                                          width: MediaQuery.of(context).size.width,
-                                                                                          height: MediaQuery.of(context).size.height * 0.18,
-                                                                                          fit: BoxFit.cover,
-                                                                                        ),
-                                                                                      ),
-                                                                                      ClipRRect(
-                                                                                        borderRadius: BorderRadius.only(
-                                                                                          bottomLeft: Radius.circular(0),
-                                                                                          bottomRight: Radius.circular(0),
-                                                                                          topLeft: Radius.circular(15),
-                                                                                          topRight: Radius.circular(20),
-                                                                                        ),
-                                                                                        child: Image.network(
-                                                                                          valueOrDefault<String>(
-                                                                                            gridViewProductsRecord.productPhoto,
-                                                                                            'https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg',
-                                                                                          ),
-                                                                                          width: MediaQuery.of(context).size.width,
-                                                                                          height: MediaQuery.of(context).size.height * 0.18,
-                                                                                          fit: BoxFit.cover,
-                                                                                        ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                  Padding(
-                                                                                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                                                                                    child: Row(
-                                                                                      mainAxisSize: MainAxisSize.max,
+                                                                          Container(
+                                                                        width:
+                                                                            200,
+                                                                        height:
+                                                                            20,
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color:
+                                                                              FlutterFlowTheme.of(context).secondaryBackground,
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            bottomLeft:
+                                                                                Radius.circular(10),
+                                                                            bottomRight:
+                                                                                Radius.circular(10),
+                                                                            topLeft:
+                                                                                Radius.circular(20),
+                                                                            topRight:
+                                                                                Radius.circular(20),
+                                                                          ),
+                                                                        ),
+                                                                        child:
+                                                                            Stack(
+                                                                          children: [
+                                                                            Stack(
+                                                                              children: [
+                                                                                Column(
+                                                                                  mainAxisSize: MainAxisSize.max,
+                                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                  children: [
+                                                                                    Stack(
                                                                                       children: [
-                                                                                        Padding(
-                                                                                          padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
-                                                                                          child: Text(
-                                                                                            gridViewProductsRecord.shopName!,
-                                                                                            textAlign: TextAlign.start,
-                                                                                            style: FlutterFlowTheme.of(context).bodyText1.override(
-                                                                                                  fontFamily: 'Roboto',
-                                                                                                  fontSize: 12,
-                                                                                                  fontWeight: FontWeight.w300,
-                                                                                                ),
+                                                                                        ClipRRect(
+                                                                                          borderRadius: BorderRadius.circular(15),
+                                                                                          child: Image.asset(
+                                                                                            'assets/images/default.png',
+                                                                                            width: MediaQuery.of(context).size.width,
+                                                                                            height: MediaQuery.of(context).size.height * 0.18,
+                                                                                            fit: BoxFit.cover,
+                                                                                          ),
+                                                                                        ),
+                                                                                        ClipRRect(
+                                                                                          borderRadius: BorderRadius.only(
+                                                                                            bottomLeft: Radius.circular(0),
+                                                                                            bottomRight: Radius.circular(0),
+                                                                                            topLeft: Radius.circular(15),
+                                                                                            topRight: Radius.circular(20),
+                                                                                          ),
+                                                                                          child: Image.network(
+                                                                                            valueOrDefault<String>(
+                                                                                              gridViewProductsRecord.productPhoto,
+                                                                                              'https://st3.depositphotos.com/23594922/31822/v/600/depositphotos_318221368-stock-illustration-missing-picture-page-for-website.jpg',
+                                                                                            ),
+                                                                                            width: MediaQuery.of(context).size.width,
+                                                                                            height: MediaQuery.of(context).size.height * 0.18,
+                                                                                            fit: BoxFit.cover,
                                                                                           ),
                                                                                         ),
                                                                                       ],
                                                                                     ),
-                                                                                  ),
-                                                                                  Align(
-                                                                                    alignment: AlignmentDirectional(-0.9, 0),
-                                                                                    child: Padding(
-                                                                                      padding: EdgeInsetsDirectional.fromSTEB(7, 5, 0, 5),
-                                                                                      child: Text(
-                                                                                        gridViewProductsRecord.productName!,
-                                                                                        style: FlutterFlowTheme.of(context).bodyText1,
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                  Padding(
-                                                                                    padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
-                                                                                    child: Row(
-                                                                                      mainAxisSize: MainAxisSize.max,
-                                                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                                                      children: [
-                                                                                        Align(
-                                                                                          alignment: AlignmentDirectional(-0.9, 0),
-                                                                                          child: Padding(
+                                                                                    Padding(
+                                                                                      padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                                                                                      child: Row(
+                                                                                        mainAxisSize: MainAxisSize.max,
+                                                                                        children: [
+                                                                                          Padding(
                                                                                             padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                                                                                             child: Text(
-                                                                                              gridViewProductsRecord.productPrice!.toString(),
+                                                                                              gridViewProductsRecord.shopName!,
+                                                                                              textAlign: TextAlign.start,
                                                                                               style: FlutterFlowTheme.of(context).bodyText1.override(
                                                                                                     fontFamily: 'Roboto',
+                                                                                                    fontSize: 12,
                                                                                                     fontWeight: FontWeight.w300,
                                                                                                   ),
                                                                                             ),
                                                                                           ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                    Align(
+                                                                                      alignment: AlignmentDirectional(-0.9, 0),
+                                                                                      child: Padding(
+                                                                                        padding: EdgeInsetsDirectional.fromSTEB(7, 5, 0, 5),
+                                                                                        child: Text(
+                                                                                          gridViewProductsRecord.productName!,
+                                                                                          style: FlutterFlowTheme.of(context).bodyText1,
                                                                                         ),
-                                                                                        Align(
-                                                                                          alignment: AlignmentDirectional(0.93, 0.53),
-                                                                                          child: Padding(
-                                                                                            padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 5),
-                                                                                            child: FlutterFlowIconButton(
-                                                                                              borderColor: Colors.transparent,
-                                                                                              borderRadius: 30,
-                                                                                              buttonSize: 30,
-                                                                                              fillColor: FlutterFlowTheme.of(context).primaryColor,
-                                                                                              icon: Icon(
-                                                                                                Icons.add,
-                                                                                                color: FlutterFlowTheme.of(context).secondaryColor,
-                                                                                                size: 15,
-                                                                                              ),
-                                                                                              onPressed: () async {
-                                                                                                FFAppState().update(() {
-                                                                                                  FFAppState().orderNo = functions.generateOrderId(containerOrderNoRecord!.orderNo)!;
-                                                                                                });
-                                                                                                await actions.addToCart(
-                                                                                                  gridViewProductsRecord.sku,
-                                                                                                  currentUserUid,
-                                                                                                  0.0,
-                                                                                                  0.0,
-                                                                                                  functions.generateOrderId(containerOrderNoRecord!.orderNo),
-                                                                                                );
-                                                                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                                                                  SnackBar(
-                                                                                                    content: Text(
-                                                                                                      'Added Success',
-                                                                                                      style: TextStyle(
-                                                                                                        color: FlutterFlowTheme.of(context).primaryBtnText,
-                                                                                                      ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    Padding(
+                                                                                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                                                                                      child: Row(
+                                                                                        mainAxisSize: MainAxisSize.max,
+                                                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                        children: [
+                                                                                          Align(
+                                                                                            alignment: AlignmentDirectional(-0.9, 0),
+                                                                                            child: Padding(
+                                                                                              padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                                                                                              child: Text(
+                                                                                                gridViewProductsRecord.productPrice!.toString(),
+                                                                                                style: FlutterFlowTheme.of(context).bodyText1.override(
+                                                                                                      fontFamily: 'Roboto',
+                                                                                                      fontWeight: FontWeight.w300,
                                                                                                     ),
-                                                                                                    duration: Duration(milliseconds: 4000),
-                                                                                                    backgroundColor: Color(0xFF15D1D1),
-                                                                                                  ),
-                                                                                                );
-                                                                                              },
+                                                                                              ),
                                                                                             ),
                                                                                           ),
-                                                                                        ),
-                                                                                      ],
+                                                                                          Align(
+                                                                                            alignment: AlignmentDirectional(0.93, 0.53),
+                                                                                            child: Padding(
+                                                                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 5),
+                                                                                              child: FlutterFlowIconButton(
+                                                                                                borderColor: Colors.transparent,
+                                                                                                borderRadius: 30,
+                                                                                                buttonSize: 30,
+                                                                                                fillColor: FlutterFlowTheme.of(context).primaryColor,
+                                                                                                icon: Icon(
+                                                                                                  Icons.add,
+                                                                                                  color: FlutterFlowTheme.of(context).secondaryColor,
+                                                                                                  size: 15,
+                                                                                                ),
+                                                                                                onPressed: () async {
+                                                                                                  FFAppState().update(() {
+                                                                                                    FFAppState().orderNo = functions.generateOrderId(containerOrderNoRecord!.orderNo)!;
+                                                                                                  });
+                                                                                                  await actions.addToCart(
+                                                                                                    gridViewProductsRecord.sku,
+                                                                                                    currentUserUid,
+                                                                                                    0.0,
+                                                                                                    0.0,
+                                                                                                    functions.generateOrderId(containerOrderNoRecord!.orderNo),
+                                                                                                  );
+                                                                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                                                                    SnackBar(
+                                                                                                      content: Text(
+                                                                                                        'Added Success',
+                                                                                                        style: TextStyle(
+                                                                                                          color: FlutterFlowTheme.of(context).primaryBtnText,
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                      duration: Duration(milliseconds: 4000),
+                                                                                                      backgroundColor: Color(0xFF15D1D1),
+                                                                                                    ),
+                                                                                                  );
+                                                                                                },
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
                                                                                     ),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ],
+                                                                                  ],
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ],
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                              ),
-                                                            );
-                                                          },
-                                                        );
-                                                      },
+                                                                    );
+                                                                  },
+                                                                ),
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                         Column(
                                           mainAxisSize: MainAxisSize.max,
@@ -1042,7 +1051,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                               child: Column(
                                                                 mainAxisSize:
                                                                     MainAxisSize
-                                                                        .max,
+                                                                        .min,
                                                                 children: [
                                                                   Padding(
                                                                     padding: EdgeInsetsDirectional
@@ -1099,16 +1108,42 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                                   ),
                                                                                   Align(
                                                                                     alignment: AlignmentDirectional(0, 0.05),
-                                                                                    child: Text(
-                                                                                      columnChannelsRecord.channelViews!.toString(),
-                                                                                      textAlign: TextAlign.center,
-                                                                                      style: FlutterFlowTheme.of(context).bodyText1.override(
-                                                                                            fontFamily: 'Roboto',
-                                                                                            color: FlutterFlowTheme.of(context).btnText,
-                                                                                            fontSize: 12,
-                                                                                            letterSpacing: 0.9,
-                                                                                            fontWeight: FontWeight.w500,
-                                                                                          ),
+                                                                                    child: Padding(
+                                                                                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 0),
+                                                                                      child: StreamBuilder<List<StreamsRecord>>(
+                                                                                        stream: queryStreamsRecord(
+                                                                                          queryBuilder: (streamsRecord) => streamsRecord.where('channel_reference', arrayContains: columnChannelsRecord.reference).where('is_live', isEqualTo: true),
+                                                                                        ),
+                                                                                        builder: (context, snapshot) {
+                                                                                          // Customize what your widget looks like when it's loading.
+                                                                                          if (!snapshot.hasData) {
+                                                                                            return Center(
+                                                                                              child: SizedBox(
+                                                                                                width: 50,
+                                                                                                height: 50,
+                                                                                                child: CircularProgressIndicator(
+                                                                                                  color: FlutterFlowTheme.of(context).primaryColor,
+                                                                                                ),
+                                                                                              ),
+                                                                                            );
+                                                                                          }
+                                                                                          List<StreamsRecord> textStreamsRecordList = snapshot.data!;
+                                                                                          return Text(
+                                                                                            formatNumber(
+                                                                                              functions.calcLiveViewrsChannel(textStreamsRecordList.toList(), -1, textStreamsRecordList.length),
+                                                                                              formatType: FormatType.compact,
+                                                                                            ),
+                                                                                            textAlign: TextAlign.center,
+                                                                                            style: FlutterFlowTheme.of(context).bodyText1.override(
+                                                                                                  fontFamily: 'Roboto',
+                                                                                                  color: FlutterFlowTheme.of(context).btnText,
+                                                                                                  fontSize: 12,
+                                                                                                  letterSpacing: 0.9,
+                                                                                                  fontWeight: FontWeight.w500,
+                                                                                                ),
+                                                                                          );
+                                                                                        },
+                                                                                      ),
                                                                                     ),
                                                                                   ),
                                                                                   Align(
@@ -1133,37 +1168,6 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                       ],
                                                                     ),
                                                                   ),
-                                                                  if (columnChannelsRecord
-                                                                              .channelVideoUrl !=
-                                                                          null &&
-                                                                      columnChannelsRecord
-                                                                              .channelVideoUrl !=
-                                                                          '')
-                                                                    Padding(
-                                                                      padding: EdgeInsetsDirectional
-                                                                          .fromSTEB(
-                                                                              0,
-                                                                              0,
-                                                                              0,
-                                                                              15),
-                                                                      child:
-                                                                          FlutterFlowVideoPlayer(
-                                                                        path:
-                                                                            '${columnChannelsRecord.channelVideoUrl}',
-                                                                        videoType:
-                                                                            VideoType.network,
-                                                                        autoPlay:
-                                                                            false,
-                                                                        looping:
-                                                                            true,
-                                                                        showControls:
-                                                                            true,
-                                                                        allowFullScreen:
-                                                                            true,
-                                                                        allowPlaybackSpeedMenu:
-                                                                            false,
-                                                                      ),
-                                                                    ),
                                                                   if (columnChannelsRecord
                                                                               .channelVideoUrl ==
                                                                           null ||
@@ -1194,7 +1198,10 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                                 BoxFit.cover,
                                                                             image:
                                                                                 Image.network(
-                                                                              'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
+                                                                              valueOrDefault<String>(
+                                                                                columnChannelsRecord.channelImage,
+                                                                                'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
+                                                                              ),
                                                                             ).image,
                                                                           ),
                                                                           borderRadius:
@@ -1208,107 +1215,131 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                             .max,
                                                                     children: [
                                                                       Expanded(
-                                                                        child:
-                                                                            GridView(
-                                                                          padding:
-                                                                              EdgeInsets.zero,
-                                                                          gridDelegate:
-                                                                              SliverGridDelegateWithFixedCrossAxisCount(
-                                                                            crossAxisCount:
+                                                                        child: StreamBuilder<
+                                                                            List<StreamsRecord>>(
+                                                                          stream:
+                                                                              queryStreamsRecord(
+                                                                            queryBuilder: (streamsRecord) =>
+                                                                                streamsRecord.where('channel_reference', arrayContains: columnChannelsRecord.reference).orderBy('stream_view_online', descending: true).orderBy('is_live'),
+                                                                            limit:
                                                                                 4,
-                                                                            crossAxisSpacing:
-                                                                                10,
-                                                                            mainAxisSpacing:
-                                                                                10,
-                                                                            childAspectRatio:
-                                                                                1,
                                                                           ),
-                                                                          shrinkWrap:
-                                                                              true,
-                                                                          scrollDirection:
-                                                                              Axis.vertical,
-                                                                          children: [
-                                                                            Padding(
-                                                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
-                                                                              child: Container(
-                                                                                width: MediaQuery.of(context).size.width,
-                                                                                height: 200,
-                                                                                decoration: BoxDecoration(
-                                                                                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                                                                                  image: DecorationImage(
-                                                                                    fit: BoxFit.cover,
-                                                                                    image: Image.network(
-                                                                                      valueOrDefault<String>(
-                                                                                        columnChannelsRecord.channelImage,
-                                                                                        'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
-                                                                                      ),
-                                                                                    ).image,
+                                                                          builder:
+                                                                              (context, snapshot) {
+                                                                            // Customize what your widget looks like when it's loading.
+                                                                            if (!snapshot.hasData) {
+                                                                              return Center(
+                                                                                child: SizedBox(
+                                                                                  width: 50,
+                                                                                  height: 50,
+                                                                                  child: CircularProgressIndicator(
+                                                                                    color: FlutterFlowTheme.of(context).primaryColor,
                                                                                   ),
-                                                                                  borderRadius: BorderRadius.circular(5),
                                                                                 ),
+                                                                              );
+                                                                            }
+                                                                            List<StreamsRecord>
+                                                                                gridViewStreamsRecordList =
+                                                                                snapshot.data!;
+                                                                            return GridView.builder(
+                                                                              padding: EdgeInsets.zero,
+                                                                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                                                crossAxisCount: 4,
+                                                                                crossAxisSpacing: 10,
+                                                                                mainAxisSpacing: 10,
+                                                                                childAspectRatio: 1,
                                                                               ),
-                                                                            ),
-                                                                            Padding(
-                                                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
-                                                                              child: Container(
-                                                                                width: MediaQuery.of(context).size.width,
-                                                                                height: 200,
-                                                                                decoration: BoxDecoration(
-                                                                                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                                                                                  image: DecorationImage(
-                                                                                    fit: BoxFit.cover,
-                                                                                    image: Image.network(
-                                                                                      valueOrDefault<String>(
-                                                                                        columnChannelsRecord.channelImage,
-                                                                                        'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
+                                                                              shrinkWrap: true,
+                                                                              scrollDirection: Axis.vertical,
+                                                                              itemCount: gridViewStreamsRecordList.length,
+                                                                              itemBuilder: (context, gridViewIndex) {
+                                                                                final gridViewStreamsRecord = gridViewStreamsRecordList[gridViewIndex];
+                                                                                return Padding(
+                                                                                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
+                                                                                  child: InkWell(
+                                                                                    onTap: () async {
+                                                                                      if (gridViewStreamsRecord.isLive!) {
+                                                                                        context.pushNamed(
+                                                                                          'livestreamViewer',
+                                                                                          queryParams: {
+                                                                                            'url': serializeParam(
+                                                                                              gridViewStreamsRecord.playbackUrl,
+                                                                                              ParamType.String,
+                                                                                            ),
+                                                                                            'streamID': serializeParam(
+                                                                                              gridViewStreamsRecord.reference,
+                                                                                              ParamType.DocumentReference,
+                                                                                            ),
+                                                                                          }.withoutNulls,
+                                                                                        );
+                                                                                      } else {
+                                                                                        apiResultvaf = await GetLiveStreamIdCall.call(
+                                                                                          playbackId: functions.getPlaybackIdFromUrl(gridViewStreamsRecord.playbackUrl),
+                                                                                        );
+                                                                                        apiResulto0b = await GetPastLiveStreamCall.call(
+                                                                                          streamId: GetLiveStreamIdCall.playBackID(
+                                                                                            (apiResultvaf?.jsonBody ?? ''),
+                                                                                          ).toString(),
+                                                                                        );
+
+                                                                                        context.pushNamed(
+                                                                                          'livestreamViewer',
+                                                                                          queryParams: {
+                                                                                            'url': serializeParam(
+                                                                                              functions.createUrlFromPlayId(GetPastLiveStreamCall.playbackID(
+                                                                                                (apiResulto0b?.jsonBody ?? ''),
+                                                                                              ).toString()),
+                                                                                              ParamType.String,
+                                                                                            ),
+                                                                                            'streamID': serializeParam(
+                                                                                              gridViewStreamsRecord.reference,
+                                                                                              ParamType.DocumentReference,
+                                                                                            ),
+                                                                                          }.withoutNulls,
+                                                                                        );
+                                                                                      }
+
+                                                                                      setState(() {});
+                                                                                    },
+                                                                                    child: Container(
+                                                                                      width: MediaQuery.of(context).size.width,
+                                                                                      height: 200,
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                                                                                        image: DecorationImage(
+                                                                                          fit: BoxFit.cover,
+                                                                                          image: Image.network(
+                                                                                            valueOrDefault<String>(
+                                                                                              'https://image.mux.com/${gridViewStreamsRecord.streamId}/animated.webp',
+                                                                                              'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
+                                                                                            ),
+                                                                                          ).image,
+                                                                                        ),
+                                                                                        borderRadius: BorderRadius.circular(5),
                                                                                       ),
-                                                                                    ).image,
-                                                                                  ),
-                                                                                  borderRadius: BorderRadius.circular(5),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            Padding(
-                                                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
-                                                                              child: Container(
-                                                                                width: MediaQuery.of(context).size.width,
-                                                                                height: 200,
-                                                                                decoration: BoxDecoration(
-                                                                                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                                                                                  image: DecorationImage(
-                                                                                    fit: BoxFit.cover,
-                                                                                    image: Image.network(
-                                                                                      valueOrDefault<String>(
-                                                                                        columnChannelsRecord.channelImage,
-                                                                                        'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
+                                                                                      child: Container(
+                                                                                        width: 15,
+                                                                                        height: 15,
+                                                                                        child: Stack(
+                                                                                          children: [
+                                                                                            if (gridViewStreamsRecord.isLive ?? true)
+                                                                                              Align(
+                                                                                                alignment: AlignmentDirectional(-0.85, -0.85),
+                                                                                                child: FaIcon(
+                                                                                                  FontAwesomeIcons.solidCircle,
+                                                                                                  color: FlutterFlowTheme.of(context).customColor3,
+                                                                                                  size: 10,
+                                                                                                ),
+                                                                                              ),
+                                                                                          ],
+                                                                                        ),
                                                                                       ),
-                                                                                    ).image,
+                                                                                    ),
                                                                                   ),
-                                                                                  borderRadius: BorderRadius.circular(5),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            Padding(
-                                                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 15),
-                                                                              child: Container(
-                                                                                width: MediaQuery.of(context).size.width,
-                                                                                height: 200,
-                                                                                decoration: BoxDecoration(
-                                                                                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                                                                                  image: DecorationImage(
-                                                                                    fit: BoxFit.cover,
-                                                                                    image: Image.network(
-                                                                                      valueOrDefault<String>(
-                                                                                        columnChannelsRecord.channelImage,
-                                                                                        'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
-                                                                                      ),
-                                                                                    ).image,
-                                                                                  ),
-                                                                                  borderRadius: BorderRadius.circular(5),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ],
+                                                                                );
+                                                                              },
+                                                                            );
+                                                                          },
                                                                         ),
                                                                       ),
                                                                     ],

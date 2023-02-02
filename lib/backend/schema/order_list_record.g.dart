@@ -58,6 +58,14 @@ class _$OrderListRecordSerializer
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
     }
+    value = object.addressRef;
+    if (value != null) {
+      result
+        ..add('addressRef')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(
+                DocumentReference, const [const FullType.nullable(Object)])));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -105,6 +113,12 @@ class _$OrderListRecordSerializer
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
           break;
+        case 'addressRef':
+          result.addressRef = serializers.deserialize(value,
+              specifiedType: const FullType(DocumentReference, const [
+                const FullType.nullable(Object)
+              ])) as DocumentReference<Object?>?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -130,6 +144,8 @@ class _$OrderListRecord extends OrderListRecord {
   @override
   final DocumentReference<Object?>? shopRef;
   @override
+  final DocumentReference<Object?>? addressRef;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$OrderListRecord([void Function(OrderListRecordBuilder)? updates]) =>
@@ -141,6 +157,7 @@ class _$OrderListRecord extends OrderListRecord {
       this.orderTotal,
       this.userRef,
       this.shopRef,
+      this.addressRef,
       this.ffRef})
       : super._();
 
@@ -161,6 +178,7 @@ class _$OrderListRecord extends OrderListRecord {
         orderTotal == other.orderTotal &&
         userRef == other.userRef &&
         shopRef == other.shopRef &&
+        addressRef == other.addressRef &&
         ffRef == other.ffRef;
   }
 
@@ -169,10 +187,12 @@ class _$OrderListRecord extends OrderListRecord {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, orderNo.hashCode), orderDate.hashCode),
-                    orderTotal.hashCode),
-                userRef.hashCode),
-            shopRef.hashCode),
+                $jc(
+                    $jc($jc($jc(0, orderNo.hashCode), orderDate.hashCode),
+                        orderTotal.hashCode),
+                    userRef.hashCode),
+                shopRef.hashCode),
+            addressRef.hashCode),
         ffRef.hashCode));
   }
 
@@ -184,6 +204,7 @@ class _$OrderListRecord extends OrderListRecord {
           ..add('orderTotal', orderTotal)
           ..add('userRef', userRef)
           ..add('shopRef', shopRef)
+          ..add('addressRef', addressRef)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -213,6 +234,11 @@ class OrderListRecordBuilder
   DocumentReference<Object?>? get shopRef => _$this._shopRef;
   set shopRef(DocumentReference<Object?>? shopRef) => _$this._shopRef = shopRef;
 
+  DocumentReference<Object?>? _addressRef;
+  DocumentReference<Object?>? get addressRef => _$this._addressRef;
+  set addressRef(DocumentReference<Object?>? addressRef) =>
+      _$this._addressRef = addressRef;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -229,6 +255,7 @@ class OrderListRecordBuilder
       _orderTotal = $v.orderTotal;
       _userRef = $v.userRef;
       _shopRef = $v.shopRef;
+      _addressRef = $v.addressRef;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -257,6 +284,7 @@ class OrderListRecordBuilder
             orderTotal: orderTotal,
             userRef: userRef,
             shopRef: shopRef,
+            addressRef: addressRef,
             ffRef: ffRef);
     replace(_$result);
     return _$result;

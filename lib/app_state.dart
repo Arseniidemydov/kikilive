@@ -353,6 +353,12 @@ class FFAppState extends ChangeNotifier {
   set chatOpen(bool _value) {
     _chatOpen = _value;
   }
+
+  DocumentReference? _isOrderOpen;
+  DocumentReference? get isOrderOpen => _isOrderOpen;
+  set isOrderOpen(DocumentReference? _value) {
+    _isOrderOpen = _value;
+  }
 }
 
 LatLng? _latLngFromString(String? val) {

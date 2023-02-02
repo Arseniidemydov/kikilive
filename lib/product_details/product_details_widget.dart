@@ -64,7 +64,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
           curve: Curves.easeInOut,
           delay: 0.ms,
           duration: 600.ms,
-          begin: Offset(0, 40),
+          begin: Offset(0, 80),
           end: Offset(0, 0),
         ),
       ],
@@ -171,7 +171,8 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
             desktop: false,
           )
               ? AppBar(
-                  backgroundColor: Color(0xFFFFFBFE),
+                  backgroundColor:
+                      FlutterFlowTheme.of(context).secondaryBackground,
                   automaticallyImplyLeading: false,
                   leading: FlutterFlowIconButton(
                     borderColor: Colors.transparent,
@@ -236,486 +237,541 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 0.35,
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                              ),
-                              child: Stack(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        16, 16, 16, 16),
-                                    child: Hero(
-                                      tag: productDetailsProductsRecord
-                                          .productPhoto!,
-                                      transitionOnUserGestures: true,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: Image.asset(
-                                          'assets/images/default.png',
-                                          width: double.infinity,
-                                          height: 300,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0, 16, 0, 16),
-                                    child: Hero(
-                                      tag: productDetailsProductsRecord
-                                          .productPhoto!,
-                                      transitionOnUserGestures: true,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(0),
-                                        child: Image.network(
-                                          productDetailsProductsRecord
-                                              .productPhoto!,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: 300,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 15, 16, 0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  InkWell(
-                                    onTap: () async {
-                                      context.pushNamed(
-                                        'userProfileView',
-                                        queryParams: {
-                                          'shopReference': serializeParam(
-                                            productDetailsProductsRecord
-                                                .shopRef,
-                                            ParamType.DocumentReference,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height * 1,
+                        decoration: BoxDecoration(
+                          color: FlutterFlowTheme.of(context).primaryBackground,
+                        ),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: MediaQuery.of(context).size.width,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.45,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                ),
+                                child: Stack(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          16, 16, 16, 16),
+                                      child: Hero(
+                                        tag: productDetailsProductsRecord
+                                            .productPhoto!,
+                                        transitionOnUserGestures: true,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          child: Image.asset(
+                                            'assets/images/default.png',
+                                            width: double.infinity,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.45,
+                                            fit: BoxFit.cover,
                                           ),
-                                        }.withoutNulls,
-                                      );
-                                    },
-                                    child: Text(
-                                      productDetailsProductsRecord.shopName!,
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText1,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          0, 16, 0, 16),
+                                      child: Hero(
+                                        tag: productDetailsProductsRecord
+                                            .productPhoto!,
+                                        transitionOnUserGestures: true,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(0),
+                                          child: Image.network(
+                                            productDetailsProductsRecord
+                                                .productPhoto!,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.45,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
-                              child: Text(
-                                productDetailsProductsRecord.sku!,
-                                style: FlutterFlowTheme.of(context)
-                                    .title1
-                                    .override(
-                                      fontFamily: 'Roboto',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16, 15, 16, 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    InkWell(
+                                      onTap: () async {
+                                        context.pushNamed(
+                                          'userProfileView',
+                                          queryParams: {
+                                            'shopReference': serializeParam(
+                                              productDetailsProductsRecord
+                                                  .shopRef,
+                                              ParamType.DocumentReference,
+                                            ),
+                                          }.withoutNulls,
+                                        );
+                                      },
+                                      child: Text(
+                                        productDetailsProductsRecord.shopName!,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyText1
+                                            .override(
+                                              fontFamily: 'Roboto',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryColor,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                      ),
                                     ),
-                              ).animateOnPageLoad(
-                                  animationsMap['textOnPageLoadAnimation1']!),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 8, 16, 0),
-                              child: Text(
-                                productDetailsProductsRecord.productName!,
-                                style: FlutterFlowTheme.of(context)
-                                    .title1
-                                    .override(
-                                      fontFamily: 'Roboto',
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                              ).animateOnPageLoad(
-                                  animationsMap['textOnPageLoadAnimation2']!),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 5, 0, 10),
-                              child: Text(
-                                productDetailsProductsRecord.productPrice!
-                                    .toString(),
-                                textAlign: TextAlign.start,
-                                style: FlutterFlowTheme.of(context)
-                                    .subtitle1
-                                    .override(
-                                      fontFamily: 'Roboto',
-                                      fontSize: 14,
-                                    ),
-                              ).animateOnPageLoad(
-                                  animationsMap['textOnPageLoadAnimation3']!),
-                            ),
-                            Divider(
-                              height: 20,
-                              thickness: 1,
-                              indent: 16,
-                              endIndent: 16,
-                              color: Color(0xA3E5E5E5),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 10, 16, 0),
-                              child: Row(
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16, 8, 16, 0),
+                                child: Text(
+                                  productDetailsProductsRecord.productName!,
+                                  style: FlutterFlowTheme.of(context)
+                                      .title1
+                                      .override(
+                                        fontFamily: 'Roboto',
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                ).animateOnPageLoad(
+                                    animationsMap['textOnPageLoadAnimation1']!),
+                              ),
+                              Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text(
-                                    'Descriptions',
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyText1,
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        16, 5, 0, 10),
+                                    child: Text(
+                                      productDetailsProductsRecord.productPrice!
+                                          .toString(),
+                                      textAlign: TextAlign.start,
+                                      style: FlutterFlowTheme.of(context)
+                                          .subtitle1
+                                          .override(
+                                            fontFamily: 'Roboto',
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ).animateOnPageLoad(animationsMap[
+                                        'textOnPageLoadAnimation2']!),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        2, 5, 0, 10),
+                                    child: Text(
+                                      'THB',
+                                      textAlign: TextAlign.start,
+                                      style: FlutterFlowTheme.of(context)
+                                          .subtitle1
+                                          .override(
+                                            fontFamily: 'Roboto',
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ).animateOnPageLoad(animationsMap[
+                                        'textOnPageLoadAnimation3']!),
                                   ),
                                 ],
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
-                              child: Text(
-                                productDetailsProductsRecord.productDesc!,
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyText2
-                                    .override(
-                                      fontFamily: 'Roboto',
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                    ),
-                              ).animateOnPageLoad(
-                                  animationsMap['textOnPageLoadAnimation4']!),
-                            ),
-                            Divider(
-                              height: 24,
-                              thickness: 2,
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        16, 0, 16, 0),
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryColor,
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Expanded(
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0, 0, 16, 0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 5, 0, 5),
-                                              child: Container(
-                                                width: 270,
-                                                height: 90,
-                                                decoration: BoxDecoration(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryColor,
-                                                ),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  5, 5, 5, 5),
-                                                      child: Container(
-                                                        width: 60,
-                                                        height: 60,
-                                                        clipBehavior:
-                                                            Clip.antiAlias,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                        ),
-                                                        child: Image.network(
-                                                          'https://picsum.photos/seed/452/600',
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      'Premium Shop',
-                                                      style:
+                                            16, 0, 16, 5),
+                                        child: Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            color: FlutterFlowTheme.of(context)
+                                                .brandBg,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0, 0, 16, 0),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 5, 0, 5),
+                                                  child: Container(
+                                                    width: 270,
+                                                    height: 90,
+                                                    decoration: BoxDecoration(
+                                                      color:
                                                           FlutterFlowTheme.of(
                                                                   context)
+                                                              .brandBg,
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(5,
+                                                                      5, 5, 5),
+                                                          child: Container(
+                                                            width: 60,
+                                                            height: 60,
+                                                            clipBehavior:
+                                                                Clip.antiAlias,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                            ),
+                                                            child:
+                                                                Image.network(
+                                                              'https://picsum.photos/seed/452/600',
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          productDetailsProductsRecord
+                                                              .shopName!,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
                                                               .bodyText1
                                                               .override(
                                                                 fontFamily:
                                                                     'Roboto',
                                                                 fontSize: 16,
                                                               ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ],
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(0, 5, 0, 5),
-                                              child: Container(
-                                                width: 50,
-                                                height: 100,
-                                                decoration: BoxDecoration(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryColor,
-                                                ),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .navigate_next_rounded,
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 5, 0, 5),
+                                                  child: Container(
+                                                    width: 50,
+                                                    height: 100,
+                                                    decoration: BoxDecoration(
                                                       color:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .button,
-                                                      size: 24,
+                                                              .brandBg,
                                                     ),
-                                                  ],
+                                                    child: Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        Icon(
+                                                          Icons
+                                                              .navigate_next_rounded,
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .button,
+                                                          size: 24,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16, 10, 16, 0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Text(
+                                      'Descriptions',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16, 8, 16, 15),
+                                child: Text(
+                                  productDetailsProductsRecord.productDesc!,
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyText2
+                                      .override(
+                                        fontFamily: 'Roboto',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                      ),
+                                ).animateOnPageLoad(
+                                    animationsMap['textOnPageLoadAnimation4']!),
+                              ),
+                              if (responsiveVisibility(
+                                context: context,
+                                phone: false,
+                                tablet: false,
+                                tabletLandscape: false,
+                              ))
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      16, 0, 16, 8),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .backgroundChat,
+                                    ),
+                                    child: Container(
+                                      width: double.infinity,
+                                      color: FlutterFlowTheme.of(context)
+                                          .backgroundChat,
+                                      child: ExpandableNotifier(
+                                        initialExpanded: false,
+                                        child: ExpandablePanel(
+                                          header: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 12, 0),
+                                                child: Icon(
+                                                  Icons.sticky_note_2_outlined,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .button,
+                                                  size: 24,
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Divider(
-                              height: 24,
-                              thickness: 2,
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 0, 16, 8),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFFFFFBFE),
-                                ),
-                                child: Container(
-                                  width: double.infinity,
-                                  color: Color(0xFFFFFBFE),
-                                  child: ExpandableNotifier(
-                                    initialExpanded: false,
-                                    child: ExpandablePanel(
-                                      header: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 0, 12, 0),
-                                            child: Icon(
-                                              Icons.sticky_note_2_outlined,
+                                              Text(
+                                                'Product Detail',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText1,
+                                              ),
+                                            ],
+                                          ),
+                                          collapsed: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            decoration: BoxDecoration(
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .button,
-                                              size: 24,
+                                                      .backgroundChat,
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(5, 0, 0, 0),
+                                              child: Text(
+                                                productDetailsProductsRecord
+                                                    .productDesc!,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText2
+                                                        .override(
+                                                          fontFamily: 'Roboto',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 12,
+                                                        ),
+                                              ),
                                             ),
                                           ),
-                                          Text(
-                                            'Product Detail',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText1,
+                                          expanded: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Text(
+                                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText2,
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                      collapsed: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFFFFFBFE),
-                                        ),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  5, 0, 0, 0),
-                                          child: Text(
-                                            productDetailsProductsRecord
-                                                .productDesc!,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText2
-                                                .override(
-                                                  fontFamily: 'Roboto',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                  fontSize: 12,
-                                                ),
+                                          theme: ExpandableThemeData(
+                                            tapHeaderToExpand: true,
+                                            tapBodyToExpand: false,
+                                            tapBodyToCollapse: false,
+                                            headerAlignment:
+                                                ExpandablePanelHeaderAlignment
+                                                    .center,
+                                            hasIcon: true,
+                                            expandIcon:
+                                                Icons.chevron_right_rounded,
+                                            collapseIcon: Icons
+                                                .keyboard_arrow_down_rounded,
+                                            iconSize: 24,
+                                            iconColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .button,
                                           ),
                                         ),
-                                      ),
-                                      expanded: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Text(
-                                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText2,
-                                          ),
-                                        ],
-                                      ),
-                                      theme: ExpandableThemeData(
-                                        tapHeaderToExpand: true,
-                                        tapBodyToExpand: false,
-                                        tapBodyToCollapse: false,
-                                        headerAlignment:
-                                            ExpandablePanelHeaderAlignment
-                                                .center,
-                                        hasIcon: true,
-                                        expandIcon: Icons.chevron_right_rounded,
-                                        collapseIcon:
-                                            Icons.keyboard_arrow_down_rounded,
-                                        iconSize: 24,
-                                        iconColor:
-                                            FlutterFlowTheme.of(context).button,
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            Divider(
-                              height: 20,
-                              thickness: 1,
-                              indent: 16,
-                              endIndent: 16,
-                              color: Color(0xA3E5E5E5),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(16, 0, 16, 24),
-                              child: Container(
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
+                              if (responsiveVisibility(
+                                context: context,
+                                phone: false,
+                                tablet: false,
+                                tabletLandscape: false,
+                              ))
+                                Divider(
+                                  height: 20,
+                                  thickness: 1,
+                                  indent: 16,
+                                  endIndent: 16,
+                                  color: Color(0xA3E5E5E5),
                                 ),
-                                child: Container(
-                                  width: double.infinity,
-                                  color: Color(0xFFFFFBFE),
-                                  child: ExpandableNotifier(
-                                    initialExpanded: false,
-                                    child: ExpandablePanel(
-                                      header: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 0, 12, 0),
-                                            child: Icon(
-                                              Icons.local_shipping_outlined,
+                              if (responsiveVisibility(
+                                context: context,
+                                phone: false,
+                                tablet: false,
+                                tabletLandscape: false,
+                              ))
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      16, 0, 16, 24),
+                                  child: Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .backgroundChat,
+                                    ),
+                                    child: Container(
+                                      width: double.infinity,
+                                      color: FlutterFlowTheme.of(context)
+                                          .backgroundChat,
+                                      child: ExpandableNotifier(
+                                        initialExpanded: false,
+                                        child: ExpandablePanel(
+                                          header: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 12, 0),
+                                                child: Icon(
+                                                  Icons.local_shipping_outlined,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .button,
+                                                  size: 24,
+                                                ),
+                                              ),
+                                              Text(
+                                                'Shipping Information',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText1,
+                                              ),
+                                            ],
+                                          ),
+                                          collapsed: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            decoration: BoxDecoration(
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .button,
-                                              size: 24,
+                                                      .backgroundChat,
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(5, 0, 0, 0),
+                                              child: Text(
+                                                'Lorem ipsum dolor sit amet, consectetur adipiscing...',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText2
+                                                        .override(
+                                                          fontFamily: 'Roboto',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryText,
+                                                          fontSize: 12,
+                                                        ),
+                                              ),
                                             ),
                                           ),
-                                          Text(
-                                            'Shipping Information',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText1,
+                                          expanded: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Text(
+                                                'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText2,
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                      collapsed: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFFFFFBFE),
+                                          theme: ExpandableThemeData(
+                                            tapHeaderToExpand: true,
+                                            tapBodyToExpand: false,
+                                            tapBodyToCollapse: false,
+                                            headerAlignment:
+                                                ExpandablePanelHeaderAlignment
+                                                    .center,
+                                            hasIcon: true,
+                                            expandIcon:
+                                                Icons.chevron_right_rounded,
+                                            collapseIcon: Icons
+                                                .keyboard_arrow_down_rounded,
+                                            iconSize: 24,
+                                            iconColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .button,
+                                          ),
                                         ),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  5, 0, 0, 0),
-                                          child: Text(
-                                            'Lorem ipsum dolor sit amet, consectetur adipiscing...',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText2
-                                                .override(
-                                                  fontFamily: 'Roboto',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                  fontSize: 12,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                      expanded: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Text(
-                                            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText2,
-                                          ),
-                                        ],
-                                      ),
-                                      theme: ExpandableThemeData(
-                                        tapHeaderToExpand: true,
-                                        tapBodyToExpand: false,
-                                        tapBodyToCollapse: false,
-                                        headerAlignment:
-                                            ExpandablePanelHeaderAlignment
-                                                .center,
-                                        hasIcon: true,
-                                        expandIcon: Icons.chevron_right_rounded,
-                                        collapseIcon:
-                                            Icons.keyboard_arrow_down_rounded,
-                                        iconSize: 24,
-                                        iconColor:
-                                            FlutterFlowTheme.of(context).button,
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -741,9 +797,9 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                             snapshot.data!;
                         return Container(
                           width: double.infinity,
-                          height: 120,
+                          height: 90,
                           decoration: BoxDecoration(
-                            color: Color(0xFFFFFBFE),
+                            color: FlutterFlowTheme.of(context).bottomSheet,
                             boxShadow: [
                               BoxShadow(
                                 blurRadius: 4,
@@ -760,51 +816,57 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Container(
-                                  width: 130,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    shape: BoxShape.rectangle,
-                                    border: Border.all(
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryColor,
-                                      width: 1,
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0, 0, 10, 0),
+                                  child: Container(
+                                    width: 130,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      shape: BoxShape.rectangle,
+                                      border: Border.all(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryColor,
+                                        width: 1,
+                                      ),
                                     ),
-                                  ),
-                                  child: FlutterFlowCountController(
-                                    decrementIconBuilder: (enabled) => Icon(
-                                      Icons.remove_circle,
-                                      color: enabled
-                                          ? FlutterFlowTheme.of(context)
-                                              .primaryColor
-                                          : FlutterFlowTheme.of(context)
-                                              .primaryColor,
-                                      size: 25,
+                                    child: FlutterFlowCountController(
+                                      decrementIconBuilder: (enabled) => Icon(
+                                        Icons.remove_circle,
+                                        color: enabled
+                                            ? FlutterFlowTheme.of(context)
+                                                .primaryColor
+                                            : FlutterFlowTheme.of(context)
+                                                .primaryColor,
+                                        size: 25,
+                                      ),
+                                      incrementIconBuilder: (enabled) => Icon(
+                                        Icons.add_circle_outlined,
+                                        color: enabled
+                                            ? FlutterFlowTheme.of(context)
+                                                .button
+                                            : FlutterFlowTheme.of(context)
+                                                .primaryColor,
+                                        size: 24,
+                                      ),
+                                      countBuilder: (count) => Text(
+                                        count.toString(),
+                                        style: FlutterFlowTheme.of(context)
+                                            .subtitle1
+                                            .override(
+                                              fontFamily: 'Roboto',
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                            ),
+                                      ),
+                                      count: countControllerValue ??= 1,
+                                      updateCount: (count) => setState(
+                                          () => countControllerValue = count),
+                                      stepSize: 1,
+                                      minimum: 1,
                                     ),
-                                    incrementIconBuilder: (enabled) => Icon(
-                                      Icons.add_circle_outlined,
-                                      color: enabled
-                                          ? FlutterFlowTheme.of(context).button
-                                          : FlutterFlowTheme.of(context)
-                                              .primaryColor,
-                                      size: 24,
-                                    ),
-                                    countBuilder: (count) => Text(
-                                      count.toString(),
-                                      style: FlutterFlowTheme.of(context)
-                                          .subtitle1
-                                          .override(
-                                            fontFamily: 'Roboto',
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryText,
-                                          ),
-                                    ),
-                                    count: countControllerValue ??= 1,
-                                    updateCount: (count) => setState(
-                                        () => countControllerValue = count),
-                                    stepSize: 1,
-                                    minimum: 1,
                                   ),
                                 ),
                                 StreamBuilder<List<UserOrderRecord>>(
@@ -865,17 +927,18 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                       },
                                       text: 'Add to Cart',
                                       options: FFButtonOptions(
-                                        width: 220,
+                                        width: 200,
                                         height: 50,
-                                        color:
-                                            FlutterFlowTheme.of(context).button,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryColor,
                                         textStyle: FlutterFlowTheme.of(context)
                                             .subtitle2
                                             .override(
                                               fontFamily: 'Roboto',
                                               color:
                                                   FlutterFlowTheme.of(context)
-                                                      .primaryBackground,
+                                                      .secondaryColor,
+                                              fontSize: 14,
                                             ),
                                         elevation: 2,
                                         borderSide: BorderSide(

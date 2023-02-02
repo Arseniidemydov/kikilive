@@ -174,6 +174,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
+              name: 'termsConditions',
+              path: 'termsConditions',
+              builder: (context, params) => TermsConditionsWidget(),
+            ),
+            FFRoute(
               name: 'paymentSuccess',
               path: 'paymentSuccess',
               builder: (context, params) => PaymentSuccessWidget(
@@ -183,11 +188,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 transactionId:
                     params.getParam('transactionId', ParamType.String),
               ),
-            ),
-            FFRoute(
-              name: 'termsConditions',
-              path: 'termsConditions',
-              builder: (context, params) => TermsConditionsWidget(),
             ),
             FFRoute(
               name: 'sellerSettings',
@@ -222,6 +222,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 orderNo: params.getParam('orderNo', ParamType.String),
                 shopRef: params.getParam(
                     'shopRef', ParamType.DocumentReference, false, ['users']),
+                userRef: params.getParam(
+                    'userRef', ParamType.DocumentReference, false, ['users']),
+                addressRef: params.getParam('addressRef',
+                    ParamType.DocumentReference, false, ['address']),
               ),
             ),
             FFRoute(
@@ -310,6 +314,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 url: params.getParam('url', ParamType.String),
                 streamID: params.getParam('streamID',
                     ParamType.DocumentReference, false, ['streams']),
+                channelRef: params.getParam('channelRef',
+                    ParamType.DocumentReference, false, ['channels']),
               ),
             ),
             FFRoute(
@@ -317,8 +323,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               path: 'liveBroadcast',
               builder: (context, params) => LiveBroadcastWidget(
                 videoName: params.getParam('videoName', ParamType.String),
-                channelRef: params.getParam('channelRef',
-                    ParamType.DocumentReference, false, ['channels']),
+                channelRef: params.getParam<DocumentReference>('channelRef',
+                    ParamType.DocumentReference, true, ['channels']),
               ),
             ),
             FFRoute(

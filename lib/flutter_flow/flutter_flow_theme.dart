@@ -60,6 +60,12 @@ abstract class FlutterFlowTheme {
   late Color white;
   late Color background;
   late Color backgroundChat;
+  late Color greyText;
+  late Color verifiedIcon;
+  late Color dimLine;
+  late Color brandBg;
+  late Color bottomSheet;
+  late Color paymentbg;
 
   String get title1Family => typography.title1Family;
   TextStyle get title1 => typography.title1;
@@ -110,6 +116,12 @@ class LightModeTheme extends FlutterFlowTheme {
   late Color white = Color(0xFFFFFFFF);
   late Color background = Color(0xFFFFFBFE);
   late Color backgroundChat = Color(0xB3FFFFFF);
+  late Color greyText = Color(0xFF525252);
+  late Color verifiedIcon = Color(0xFF16AF77);
+  late Color dimLine = Color(0xFFCACACA);
+  late Color brandBg = Color(0xFFFFFFFF);
+  late Color bottomSheet = Color(0xFFFFFFFF);
+  late Color paymentbg = Color(0xFFEDEDED);
 }
 
 abstract class Typography {
@@ -191,7 +203,7 @@ class DarkModeTheme extends FlutterFlowTheme {
   late Color tertiaryColor = const Color(0xFFCAC4D0);
   late Color alternate = const Color(0xFFCCC2DC);
   late Color primaryBackground = const Color(0xFF1C1B1F);
-  late Color secondaryBackground = const Color(0xFF49454F);
+  late Color secondaryBackground = const Color(0xFF313033);
   late Color primaryText = const Color(0xFFE6E1E5);
   late Color secondaryText = const Color(0xFFCAC4D0);
 
@@ -216,6 +228,12 @@ class DarkModeTheme extends FlutterFlowTheme {
   late Color white = Color(0xFFFFFFFF);
   late Color background = Color(0xFF1D2429);
   late Color backgroundChat = Color(0xB3000000);
+  late Color greyText = Color(0xFFD3D3D3);
+  late Color verifiedIcon = Color(0xFF16AF77);
+  late Color dimLine = Color(0xFFCACACA);
+  late Color brandBg = Color(0xFF464646);
+  late Color bottomSheet = Color(0xFF282828);
+  late Color paymentbg = Color(0xFF2E2E2E);
 }
 
 extension TextStyleHelper on TextStyle {

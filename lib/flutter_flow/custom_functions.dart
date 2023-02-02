@@ -354,3 +354,23 @@ String? createUrlFromPlayId(String? playbackId) {
   // Add your function code here!
   return 'https://stream.mux.com/$playbackId.m3u8';
 }
+
+double? calcLiveViewrsChannel(
+  List<StreamsRecord> data,
+  int? index,
+  int count,
+) {
+  var maxIndex = index;
+  if (maxIndex == -1 || index! >= data.length) {
+    // Pass index of -1 if you want a grand total across all indexes
+    maxIndex = data.length - 1;
+  }
+
+  double total = 0;
+  for (var i = 0; i <= maxIndex!; i++) {
+    total += data[i]
+        .streamViewOnline!; // Todo: replace "pontos_totais" with the field you want to do a running total on
+  }
+
+  return total;
+}

@@ -18,9 +18,9 @@ export 'products/products_widget.dart' show ProductsWidget;
 export 'forgot_password/forgot_password_widget.dart' show ForgotPasswordWidget;
 export 'shopping_cart/shopping_cart_widget.dart' show ShoppingCartWidget;
 export 'product_details/product_details_widget.dart' show ProductDetailsWidget;
-export 'payment_success/payment_success_widget.dart' show PaymentSuccessWidget;
 export 'terms_conditions/terms_conditions_widget.dart'
     show TermsConditionsWidget;
+export 'payment_success/payment_success_widget.dart' show PaymentSuccessWidget;
 export 'seller_settings/seller_settings_widget.dart' show SellerSettingsWidget;
 export 'sellers_details/sellers_details_widget.dart' show SellersDetailsWidget;
 export 'sellers_details_preview/sellers_details_preview_widget.dart'

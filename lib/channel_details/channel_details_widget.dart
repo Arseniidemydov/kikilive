@@ -1,9 +1,9 @@
+import '../auth/auth_util.dart';
 import '../backend/api_requests/api_calls.dart';
 import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../flutter_flow/flutter_flow_video_player.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
 import '../flutter_flow/custom_functions.dart' as functions;
 import 'dart:async';
@@ -127,29 +127,14 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                               image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: Image.network(
-                                  'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
+                                  valueOrDefault<String>(
+                                    channelDetailsChannelsRecord.channelImage,
+                                    'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
+                                  ),
                                 ).image,
                               ),
                               borderRadius: BorderRadius.circular(10),
                             ),
-                          ),
-                        ),
-                      if (channelDetailsChannelsRecord.channelVideoUrl !=
-                              null &&
-                          channelDetailsChannelsRecord.channelVideoUrl != '')
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(15, 15, 15, 15),
-                          child: FlutterFlowVideoPlayer(
-                            path:
-                                '${channelDetailsChannelsRecord.channelVideoUrl}',
-                            videoType: VideoType.network,
-                            width: MediaQuery.of(context).size.width,
-                            autoPlay: true,
-                            looping: false,
-                            showControls: true,
-                            allowFullScreen: false,
-                            allowPlaybackSpeedMenu: false,
                           ),
                         ),
                       Padding(
@@ -217,25 +202,76 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                                               Align(
                                                 alignment: AlignmentDirectional(
                                                     0, 0.05),
-                                                child: Text(
-                                                  channelDetailsChannelsRecord
-                                                      .channelViews!
-                                                      .toString(),
-                                                  textAlign: TextAlign.center,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyText1
-                                                      .override(
-                                                        fontFamily: 'Roboto',
-                                                        color:
+                                                child: Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 5, 0),
+                                                  child: StreamBuilder<
+                                                      List<StreamsRecord>>(
+                                                    stream: queryStreamsRecord(
+                                                      queryBuilder: (streamsRecord) =>
+                                                          streamsRecord
+                                                              .where(
+                                                                  'channel_reference',
+                                                                  arrayContains:
+                                                                      widget
+                                                                          .channelRef)
+                                                              .where('is_live',
+                                                                  isEqualTo:
+                                                                      true),
+                                                    ),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      // Customize what your widget looks like when it's loading.
+                                                      if (!snapshot.hasData) {
+                                                        return Center(
+                                                          child: SizedBox(
+                                                            width: 50,
+                                                            height: 50,
+                                                            child:
+                                                                CircularProgressIndicator(
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .primaryColor,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }
+                                                      List<StreamsRecord>
+                                                          textStreamsRecordList =
+                                                          snapshot.data!;
+                                                      return Text(
+                                                        formatNumber(
+                                                          functions.calcLiveViewrsChannel(
+                                                              textStreamsRecordList
+                                                                  .toList(),
+                                                              -1,
+                                                              textStreamsRecordList
+                                                                  .length),
+                                                          formatType: FormatType
+                                                              .compact,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .btnText,
-                                                        fontSize: 12,
-                                                        letterSpacing: 0.9,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
+                                                                .bodyText1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .btnText,
+                                                                  fontSize: 12,
+                                                                  letterSpacing:
+                                                                      0.9,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                      );
+                                                    },
+                                                  ),
                                                 ),
                                               ),
                                               Align(
@@ -309,10 +345,40 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                                             ),
                                           ),
                                           FFButtonWidget(
-                                            onPressed: () {
-                                              print('Button pressed ...');
+                                            onPressed: () async {
+                                              if (channelDetailsChannelsRecord
+                                                  .channelMembers!
+                                                  .toList()
+                                                  .contains(
+                                                      currentUserReference)) {
+                                                final channelsUpdateData = {
+                                                  'channel_members':
+                                                      FieldValue.arrayRemove([
+                                                    currentUserReference
+                                                  ]),
+                                                };
+                                                await channelDetailsChannelsRecord
+                                                    .reference
+                                                    .update(channelsUpdateData);
+                                              } else {
+                                                final channelsUpdateData = {
+                                                  'channel_members':
+                                                      FieldValue.arrayUnion([
+                                                    currentUserReference
+                                                  ]),
+                                                };
+                                                await channelDetailsChannelsRecord
+                                                    .reference
+                                                    .update(channelsUpdateData);
+                                              }
                                             },
-                                            text: 'Join',
+                                            text: channelDetailsChannelsRecord
+                                                    .channelMembers!
+                                                    .toList()
+                                                    .contains(
+                                                        currentUserReference)
+                                                ? 'Leave'
+                                                : 'Join',
                                             options: FFButtonOptions(
                                               width: 60,
                                               height: 40,
@@ -385,10 +451,11 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                                         queryBuilder: (streamsRecord) =>
                                             streamsRecord
                                                 .where('channel_reference',
-                                                    isEqualTo:
+                                                    arrayContains:
                                                         widget.channelRef)
-                                                .orderBy('timestamp',
-                                                    descending: true),
+                                                .orderBy('stream_view_online',
+                                                    descending: true)
+                                                .orderBy('is_live'),
                                       )))
                                 .future,
                             builder: (context, snapshot) {
@@ -445,295 +512,291 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.stretch,
                                           children: [
-                                            StreamBuilder<ChannelsRecord>(
-                                              stream:
-                                                  ChannelsRecord.getDocument(
-                                                      listViewStreamsRecord
-                                                          .channelReference!),
-                                              builder: (context, snapshot) {
-                                                // Customize what your widget looks like when it's loading.
-                                                if (!snapshot.hasData) {
-                                                  return Center(
-                                                    child: SizedBox(
-                                                      width: 50,
-                                                      height: 50,
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .primaryColor,
+                                            InkWell(
+                                              onTap: () async {
+                                                if (listViewStreamsRecord
+                                                    .isLive!) {
+                                                  context.pushNamed(
+                                                    'livestreamViewer',
+                                                    queryParams: {
+                                                      'url': serializeParam(
+                                                        listViewStreamsRecord
+                                                            .playbackUrl,
+                                                        ParamType.String,
                                                       ),
-                                                    ),
+                                                      'streamID':
+                                                          serializeParam(
+                                                        listViewStreamsRecord
+                                                            .reference,
+                                                        ParamType
+                                                            .DocumentReference,
+                                                      ),
+                                                    }.withoutNulls,
                                                   );
-                                                }
-                                                final containerChannelsRecord =
-                                                    snapshot.data!;
-                                                return InkWell(
-                                                  onTap: () async {
-                                                    if (listViewStreamsRecord
-                                                        .isLive!) {
-                                                      context.pushNamed(
-                                                        'livestreamViewer',
-                                                        queryParams: {
-                                                          'url': serializeParam(
+                                                } else {
+                                                  apiResultvaf =
+                                                      await GetLiveStreamIdCall
+                                                          .call(
+                                                    playbackId: functions
+                                                        .getPlaybackIdFromUrl(
                                                             listViewStreamsRecord
-                                                                .playbackUrl,
-                                                            ParamType.String,
-                                                          ),
-                                                          'streamID':
-                                                              serializeParam(
-                                                            listViewStreamsRecord
-                                                                .reference,
-                                                            ParamType
-                                                                .DocumentReference,
-                                                          ),
-                                                        }.withoutNulls,
-                                                      );
-                                                    } else {
-                                                      apiResultvaf =
-                                                          await GetLiveStreamIdCall
-                                                              .call(
-                                                        playbackId: functions
-                                                            .getPlaybackIdFromUrl(
-                                                                listViewStreamsRecord
-                                                                    .playbackUrl),
-                                                      );
-                                                      apiResulto0b =
-                                                          await GetPastLiveStreamCall
-                                                              .call(
-                                                        streamId:
-                                                            GetLiveStreamIdCall
-                                                                .playBackID(
-                                                          (apiResultvaf
-                                                                  ?.jsonBody ??
-                                                              ''),
-                                                        ).toString(),
-                                                      );
+                                                                .playbackUrl),
+                                                  );
+                                                  apiResulto0b =
+                                                      await GetPastLiveStreamCall
+                                                          .call(
+                                                    streamId:
+                                                        GetLiveStreamIdCall
+                                                            .playBackID(
+                                                      (apiResultvaf?.jsonBody ??
+                                                          ''),
+                                                    ).toString(),
+                                                  );
 
-                                                      context.pushNamed(
-                                                        'livestreamViewer',
-                                                        queryParams: {
-                                                          'url': serializeParam(
-                                                            functions.createUrlFromPlayId(
+                                                  context.pushNamed(
+                                                    'livestreamViewer',
+                                                    queryParams: {
+                                                      'url': serializeParam(
+                                                        functions
+                                                            .createUrlFromPlayId(
                                                                 GetPastLiveStreamCall
                                                                     .playbackID(
-                                                              (apiResulto0b
-                                                                      ?.jsonBody ??
-                                                                  ''),
-                                                            ).toString()),
-                                                            ParamType.String,
-                                                          ),
-                                                          'streamID':
-                                                              serializeParam(
-                                                            listViewStreamsRecord
-                                                                .reference,
-                                                            ParamType
-                                                                .DocumentReference,
-                                                          ),
-                                                        }.withoutNulls,
-                                                      );
-                                                    }
+                                                          (apiResulto0b
+                                                                  ?.jsonBody ??
+                                                              ''),
+                                                        ).toString()),
+                                                        ParamType.String,
+                                                      ),
+                                                      'streamID':
+                                                          serializeParam(
+                                                        listViewStreamsRecord
+                                                            .reference,
+                                                        ParamType
+                                                            .DocumentReference,
+                                                      ),
+                                                    }.withoutNulls,
+                                                  );
+                                                }
 
-                                                    setState(() {});
-                                                  },
-                                                  child: Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.54,
-                                                    decoration: BoxDecoration(
-                                                      color: FlutterFlowTheme
-                                                              .of(context)
-                                                          .secondaryBackground,
-                                                      image: DecorationImage(
-                                                        fit: BoxFit.cover,
-                                                        image: Image.network(
-                                                          valueOrDefault<
-                                                              String>(
-                                                            containerChannelsRecord
-                                                                .channelImage,
-                                                            'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
-                                                          ),
-                                                        ).image,
+                                                setState(() {});
+                                              },
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.54,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryBackground,
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: Image.network(
+                                                      valueOrDefault<String>(
+                                                        'https://image.mux.com/${listViewStreamsRecord.streamId}/animated.webp',
+                                                        'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
                                                       ),
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        bottomLeft:
-                                                            Radius.circular(0),
-                                                        bottomRight:
-                                                            Radius.circular(0),
-                                                        topLeft:
-                                                            Radius.circular(10),
-                                                        topRight:
-                                                            Radius.circular(10),
-                                                      ),
-                                                    ),
-                                                    child: Stack(
+                                                    ).image,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    bottomLeft:
+                                                        Radius.circular(0),
+                                                    bottomRight:
+                                                        Radius.circular(0),
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                  ),
+                                                ),
+                                                child: Stack(
+                                                  children: [
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
-                                                        Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            if (listViewStreamsRecord
-                                                                    .isLive ??
-                                                                true)
-                                                              Align(
-                                                                alignment:
-                                                                    AlignmentDirectional(
-                                                                        0, -1),
-                                                                child: Padding(
-                                                                  padding: EdgeInsetsDirectional
+                                                        if (listViewStreamsRecord
+                                                                .isLive ??
+                                                            true)
+                                                          Align(
+                                                            alignment:
+                                                                AlignmentDirectional(
+                                                                    0, -1),
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           12,
                                                                           15,
                                                                           0,
                                                                           0),
-                                                                  child:
-                                                                      Container(
-                                                                    width: 45,
-                                                                    height: 28,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .customColor3,
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
+                                                              child: Container(
+                                                                width: 45,
+                                                                height: 28,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .customColor3,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
                                                                               10),
-                                                                    ),
-                                                                    child:
-                                                                        Align(
-                                                                      alignment:
-                                                                          AlignmentDirectional(
-                                                                              0,
-                                                                              0.05),
-                                                                      child:
-                                                                          Text(
-                                                                        'LIVE',
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style: FlutterFlowTheme.of(context)
-                                                                            .bodyText1
-                                                                            .override(
-                                                                              fontFamily: 'Roboto',
-                                                                              color: FlutterFlowTheme.of(context).btnText,
-                                                                              fontSize: 12,
-                                                                              letterSpacing: 0.9,
-                                                                              fontWeight: FontWeight.w500,
-                                                                            ),
-                                                                      ),
-                                                                    ),
+                                                                ),
+                                                                child: Align(
+                                                                  alignment:
+                                                                      AlignmentDirectional(
+                                                                          0,
+                                                                          0.05),
+                                                                  child: Text(
+                                                                    'LIVE',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyText1
+                                                                        .override(
+                                                                          fontFamily:
+                                                                              'Roboto',
+                                                                          color:
+                                                                              FlutterFlowTheme.of(context).btnText,
+                                                                          fontSize:
+                                                                              12,
+                                                                          letterSpacing:
+                                                                              0.9,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                        ),
                                                                   ),
                                                                 ),
                                                               ),
-                                                            if (listViewStreamsRecord
-                                                                    .isLive ??
-                                                                true)
-                                                              Align(
-                                                                alignment:
-                                                                    AlignmentDirectional(
-                                                                        0, -1),
-                                                                child: Padding(
-                                                                  padding: EdgeInsetsDirectional
+                                                            ),
+                                                          ),
+                                                        if (listViewStreamsRecord
+                                                                .isLive ??
+                                                            true)
+                                                          Align(
+                                                            alignment:
+                                                                AlignmentDirectional(
+                                                                    0, -1),
+                                                            child: Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
                                                                       .fromSTEB(
                                                                           0,
                                                                           15,
                                                                           12,
                                                                           0),
-                                                                  child:
-                                                                      Container(
-                                                                    height: 28,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: Color(
-                                                                          0xB3322F37),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
+                                                              child: Container(
+                                                                height: 28,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Color(
+                                                                      0xB3322F37),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
                                                                               10),
-                                                                    ),
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: EdgeInsetsDirectional
-                                                                          .fromSTEB(
-                                                                              10,
+                                                                ),
+                                                                child: Padding(
+                                                                  padding: EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          10,
+                                                                          0,
+                                                                          10,
+                                                                          0),
+                                                                  child: Row(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .max,
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                                                            0,
+                                                                            0,
+                                                                            5,
+                                                                            0),
+                                                                        child:
+                                                                            FaIcon(
+                                                                          FontAwesomeIcons
+                                                                              .solidCircle,
+                                                                          color:
+                                                                              FlutterFlowTheme.of(context).customColor3,
+                                                                          size:
+                                                                              12,
+                                                                        ),
+                                                                      ),
+                                                                      Align(
+                                                                        alignment: AlignmentDirectional(
+                                                                            0,
+                                                                            0.05),
+                                                                        child:
+                                                                            Padding(
+                                                                          padding: EdgeInsetsDirectional.fromSTEB(
                                                                               0,
-                                                                              10,
+                                                                              0,
+                                                                              5,
                                                                               0),
-                                                                      child:
-                                                                          Row(
-                                                                        mainAxisSize:
-                                                                            MainAxisSize.max,
-                                                                        children: [
-                                                                          Padding(
-                                                                            padding: EdgeInsetsDirectional.fromSTEB(
-                                                                                0,
-                                                                                0,
-                                                                                5,
-                                                                                0),
-                                                                            child:
-                                                                                FaIcon(
-                                                                              FontAwesomeIcons.solidCircle,
-                                                                              color: FlutterFlowTheme.of(context).customColor3,
-                                                                              size: 12,
+                                                                          child:
+                                                                              Text(
+                                                                            formatNumber(
+                                                                              listViewStreamsRecord.streamViewOnline!,
+                                                                              formatType: FormatType.compact,
                                                                             ),
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style: FlutterFlowTheme.of(context).bodyText1.override(
+                                                                                  fontFamily: 'Roboto',
+                                                                                  color: FlutterFlowTheme.of(context).btnText,
+                                                                                  fontSize: 12,
+                                                                                  letterSpacing: 0.9,
+                                                                                  fontWeight: FontWeight.w500,
+                                                                                ),
                                                                           ),
-                                                                          Align(
-                                                                            alignment:
-                                                                                AlignmentDirectional(0, 0.05),
-                                                                            child:
-                                                                                Text(
-                                                                              '10K ',
-                                                                              textAlign: TextAlign.center,
-                                                                              style: FlutterFlowTheme.of(context).bodyText1.override(
-                                                                                    fontFamily: 'Roboto',
-                                                                                    color: FlutterFlowTheme.of(context).btnText,
-                                                                                    fontSize: 12,
-                                                                                    letterSpacing: 0.9,
-                                                                                    fontWeight: FontWeight.w500,
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                          Align(
-                                                                            alignment:
-                                                                                AlignmentDirectional(0, 0.05),
-                                                                            child:
-                                                                                Text(
-                                                                              'Viewers',
-                                                                              textAlign: TextAlign.center,
-                                                                              style: FlutterFlowTheme.of(context).bodyText1.override(
-                                                                                    fontFamily: 'Roboto',
-                                                                                    color: FlutterFlowTheme.of(context).btnText,
-                                                                                    fontSize: 12,
-                                                                                    letterSpacing: 0.9,
-                                                                                    fontWeight: FontWeight.w500,
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                        ],
+                                                                        ),
                                                                       ),
-                                                                    ),
+                                                                      Align(
+                                                                        alignment: AlignmentDirectional(
+                                                                            0,
+                                                                            0.05),
+                                                                        child:
+                                                                            Text(
+                                                                          'Viewers',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style: FlutterFlowTheme.of(context)
+                                                                              .bodyText1
+                                                                              .override(
+                                                                                fontFamily: 'Roboto',
+                                                                                color: FlutterFlowTheme.of(context).btnText,
+                                                                                fontSize: 12,
+                                                                                letterSpacing: 0.9,
+                                                                                fontWeight: FontWeight.w500,
+                                                                              ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                                   ),
                                                                 ),
                                                               ),
-                                                          ],
-                                                        ),
+                                                            ),
+                                                          ),
                                                       ],
                                                     ),
-                                                  ),
-                                                );
-                                              },
+                                                  ],
+                                                ),
+                                              ),
                                             ),
                                             Expanded(
                                               child: Column(
@@ -764,11 +827,11 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                                                           ),
                                                     ),
                                                   ),
-                                                  StreamBuilder<ChannelsRecord>(
-                                                    stream: ChannelsRecord
-                                                        .getDocument(
+                                                  StreamBuilder<UsersRecord>(
+                                                    stream:
+                                                        UsersRecord.getDocument(
                                                             listViewStreamsRecord
-                                                                .channelReference!),
+                                                                .userRef!),
                                                     builder:
                                                         (context, snapshot) {
                                                       // Customize what your widget looks like when it's loading.
@@ -786,16 +849,16 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                                                           ),
                                                         );
                                                       }
-                                                      final rowChannelsRecord =
+                                                      final rowUsersRecord =
                                                           snapshot.data!;
                                                       return InkWell(
                                                         onTap: () async {
                                                           context.pushNamed(
-                                                            'channelDetails',
+                                                            'userProfileView',
                                                             queryParams: {
-                                                              'channelRef':
+                                                              'shopReference':
                                                                   serializeParam(
-                                                                rowChannelsRecord
+                                                                rowUsersRecord
                                                                     .reference,
                                                                 ParamType
                                                                     .DocumentReference,
@@ -829,8 +892,8 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                                                                         .cover,
                                                                     image: Image
                                                                         .network(
-                                                                      rowChannelsRecord
-                                                                          .channelImage!,
+                                                                      rowUsersRecord
+                                                                          .photoUrl!,
                                                                     ).image,
                                                                   ),
                                                                   shape: BoxShape
@@ -850,8 +913,8 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                                                                           0,
                                                                           2),
                                                               child: Text(
-                                                                rowChannelsRecord
-                                                                    .channelName!,
+                                                                rowUsersRecord
+                                                                    .displayName!,
                                                                 style: FlutterFlowTheme.of(
                                                                         context)
                                                                     .bodyText1

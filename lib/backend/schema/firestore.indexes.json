@@ -79,6 +79,38 @@
       ]
     },
     {
+      "collectionGroup": "streams",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "is_live",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "channel_reference",
+          "arrayConfig": "CONTAINS"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "streams",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "channel_reference",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "stream_view_online",
+          "order": "DESCENDING"
+        },
+        {
+          "fieldPath": "is_live",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
       "collectionGroup": "chat_messages",
       "queryScope": "COLLECTION",
       "fields": [
@@ -139,11 +171,11 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "order_number",
+          "fieldPath": "shop_ref",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "shop_ref",
+          "fieldPath": "order_number",
           "order": "ASCENDING"
         },
         {
@@ -231,16 +263,16 @@
       ]
     },
     {
-      "collectionGroup": "streams",
+      "collectionGroup": "channels",
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "channel_reference",
+          "fieldPath": "channel_status",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "timestamp",
-          "order": "DESCENDING"
+          "fieldPath": "channel_members",
+          "arrayConfig": "CONTAINS"
         }
       ]
     },
@@ -255,6 +287,24 @@
         {
           "fieldPath": "product_name",
           "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "streams",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "channel_reference",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "is_live",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "stream_view_online",
+          "order": "DESCENDING"
         }
       ]
     },

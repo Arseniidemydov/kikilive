@@ -21,11 +21,8 @@ class CreateChannelsWidget extends StatefulWidget {
 }
 
 class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
-  bool isMediaUploading1 = false;
-  String uploadedFileUrl1 = '';
-
-  bool isMediaUploading2 = false;
-  String uploadedFileUrl2 = '';
+  bool isMediaUploading = false;
+  String uploadedFileUrl = '';
 
   TextEditingController? txtChannelNameController;
   TextEditingController? txtChannelDescController;
@@ -173,7 +170,11 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                               borderRadius:
                                                   BorderRadius.circular(8),
                                               child: CachedNetworkImage(
-                                                imageUrl: uploadedFileUrl1,
+                                                imageUrl:
+                                                    valueOrDefault<String>(
+                                                  uploadedFileUrl,
+                                                  'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
+                                                ),
                                                 width: MediaQuery.of(context)
                                                     .size
                                                     .width,
@@ -193,8 +194,7 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                                 final selectedMedia =
                                                     await selectMediaWithSourceBottomSheet(
                                                   context: context,
-                                                  allowPhoto: false,
-                                                  allowVideo: true,
+                                                  allowPhoto: true,
                                                 );
                                                 if (selectedMedia != null &&
                                                     selectedMedia.every((m) =>
@@ -202,9 +202,14 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                                             m.storagePath,
                                                             context))) {
                                                   setState(() =>
-                                                      isMediaUploading1 = true);
+                                                      isMediaUploading = true);
                                                   var downloadUrls = <String>[];
                                                   try {
+                                                    showUploadMessage(
+                                                      context,
+                                                      'Uploading file...',
+                                                      showLoading: true,
+                                                    );
                                                     downloadUrls = (await Future
                                                             .wait(
                                                       selectedMedia.map(
@@ -218,15 +223,22 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                                         .map((u) => u!)
                                                         .toList();
                                                   } finally {
-                                                    isMediaUploading1 = false;
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .hideCurrentSnackBar();
+                                                    isMediaUploading = false;
                                                   }
                                                   if (downloadUrls.length ==
                                                       selectedMedia.length) {
                                                     setState(() =>
-                                                        uploadedFileUrl1 =
+                                                        uploadedFileUrl =
                                                             downloadUrls.first);
+                                                    showUploadMessage(
+                                                        context, 'Success!');
                                                   } else {
                                                     setState(() {});
+                                                    showUploadMessage(context,
+                                                        'Failed to upload media');
                                                     return;
                                                   }
                                                 }
@@ -241,111 +253,61 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                                   borderRadius:
                                                       BorderRadius.circular(30),
                                                 ),
-                                                child: InkWell(
-                                                  onTap: () async {
-                                                    final selectedMedia =
-                                                        await selectMediaWithSourceBottomSheet(
-                                                      context: context,
-                                                      allowPhoto: false,
-                                                      allowVideo: true,
-                                                    );
-                                                    if (selectedMedia != null &&
-                                                        selectedMedia.every((m) =>
-                                                            validateFileFormat(
-                                                                m.storagePath,
-                                                                context))) {
-                                                      setState(() =>
-                                                          isMediaUploading2 =
-                                                              true);
-                                                      var downloadUrls =
-                                                          <String>[];
-                                                      try {
-                                                        downloadUrls =
-                                                            (await Future.wait(
-                                                          selectedMedia.map(
-                                                            (m) async =>
-                                                                await uploadData(
-                                                                    m.storagePath,
-                                                                    m.bytes),
-                                                          ),
-                                                        ))
-                                                                .where((u) =>
-                                                                    u != null)
-                                                                .map((u) => u!)
-                                                                .toList();
-                                                      } finally {
-                                                        isMediaUploading2 =
-                                                            false;
-                                                      }
-                                                      if (downloadUrls.length ==
-                                                          selectedMedia
-                                                              .length) {
-                                                        setState(() =>
-                                                            uploadedFileUrl2 =
-                                                                downloadUrls
-                                                                    .first);
-                                                      } else {
-                                                        setState(() {});
-                                                        return;
-                                                      }
-                                                    }
-                                                  },
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    children: [
-                                                      Align(
-                                                        alignment:
-                                                            AlignmentDirectional(
-                                                                0.01, -0.09),
-                                                        child: Padding(
-                                                          padding:
-                                                              EdgeInsetsDirectional
-                                                                  .fromSTEB(5,
-                                                                      5, 5, 5),
-                                                          child:
-                                                              FlutterFlowIconButton(
-                                                            borderColor: Colors
-                                                                .transparent,
-                                                            borderRadius: 30,
-                                                            borderWidth: 1,
-                                                            buttonSize: 30,
-                                                            fillColor: FlutterFlowTheme
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Align(
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              0.01, -0.09),
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    5, 5, 5, 5),
+                                                        child:
+                                                            FlutterFlowIconButton(
+                                                          borderColor: Colors
+                                                              .transparent,
+                                                          borderRadius: 30,
+                                                          borderWidth: 1,
+                                                          buttonSize: 30,
+                                                          fillColor:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .secondaryColor,
+                                                          icon: Icon(
+                                                            Icons.photo_camera,
+                                                            color: FlutterFlowTheme
                                                                     .of(context)
-                                                                .secondaryColor,
-                                                            icon: Icon(
-                                                              Icons
-                                                                  .photo_camera,
-                                                              color: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .primaryColor,
-                                                              size: 15,
-                                                            ),
-                                                            showLoadingIndicator:
-                                                                true,
-                                                            onPressed: () {
-                                                              print(
-                                                                  'IconButton pressed ...');
-                                                            },
+                                                                .primaryColor,
+                                                            size: 15,
                                                           ),
+                                                          showLoadingIndicator:
+                                                              true,
+                                                          onPressed: () {
+                                                            print(
+                                                                'IconButton pressed ...');
+                                                          },
                                                         ),
                                                       ),
-                                                      Text(
-                                                        'Upload',
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyText1
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Roboto',
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primaryColor,
-                                                                ),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                    Text(
+                                                      'Upload',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .primaryColor,
+                                                              ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ),
@@ -767,20 +729,22 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                 ),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    final channelsCreateData =
-                                        createChannelsRecordData(
-                                      channelName:
-                                          txtChannelNameController!.text,
-                                      channelDesc:
-                                          txtChannelDescController!.text,
-                                      channelType: ddChannelTypeValue,
-                                      channelOwner: currentUserReference,
-                                      channelPrice: double.tryParse(
-                                          txtChannelFeeController!.text),
-                                      channelVideoUrl: uploadedFileUrl1,
-                                      channelCreatedOn: getCurrentTimestamp,
-                                      channelStatus: false,
-                                    );
+                                    final channelsCreateData = {
+                                      ...createChannelsRecordData(
+                                        channelName:
+                                            txtChannelNameController!.text,
+                                        channelDesc:
+                                            txtChannelDescController!.text,
+                                        channelType: ddChannelTypeValue,
+                                        channelOwner: currentUserReference,
+                                        channelPrice: double.tryParse(
+                                            txtChannelFeeController!.text),
+                                        channelCreatedOn: getCurrentTimestamp,
+                                        channelStatus: false,
+                                        channelImage: uploadedFileUrl,
+                                      ),
+                                      'channel_members': [currentUserReference],
+                                    };
                                     await ChannelsRecord.collection
                                         .doc()
                                         .set(channelsCreateData);
