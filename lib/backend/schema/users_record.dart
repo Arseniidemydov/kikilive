@@ -57,6 +57,8 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
   @BuiltValueField(wireName: 'IsAdmin')
   bool? get isAdmin;
 
+  double? get userPoints;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -77,7 +79,8 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
     ..line = ''
     ..bankName = ''
     ..bankAccount = 0
-    ..isAdmin = false;
+    ..isAdmin = false
+    ..userPoints = 0.0;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('users');
@@ -110,6 +113,7 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
           ..bankName = snapshot.data['bank_name']
           ..bankAccount = snapshot.data['bank_account']?.round()
           ..isAdmin = snapshot.data['IsAdmin']
+          ..userPoints = snapshot.data['userPoints']?.toDouble()
           ..ffRef = UsersRecord.collection.doc(snapshot.objectID),
       );
 
@@ -156,6 +160,7 @@ Map<String, dynamic> createUsersRecordData({
   String? bankName,
   int? bankAccount,
   bool? isAdmin,
+  double? userPoints,
 }) {
   final firestoreData = serializers.toFirestore(
     UsersRecord.serializer,
@@ -177,7 +182,8 @@ Map<String, dynamic> createUsersRecordData({
         ..line = line
         ..bankName = bankName
         ..bankAccount = bankAccount
-        ..isAdmin = isAdmin,
+        ..isAdmin = isAdmin
+        ..userPoints = userPoints,
     ),
   );
 

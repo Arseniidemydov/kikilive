@@ -137,6 +137,13 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
         ..add(
             serializers.serialize(value, specifiedType: const FullType(bool)));
     }
+    value = object.userPoints;
+    if (value != null) {
+      result
+        ..add('userPoints')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(double)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -227,6 +234,10 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
           result.isAdmin = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool?;
           break;
+        case 'userPoints':
+          result.userPoints = serializers.deserialize(value,
+              specifiedType: const FullType(double)) as double?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -276,6 +287,8 @@ class _$UsersRecord extends UsersRecord {
   @override
   final bool? isAdmin;
   @override
+  final double? userPoints;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$UsersRecord([void Function(UsersRecordBuilder)? updates]) =>
@@ -299,6 +312,7 @@ class _$UsersRecord extends UsersRecord {
       this.bankName,
       this.bankAccount,
       this.isAdmin,
+      this.userPoints,
       this.ffRef})
       : super._();
 
@@ -330,6 +344,7 @@ class _$UsersRecord extends UsersRecord {
         bankName == other.bankName &&
         bankAccount == other.bankAccount &&
         isAdmin == other.isAdmin &&
+        userPoints == other.userPoints &&
         ffRef == other.ffRef;
   }
 
@@ -353,28 +368,32 @@ class _$UsersRecord extends UsersRecord {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            0,
-                                                                            email
+                                                                            $jc(
+                                                                                0,
+                                                                                email
+                                                                                    .hashCode),
+                                                                            displayName
                                                                                 .hashCode),
-                                                                        displayName
+                                                                        photoUrl
                                                                             .hashCode),
-                                                                    photoUrl
+                                                                    uid
                                                                         .hashCode),
-                                                                uid.hashCode),
-                                                            createdTime
+                                                                createdTime
+                                                                    .hashCode),
+                                                            phoneNumber
                                                                 .hashCode),
-                                                        phoneNumber.hashCode),
-                                                    coverPhoto.hashCode),
-                                                userBio.hashCode),
-                                            userVerified.hashCode),
-                                        isSeller.hashCode),
-                                    shippingCost.hashCode),
-                                accountType.hashCode),
-                            instagram.hashCode),
-                        line.hashCode),
-                    bankName.hashCode),
-                bankAccount.hashCode),
-            isAdmin.hashCode),
+                                                        coverPhoto.hashCode),
+                                                    userBio.hashCode),
+                                                userVerified.hashCode),
+                                            isSeller.hashCode),
+                                        shippingCost.hashCode),
+                                    accountType.hashCode),
+                                instagram.hashCode),
+                            line.hashCode),
+                        bankName.hashCode),
+                    bankAccount.hashCode),
+                isAdmin.hashCode),
+            userPoints.hashCode),
         ffRef.hashCode));
   }
 
@@ -398,6 +417,7 @@ class _$UsersRecord extends UsersRecord {
           ..add('bankName', bankName)
           ..add('bankAccount', bankAccount)
           ..add('isAdmin', isAdmin)
+          ..add('userPoints', userPoints)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -474,6 +494,10 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
   bool? get isAdmin => _$this._isAdmin;
   set isAdmin(bool? isAdmin) => _$this._isAdmin = isAdmin;
 
+  double? _userPoints;
+  double? get userPoints => _$this._userPoints;
+  set userPoints(double? userPoints) => _$this._userPoints = userPoints;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -502,6 +526,7 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
       _bankName = $v.bankName;
       _bankAccount = $v.bankAccount;
       _isAdmin = $v.isAdmin;
+      _userPoints = $v.userPoints;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -542,6 +567,7 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
             bankName: bankName,
             bankAccount: bankAccount,
             isAdmin: isAdmin,
+            userPoints: userPoints,
             ffRef: ffRef);
     replace(_$result);
     return _$result;

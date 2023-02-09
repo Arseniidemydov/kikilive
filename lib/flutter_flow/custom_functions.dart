@@ -63,6 +63,15 @@ String? generateOrderId(int? orderNumber) {
   return newOrderNo.toString();
 }
 
+bool? clearAddressCheckboxCopy(List<bool>? addressList) {
+  // Add your function code here
+  bool? addressChecked;
+  for (addressChecked in addressList!) {
+    addressChecked == false;
+  }
+  return true;
+}
+
 int? finalTotal(
   List<double>? subTotal,
   double? tax,
@@ -355,6 +364,13 @@ String? createUrlFromPlayId(String? playbackId) {
   return 'https://stream.mux.com/$playbackId.m3u8';
 }
 
+double? stripeAmountPayNewCart(
+  double shipping,
+  double amount,
+) {
+  return (shipping + amount) * 100;
+}
+
 double? calcLiveViewrsChannel(
   List<StreamsRecord> data,
   int? index,
@@ -373,4 +389,46 @@ double? calcLiveViewrsChannel(
   }
 
   return total;
+}
+
+bool checkPaymentStatus(String paymentID) {
+  if (paymentID != "") {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+int? orderNoCalculateNew(int numberOfOrders) {
+  return numberOfOrders + 1;
+}
+
+double? stripeAmountPayNew(
+  double shipping,
+  double amount,
+) {
+  return shipping + amount;
+}
+
+double? sumEarnings(
+  List<OrdersRecord> data,
+  int? index,
+) {
+  var maxIndex = index;
+  if (maxIndex == -1 || index! >= data.length) {
+    // Pass index of -1 if you want a grand total across all indexes
+    maxIndex = data.length - 1;
+  }
+
+  double total = 0;
+  for (var i = 0; i <= maxIndex!; i++) {
+    total += data[i]
+        .productPrice!; // Todo: replace "pontos_totais" with the field you want to do a running total on
+  }
+
+  return total;
+}
+
+double? pointsCalulator(double orderTotal) {
+  return orderTotal * 0.0001;
 }

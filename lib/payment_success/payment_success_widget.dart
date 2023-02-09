@@ -1,6 +1,4 @@
-import '../auth/auth_util.dart';
 import '../backend/backend.dart';
-import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
@@ -13,14 +11,14 @@ import 'package:provider/provider.dart';
 class PaymentSuccessWidget extends StatefulWidget {
   const PaymentSuccessWidget({
     Key? key,
-    this.orderDetails,
     this.paymentStatus,
     this.transactionId,
+    this.orderlist,
   }) : super(key: key);
 
-  final DocumentReference? orderDetails;
   final bool? paymentStatus;
   final String? transactionId;
+  final DocumentReference? orderlist;
 
   @override
   _PaymentSuccessWidgetState createState() => _PaymentSuccessWidgetState();
@@ -33,68 +31,21 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return StreamBuilder<List<OrderCompletedRecord>>(
-      stream: queryOrderCompletedRecord(
-        parent: currentUserReference,
-        singleRecord: true,
-      ),
-      builder: (context, snapshot) {
-        // Customize what your widget looks like when it's loading.
-        if (!snapshot.hasData) {
-          return Center(
-            child: SizedBox(
-              width: 50,
-              height: 50,
-              child: CircularProgressIndicator(
-                color: FlutterFlowTheme.of(context).primaryColor,
-              ),
-            ),
-          );
-        }
-        List<OrderCompletedRecord> paymentSuccessOrderCompletedRecordList =
-            snapshot.data!;
-        // Return an empty Container when the item does not exist.
-        if (snapshot.data!.isEmpty) {
-          return Container();
-        }
-        final paymentSuccessOrderCompletedRecord =
-            paymentSuccessOrderCompletedRecordList.isNotEmpty
-                ? paymentSuccessOrderCompletedRecordList.first
-                : null;
-        return Scaffold(
-          key: scaffoldKey,
-          backgroundColor: FlutterFlowTheme.of(context).paymentbg,
-          body: SafeArea(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(20, 24, 20, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      FlutterFlowIconButton(
-                        borderColor: Colors.transparent,
-                        borderRadius: 30,
-                        buttonSize: 46,
-                        fillColor: FlutterFlowTheme.of(context).primaryColor,
-                        icon: Icon(
-                          Icons.close_rounded,
-                          color: FlutterFlowTheme.of(context).secondaryColor,
-                          size: 20,
-                        ),
-                        onPressed: () async {
-                          context.pushNamed('Products');
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                if (widget.paymentStatus == true)
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
+    return Scaffold(
+      key: scaffoldKey,
+      backgroundColor: FlutterFlowTheme.of(context).paymentbg,
+      body: SafeArea(
+        child: Align(
+          alignment: AlignmentDirectional(0, 0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (widget.paymentStatus == true)
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    if (widget.paymentStatus ?? true)
                       Container(
                         width: MediaQuery.of(context).size.width,
                         height: 150,
@@ -149,18 +100,20 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                if (FFAppState().paymentStatus == false)
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).paymentbg,
-                        ),
+                  ],
+                ),
+              if (FFAppState().paymentStatus == false)
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).paymentbg,
+                      ),
+                      child: Visibility(
+                        visible: widget.paymentStatus ?? true,
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
                           children: [
@@ -209,192 +162,170 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                           ],
                         ),
                       ),
+                    ),
+                  ],
+                ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.9,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: FlutterFlowTheme.of(context).bottomSheet,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(14, 0, 14, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Transaction ID: ',
+                        style: FlutterFlowTheme.of(context).bodyText1.override(
+                              fontFamily: 'Roboto',
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
+                      Text(
+                        widget.transactionId!,
+                        style: FlutterFlowTheme.of(context).bodyText1,
+                      ),
                     ],
                   ),
-                Container(
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                child: Container(
                   width: MediaQuery.of(context).size.width * 0.9,
-                  height: 50,
+                  height: 140,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).bottomSheet,
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(14, 0, 14, 0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Transaction ID: ',
-                          style:
-                              FlutterFlowTheme.of(context).bodyText1.override(
-                                    fontFamily: 'Roboto',
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
-                        Text(
-                          paymentSuccessOrderCompletedRecord!.orderNumber!,
-                          style: FlutterFlowTheme.of(context).bodyText1,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: 140,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).bottomSheet,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(16, 20, 16, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Total',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyText1
-                                    .override(
-                                      fontFamily: 'Roboto',
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                              ),
-                              Text(
-                                formatNumber(
-                                  paymentSuccessOrderCompletedRecord!
-                                      .finalTotal!,
-                                  formatType: FormatType.decimal,
-                                  decimalType: DecimalType.periodDecimal,
-                                  currency: 'THB',
-                                ),
-                                style: GoogleFonts.getFont(
-                                  'Overpass',
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Divider(
-                          thickness: 1,
-                          indent: 16,
-                          endIndent: 16,
-                          color: Color(0x85828282),
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
-                          child: Text(
-                            'Your payment has been confirmed, it may take 1-2 hours in order for your payment to go through and show up in your transation list.',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyText2
-                                .override(
-                                  fontFamily: 'Roboto',
-                                  color:
-                                      FlutterFlowTheme.of(context).primaryText,
-                                  fontSize: 13.5,
-                                  lineHeight: 1.5,
-                                ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-                        child: StreamBuilder<List<OrderNoRecord>>(
-                          stream: queryOrderNoRecord(
-                            singleRecord: true,
-                          ),
-                          builder: (context, snapshot) {
-                            // Customize what your widget looks like when it's loading.
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: SizedBox(
-                                  width: 50,
-                                  height: 50,
-                                  child: CircularProgressIndicator(
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryColor,
+                        padding: EdgeInsetsDirectional.fromSTEB(16, 20, 16, 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Total',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Roboto',
+                                    fontWeight: FontWeight.w600,
                                   ),
-                                ),
-                              );
-                            }
-                            List<OrderNoRecord> buttonOrderNoRecordList =
-                                snapshot.data!;
-                            // Return an empty Container when the item does not exist.
-                            if (snapshot.data!.isEmpty) {
-                              return Container();
-                            }
-                            final buttonOrderNoRecord =
-                                buttonOrderNoRecordList.isNotEmpty
-                                    ? buttonOrderNoRecordList.first
-                                    : null;
-                            return FFButtonWidget(
-                              onPressed: () async {
-                                final orderNoUpdateData =
-                                    createOrderNoRecordData(
-                                  orderNo: functions.orderNumOnly(
-                                      buttonOrderNoRecord!.orderNo),
-                                );
-                                await buttonOrderNoRecord!.reference
-                                    .update(orderNoUpdateData);
-
-                                context.pushNamed('Products');
-                              },
-                              text: 'Go Home',
-                              options: FFButtonOptions(
-                                width: 340,
-                                height: 50,
-                                color:
-                                    FlutterFlowTheme.of(context).primaryColor,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .subtitle2
-                                    .override(
-                                      fontFamily: 'Lexend Deca',
-                                      color: FlutterFlowTheme.of(context)
-                                          .secondaryColor,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
+                            ),
+                            StreamBuilder<OrderListRecord>(
+                              stream: OrderListRecord.getDocument(
+                                  widget.orderlist!),
+                              builder: (context, snapshot) {
+                                // Customize what your widget looks like when it's loading.
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: CircularProgressIndicator(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryColor,
+                                      ),
                                     ),
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1,
-                                ),
-                                borderRadius: BorderRadius.circular(30),
+                                  );
+                                }
+                                final amountOrderListRecord = snapshot.data!;
+                                return Text(
+                                  formatNumber(
+                                    functions.stripeAmountPayNew(
+                                        amountOrderListRecord.shippingTotal!,
+                                        amountOrderListRecord.orderTotal!),
+                                    formatType: FormatType.decimal,
+                                    decimalType: DecimalType.automatic,
+                                    currency: 'THB ',
+                                  ),
+                                  style: GoogleFonts.getFont(
+                                    'Overpass',
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(
+                        thickness: 1,
+                        indent: 16,
+                        endIndent: 16,
+                        color: Color(0x85828282),
+                      ),
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                        child: Text(
+                          'Your payment has been confirmed, it may take 1-2 hours in order for your payment to go through and show up in your transation list.',
+                          style: FlutterFlowTheme.of(context)
+                              .bodyText2
+                              .override(
+                                fontFamily: 'Roboto',
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                fontSize: 13.5,
+                                lineHeight: 1.5,
                               ),
-                            );
-                          },
                         ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                      child: FFButtonWidget(
+                        onPressed: () async {
+                          context.pushNamed('Products');
+                        },
+                        text: 'Go Home',
+                        options: FFButtonOptions(
+                          width: 340,
+                          height: 50,
+                          color: FlutterFlowTheme.of(context).primaryColor,
+                          textStyle: FlutterFlowTheme.of(context)
+                              .subtitle2
+                              .override(
+                                fontFamily: 'Lexend Deca',
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryColor,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w500,
+                              ),
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 1,
+                          ),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

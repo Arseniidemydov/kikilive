@@ -28,13 +28,29 @@ abstract class OrderListRecord
 
   DocumentReference? get addressRef;
 
+  BuiltList<DocumentReference>? get productsList;
+
+  bool? get isPaid;
+
+  BuiltList<DocumentReference>? get productsListUnique;
+
+  double? get shippingTotal;
+
+  @BuiltValueField(wireName: 'PaymentID')
+  String? get paymentID;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
 
   static void _initializeBuilder(OrderListRecordBuilder builder) => builder
     ..orderNo = ''
-    ..orderTotal = 0.0;
+    ..orderTotal = 0.0
+    ..productsList = ListBuilder()
+    ..isPaid = false
+    ..productsListUnique = ListBuilder()
+    ..shippingTotal = 0.0
+    ..paymentID = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('orderList');
@@ -64,6 +80,9 @@ Map<String, dynamic> createOrderListRecordData({
   DocumentReference? userRef,
   DocumentReference? shopRef,
   DocumentReference? addressRef,
+  bool? isPaid,
+  double? shippingTotal,
+  String? paymentID,
 }) {
   final firestoreData = serializers.toFirestore(
     OrderListRecord.serializer,
@@ -74,7 +93,12 @@ Map<String, dynamic> createOrderListRecordData({
         ..orderTotal = orderTotal
         ..userRef = userRef
         ..shopRef = shopRef
-        ..addressRef = addressRef,
+        ..addressRef = addressRef
+        ..productsList = null
+        ..isPaid = isPaid
+        ..productsListUnique = null
+        ..shippingTotal = shippingTotal
+        ..paymentID = paymentID,
     ),
   );
 

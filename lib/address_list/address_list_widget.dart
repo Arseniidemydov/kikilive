@@ -113,175 +113,274 @@ class _AddressListWidgetState extends State<AddressListWidget> {
                               itemBuilder: (context, listViewIndex) {
                                 final listViewAddressRecord =
                                     listViewAddressRecordList[listViewIndex];
-                                return Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 0, 5),
-                                  child: Container(
-                                    width: 100,
-                                    height: 120,
-                                    decoration: BoxDecoration(
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryBackground,
+                                return Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 12,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .dimLine,
+                                      ),
                                     ),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          10, 10, 10, 10),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          context.pushNamed(
-                                            'UpdateAddressDetails',
-                                            queryParams: {
-                                              'addressReference':
-                                                  serializeParam(
-                                                listViewAddressRecord.reference,
-                                                ParamType.DocumentReference,
-                                              ),
-                                            }.withoutNulls,
-                                          );
-                                        },
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  'Set as Default',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyText1
-                                                      .override(
-                                                        fontFamily: 'Roboto',
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 165,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryBackground,
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            15, 15, 15, 15),
+                                        child: InkWell(
+                                          onTap: () async {
+                                            context.pushNamed(
+                                              'UpdateAddressDetails',
+                                              queryParams: {
+                                                'addressReference':
+                                                    serializeParam(
+                                                  listViewAddressRecord
+                                                      .reference,
+                                                  ParamType.DocumentReference,
                                                 ),
-                                                Stack(
+                                              }.withoutNulls,
+                                            );
+                                          },
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(0, 0, 0, 20),
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
                                                   children: [
-                                                    InkWell(
-                                                      onTap: () async {
-                                                        await actions
-                                                            .clearAddressChecked();
+                                                    Text(
+                                                      'Set as Default',
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyText1
+                                                          .override(
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                    ),
+                                                    Stack(
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () async {
+                                                            await actions
+                                                                .clearAddressChecked();
 
-                                                        final addressUpdateData =
-                                                            createAddressRecordData(
-                                                          defaultAddress: true,
-                                                        );
-                                                        await listViewAddressRecord
-                                                            .reference
-                                                            .update(
-                                                                addressUpdateData);
-                                                      },
-                                                      child: Icon(
-                                                        Icons
-                                                            .check_box_outline_blank,
+                                                            final addressUpdateData =
+                                                                createAddressRecordData(
+                                                              defaultAddress:
+                                                                  true,
+                                                            );
+                                                            await listViewAddressRecord
+                                                                .reference
+                                                                .update(
+                                                                    addressUpdateData);
+                                                          },
+                                                          child: Icon(
+                                                            Icons
+                                                                .check_box_outline_blank,
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .primaryColor,
+                                                            size: 24,
+                                                          ),
+                                                        ),
+                                                        if (listViewAddressRecord
+                                                                .defaultAddress ==
+                                                            true)
+                                                          InkWell(
+                                                            onTap: () async {
+                                                              final addressUpdateData =
+                                                                  createAddressRecordData(
+                                                                defaultAddress:
+                                                                    true,
+                                                              );
+                                                              await listViewAddressRecord
+                                                                  .reference
+                                                                  .update(
+                                                                      addressUpdateData);
+                                                            },
+                                                            child: Icon(
+                                                              Icons.check_box,
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .secondaryColor,
+                                                              size: 24,
+                                                            ),
+                                                          ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment:
+                                                    AlignmentDirectional(-1, 0),
+                                                child: Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(0, 0, 0, 10),
+                                                  child: Container(
+                                                    width: 75,
+                                                    height: 35,
+                                                    decoration: BoxDecoration(
+                                                      color: FlutterFlowTheme
+                                                              .of(context)
+                                                          .secondaryBackground,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              100),
+                                                      border: Border.all(
                                                         color:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .primaryColor,
-                                                        size: 24,
+                                                                .secondaryColor,
+                                                        width: 1.5,
                                                       ),
                                                     ),
-                                                    if (listViewAddressRecord
-                                                            .defaultAddress ==
-                                                        true)
-                                                      InkWell(
-                                                        onTap: () async {
-                                                          final addressUpdateData =
-                                                              createAddressRecordData(
-                                                            defaultAddress:
-                                                                true,
-                                                          );
-                                                          await listViewAddressRecord
-                                                              .reference
-                                                              .update(
-                                                                  addressUpdateData);
-                                                        },
-                                                        child: Icon(
-                                                          Icons.check_box,
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryColor,
-                                                          size: 24,
-                                                        ),
+                                                    child: Align(
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              0, 0),
+                                                      child: Text(
+                                                        'Home',
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyText1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  color: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .secondaryColor,
+                                                                  fontSize:
+                                                                      14.5,
+                                                                ),
                                                       ),
-                                                  ],
+                                                    ),
+                                                  ),
                                                 ),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Text(
-                                                  'Address ',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyText1,
-                                                ),
-                                                Text(
-                                                  listViewAddressRecord
-                                                      .addressLabel!,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyText1,
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Text(
-                                                  listViewAddressRecord
-                                                      .address!,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyText1,
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(5, 0, 0, 0),
-                                                  child: Text(
+                                              ),
+                                              Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 0, 0, 10),
+                                                    child: Text(
+                                                      'Address ',
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyText1
+                                                          .override(
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 0, 0, 10),
+                                                    child: Text(
+                                                      listViewAddressRecord
+                                                          .addressLabel!,
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyText1
+                                                          .override(
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Text(
                                                     listViewAddressRecord
-                                                        .address2!,
+                                                        .address!,
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyText1,
                                                   ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(5, 0, 0, 0),
-                                                  child: Text(
-                                                    listViewAddressRecord.city!,
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyText1,
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                5, 0, 0, 0),
+                                                    child: Text(
+                                                      listViewAddressRecord
+                                                          .address2!,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1,
+                                                    ),
                                                   ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(5, 0, 0, 0),
-                                                  child: Text(
-                                                    listViewAddressRecord
-                                                        .zipcode!
-                                                        .toString(),
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyText1,
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                5, 0, 0, 0),
+                                                    child: Text(
+                                                      listViewAddressRecord
+                                                          .city!,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                5, 0, 0, 0),
+                                                    child: Text(
+                                                      listViewAddressRecord
+                                                          .zipcode!
+                                                          .toString(),
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 );
                               },
                             );
@@ -302,13 +401,14 @@ class _AddressListWidgetState extends State<AddressListWidget> {
                           options: FFButtonOptions(
                             width: 130,
                             height: 40,
-                            color: FlutterFlowTheme.of(context).secondaryColor,
+                            color: FlutterFlowTheme.of(context).primaryColor,
                             textStyle:
                                 FlutterFlowTheme.of(context).subtitle2.override(
                                       fontFamily: 'Roboto',
-                                      color: Colors.white,
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryColor,
                                       fontSize: 16,
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.normal,
                                     ),
                             borderSide: BorderSide(
                               color: Colors.transparent,

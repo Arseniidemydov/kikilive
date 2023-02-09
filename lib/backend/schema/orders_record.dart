@@ -65,6 +65,12 @@ abstract class OrdersRecord
 
   String? get date;
 
+  @BuiltValueField(wireName: 'OrderListRef')
+  DocumentReference? get orderListRef;
+
+  @BuiltValueField(wireName: 'ProductRef')
+  DocumentReference? get productRef;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -127,6 +133,8 @@ Map<String, dynamic> createOrdersRecordData({
   String? productImage,
   String? transactionId,
   String? date,
+  DocumentReference? orderListRef,
+  DocumentReference? productRef,
 }) {
   final firestoreData = serializers.toFirestore(
     OrdersRecord.serializer,
@@ -150,7 +158,9 @@ Map<String, dynamic> createOrdersRecordData({
         ..orderNumber = orderNumber
         ..productImage = productImage
         ..transactionId = transactionId
-        ..date = date,
+        ..date = date
+        ..orderListRef = orderListRef
+        ..productRef = productRef,
     ),
   );
 

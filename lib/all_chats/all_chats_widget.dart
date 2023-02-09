@@ -30,7 +30,7 @@ class _AllChatsWidgetState extends State<AllChatsWidget> {
         desktop: false,
       )
           ? AppBar(
-              backgroundColor: FlutterFlowTheme.of(context).tertiaryColor,
+              backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
               automaticallyImplyLeading: false,
               title: Text(
                 'All Chats',
@@ -38,12 +38,12 @@ class _AllChatsWidgetState extends State<AllChatsWidget> {
                       fontFamily: 'Roboto',
                       color: FlutterFlowTheme.of(context).primaryText,
                       fontSize: 20,
-                      fontWeight: FontWeight.normal,
+                      fontWeight: FontWeight.w600,
                     ),
               ),
               actions: [],
               centerTitle: true,
-              elevation: 4,
+              elevation: 0,
             )
           : null,
       body: SafeArea(
@@ -56,82 +56,106 @@ class _AllChatsWidgetState extends State<AllChatsWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height * 0.77,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).customColor4,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height * 0.06,
-                          decoration: BoxDecoration(
-                            color: Color(0xFFD0BCFF),
-                          ),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      16, 0, 16, 0),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.06,
+                decoration: BoxDecoration(
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                ),
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                ),
+                                child: InkWell(
+                                  onTap: () async {
+                                    context.pushNamed('addChat');
+                                  },
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
-                                        child: Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: 40,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xFFD0BCFF),
-                                          ),
-                                          child: InkWell(
-                                            onTap: () async {
-                                              context.pushNamed('addChat');
-                                            },
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(10, 0, 0, 0),
-                                                  child: InkWell(
-                                                    onTap: () async {
-                                                      context
-                                                          .pushNamed('addChat');
-                                                    },
-                                                    child: Text(
-                                                      'Add to Chat',
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyText1
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Roboto',
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryText,
-                                                                fontSize: 14,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                              ),
-                                                    ),
+                                        child: InkWell(
+                                          onTap: () async {
+                                            context.pushNamed('addChat');
+                                          },
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.chat_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryColor,
+                                                size: 20,
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(10, 0, 0, 0),
+                                                child: InkWell(
+                                                  onTap: () async {
+                                                    context
+                                                        .pushNamed('addChat');
+                                                  },
+                                                  child: Text(
+                                                    'Add to Chat',
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyText1
+                                                        .override(
+                                                          fontFamily: 'Roboto',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .primaryColor,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
                                                   ),
                                                 ),
-                                                InkWell(
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: InkWell(
+                                          onTap: () async {
+                                            context.pushNamed('inviteUsers');
+                                          },
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.group_sharp,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryColor,
+                                                size: 20,
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(10, 0, 0, 0),
+                                                child: InkWell(
                                                   onTap: () async {
                                                     context.pushNamed(
                                                         'inviteUsers');
@@ -145,39 +169,68 @@ class _AllChatsWidgetState extends State<AllChatsWidget> {
                                                           fontFamily: 'Roboto',
                                                           color: FlutterFlowTheme
                                                                   .of(context)
-                                                              .primaryText,
+                                                              .primaryColor,
                                                           fontWeight:
                                                               FontWeight.w500,
                                                         ),
                                                   ),
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 2, 0, 0),
+                  child: StreamBuilder<List<ChatsRecord>>(
+                    stream: queryChatsRecord(
+                      queryBuilder: (chatsRecord) => chatsRecord
+                          .where('users', arrayContains: currentUserReference)
+                          .orderBy('last_message_time', descending: true),
+                    ),
+                    builder: (context, snapshot) {
+                      // Customize what your widget looks like when it's loading.
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: CircularProgressIndicator(
+                              color: FlutterFlowTheme.of(context).primaryColor,
                             ),
                           ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 10,
-                          height: MediaQuery.of(context).size.height * 0.8,
-                          decoration: BoxDecoration(
-                            color:
-                                FlutterFlowTheme.of(context).primaryBackground,
-                          ),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0, 2, 0, 0),
+                        );
+                      }
+                      List<ChatsRecord> listViewChatsRecordList =
+                          snapshot.data!;
+                      return ListView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: listViewChatsRecordList.length,
+                        itemBuilder: (context, listViewIndex) {
+                          final listViewChatsRecord =
+                              listViewChatsRecordList[listViewIndex];
+                          return Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(10, 5, 10, 0),
                             child: StreamBuilder<List<ChatsRecord>>(
                               stream: queryChatsRecord(
-                                queryBuilder: (chatsRecord) => chatsRecord
-                                    .where('users',
-                                        arrayContains: currentUserReference)
-                                    .orderBy('last_message_time',
+                                queryBuilder: (chatsRecord) =>
+                                    chatsRecord.orderBy('last_message_time',
                                         descending: true),
                               ),
                               builder: (context, snapshot) {
@@ -194,141 +247,85 @@ class _AllChatsWidgetState extends State<AllChatsWidget> {
                                     ),
                                   );
                                 }
-                                List<ChatsRecord> listViewChatsRecordList =
+                                List<ChatsRecord> chatPreviewChatsRecordList =
                                     snapshot.data!;
-                                return ListView.builder(
-                                  padding: EdgeInsets.zero,
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: listViewChatsRecordList.length,
-                                  itemBuilder: (context, listViewIndex) {
-                                    final listViewChatsRecord =
-                                        listViewChatsRecordList[listViewIndex];
-                                    return StreamBuilder<List<ChatsRecord>>(
-                                      stream: queryChatsRecord(
-                                        queryBuilder: (chatsRecord) =>
-                                            chatsRecord.orderBy(
-                                                'last_message_time',
-                                                descending: true),
+                                return StreamBuilder<FFChatInfo>(
+                                  stream: FFChatManager.instance.getChatInfo(
+                                      chatRecord: listViewChatsRecord),
+                                  builder: (context, snapshot) {
+                                    final chatInfo = snapshot.data ??
+                                        FFChatInfo(listViewChatsRecord);
+                                    return FFChatPreview(
+                                      onTap: () => context.pushNamed(
+                                        'chatPage',
+                                        queryParams: {
+                                          'chatUser': serializeParam(
+                                            chatInfo.otherUsers.length == 1
+                                                ? chatInfo.otherUsersList.first
+                                                : null,
+                                            ParamType.Document,
+                                          ),
+                                          'chatRef': serializeParam(
+                                            chatInfo.chatRecord.reference,
+                                            ParamType.DocumentReference,
+                                          ),
+                                        }.withoutNulls,
+                                        extra: <String, dynamic>{
+                                          'chatUser':
+                                              chatInfo.otherUsers.length == 1
+                                                  ? chatInfo
+                                                      .otherUsersList.first
+                                                  : null,
+                                        },
                                       ),
-                                      builder: (context, snapshot) {
-                                        // Customize what your widget looks like when it's loading.
-                                        if (!snapshot.hasData) {
-                                          return Center(
-                                            child: SizedBox(
-                                              width: 50,
-                                              height: 50,
-                                              child: CircularProgressIndicator(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryColor,
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                        List<ChatsRecord>
-                                            chatPreviewChatsRecordList =
-                                            snapshot.data!;
-                                        return StreamBuilder<FFChatInfo>(
-                                          stream: FFChatManager.instance
-                                              .getChatInfo(
-                                                  chatRecord:
-                                                      listViewChatsRecord),
-                                          builder: (context, snapshot) {
-                                            final chatInfo = snapshot.data ??
-                                                FFChatInfo(listViewChatsRecord);
-                                            return FFChatPreview(
-                                              onTap: () => context.pushNamed(
-                                                'chatPage',
-                                                queryParams: {
-                                                  'chatUser': serializeParam(
-                                                    chatInfo.otherUsers
-                                                                .length ==
-                                                            1
-                                                        ? chatInfo
-                                                            .otherUsersList
-                                                            .first
-                                                        : null,
-                                                    ParamType.Document,
-                                                  ),
-                                                  'chatRef': serializeParam(
-                                                    chatInfo
-                                                        .chatRecord.reference,
-                                                    ParamType.DocumentReference,
-                                                  ),
-                                                }.withoutNulls,
-                                                extra: <String, dynamic>{
-                                                  'chatUser': chatInfo
-                                                              .otherUsers
-                                                              .length ==
-                                                          1
-                                                      ? chatInfo
-                                                          .otherUsersList.first
-                                                      : null,
-                                                },
-                                              ),
-                                              lastChatText:
-                                                  chatInfo.chatPreviewMessage(),
-                                              lastChatTime: listViewChatsRecord
-                                                  .lastMessageTime,
-                                              seen: listViewChatsRecord
-                                                  .lastMessageSeenBy!
-                                                  .contains(
-                                                      currentUserReference),
-                                              title:
-                                                  chatInfo.chatPreviewTitle(),
-                                              userProfilePic:
-                                                  chatInfo.chatPreviewPic(),
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryColor,
-                                              unreadColor:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              titleTextStyle:
-                                                  GoogleFonts.getFont(
-                                                'Roboto',
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
-                                              dateTextStyle:
-                                                  GoogleFonts.getFont(
-                                                'Roboto',
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryBackground,
-                                                fontWeight: FontWeight.normal,
-                                                fontSize: 14,
-                                              ),
-                                              previewTextStyle:
-                                                  GoogleFonts.getFont(
-                                                'Roboto',
-                                                color: Color(0xA595A1AC),
-                                                fontWeight: FontWeight.normal,
-                                                fontSize: 14,
-                                              ),
-                                              contentPadding:
-                                                  EdgeInsetsDirectional
-                                                      .fromSTEB(3, 3, 3, 3),
-                                              borderRadius:
-                                                  BorderRadius.circular(0),
-                                            );
-                                          },
-                                        );
-                                      },
+                                      lastChatText:
+                                          chatInfo.chatPreviewMessage(),
+                                      lastChatTime:
+                                          listViewChatsRecord.lastMessageTime,
+                                      seen: listViewChatsRecord
+                                          .lastMessageSeenBy!
+                                          .contains(currentUserReference),
+                                      title: chatInfo.chatPreviewTitle(),
+                                      userProfilePic: chatInfo.chatPreviewPic(),
+                                      color: FlutterFlowTheme.of(context)
+                                          .primaryColor,
+                                      unreadColor: FlutterFlowTheme.of(context)
+                                          .primaryColor,
+                                      titleTextStyle: GoogleFonts.getFont(
+                                        'Roboto',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
+                                      dateTextStyle: GoogleFonts.getFont(
+                                        'Roboto',
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 14,
+                                      ),
+                                      previewTextStyle: GoogleFonts.getFont(
+                                        'Roboto',
+                                        color: Color(0xA595A1AC),
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 14,
+                                      ),
+                                      contentPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              3, 3, 3, 3),
+                                      borderRadius: BorderRadius.circular(0),
                                     );
                                   },
                                 );
                               },
                             ),
-                          ),
-                        ),
-                      ],
-                    ),
+                          );
+                        },
+                      );
+                    },
                   ),
-                ],
+                ),
               ),
             ],
           ),

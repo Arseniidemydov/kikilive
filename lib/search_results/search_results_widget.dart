@@ -4,8 +4,8 @@ import '../backend/backend.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
-import '../custom_code/actions/index.dart' as actions;
 import '../flutter_flow/custom_functions.dart' as functions;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,6 +22,7 @@ class SearchResultsWidget extends StatefulWidget {
 class _SearchResultsWidgetState extends State<SearchResultsWidget> {
   ApiCallResponse? apiResulto0b;
   ApiCallResponse? apiResultvaf;
+  OrderListRecord? orderListOutPut;
   TextEditingController? textController;
   final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -534,46 +535,153 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                                               ),
                                                                                             ),
                                                                                           ),
-                                                                                          Align(
-                                                                                            alignment: AlignmentDirectional(0.93, 0.53),
-                                                                                            child: Padding(
-                                                                                              padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 5),
-                                                                                              child: FlutterFlowIconButton(
-                                                                                                borderColor: Colors.transparent,
-                                                                                                borderRadius: 30,
-                                                                                                buttonSize: 30,
-                                                                                                fillColor: FlutterFlowTheme.of(context).primaryColor,
-                                                                                                icon: Icon(
-                                                                                                  Icons.add,
-                                                                                                  color: FlutterFlowTheme.of(context).secondaryColor,
-                                                                                                  size: 15,
+                                                                                          StreamBuilder<UsersRecord>(
+                                                                                            stream: UsersRecord.getDocument(gridViewProductsRecord.shopRef!),
+                                                                                            builder: (context, snapshot) {
+                                                                                              // Customize what your widget looks like when it's loading.
+                                                                                              if (!snapshot.hasData) {
+                                                                                                return Center(
+                                                                                                  child: SizedBox(
+                                                                                                    width: 50,
+                                                                                                    height: 50,
+                                                                                                    child: CircularProgressIndicator(
+                                                                                                      color: FlutterFlowTheme.of(context).primaryColor,
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                );
+                                                                                              }
+                                                                                              final containerUsersRecord = snapshot.data!;
+                                                                                              return Container(
+                                                                                                decoration: BoxDecoration(
+                                                                                                  color: FlutterFlowTheme.of(context).secondaryBackground,
                                                                                                 ),
-                                                                                                onPressed: () async {
-                                                                                                  FFAppState().update(() {
-                                                                                                    FFAppState().orderNo = functions.generateOrderId(containerOrderNoRecord!.orderNo)!;
-                                                                                                  });
-                                                                                                  await actions.addToCart(
-                                                                                                    gridViewProductsRecord.sku,
-                                                                                                    currentUserUid,
-                                                                                                    0.0,
-                                                                                                    0.0,
-                                                                                                    functions.generateOrderId(containerOrderNoRecord!.orderNo),
-                                                                                                  );
-                                                                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                                                                    SnackBar(
-                                                                                                      content: Text(
-                                                                                                        'Added Success',
-                                                                                                        style: TextStyle(
-                                                                                                          color: FlutterFlowTheme.of(context).primaryBtnText,
+                                                                                                child: FutureBuilder<int>(
+                                                                                                  future: queryOrderListRecordCount(),
+                                                                                                  builder: (context, snapshot) {
+                                                                                                    // Customize what your widget looks like when it's loading.
+                                                                                                    if (!snapshot.hasData) {
+                                                                                                      return Center(
+                                                                                                        child: SizedBox(
+                                                                                                          width: 50,
+                                                                                                          height: 50,
+                                                                                                          child: CircularProgressIndicator(
+                                                                                                            color: FlutterFlowTheme.of(context).primaryColor,
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      );
+                                                                                                    }
+                                                                                                    int containerCount = snapshot.data!;
+                                                                                                    return Container(
+                                                                                                      decoration: BoxDecoration(
+                                                                                                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                                                                                                      ),
+                                                                                                      child: Align(
+                                                                                                        alignment: AlignmentDirectional(0.93, 0.53),
+                                                                                                        child: Padding(
+                                                                                                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 5, 5),
+                                                                                                          child: StreamBuilder<List<OrderListRecord>>(
+                                                                                                            stream: queryOrderListRecord(
+                                                                                                              queryBuilder: (orderListRecord) => orderListRecord.where('isPaid', isEqualTo: false).where('user_Ref', isEqualTo: currentUserReference),
+                                                                                                              singleRecord: true,
+                                                                                                            ),
+                                                                                                            builder: (context, snapshot) {
+                                                                                                              // Customize what your widget looks like when it's loading.
+                                                                                                              if (!snapshot.hasData) {
+                                                                                                                return Center(
+                                                                                                                  child: SizedBox(
+                                                                                                                    width: 50,
+                                                                                                                    height: 50,
+                                                                                                                    child: CircularProgressIndicator(
+                                                                                                                      color: FlutterFlowTheme.of(context).primaryColor,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                );
+                                                                                                              }
+                                                                                                              List<OrderListRecord> iconAddProductOrderListRecordList = snapshot.data!;
+                                                                                                              final iconAddProductOrderListRecord = iconAddProductOrderListRecordList.isNotEmpty ? iconAddProductOrderListRecordList.first : null;
+                                                                                                              return FlutterFlowIconButton(
+                                                                                                                borderColor: Colors.transparent,
+                                                                                                                borderRadius: 30,
+                                                                                                                buttonSize: 30,
+                                                                                                                fillColor: FlutterFlowTheme.of(context).primaryColor,
+                                                                                                                icon: Icon(
+                                                                                                                  Icons.add,
+                                                                                                                  color: FlutterFlowTheme.of(context).secondaryColor,
+                                                                                                                  size: 15,
+                                                                                                                ),
+                                                                                                                onPressed: () async {
+                                                                                                                  if (iconAddProductOrderListRecord != null) {
+                                                                                                                    FFAppState().update(() {
+                                                                                                                      FFAppState().ProductListCart = iconAddProductOrderListRecord!.productsList!.toList();
+                                                                                                                    });
+                                                                                                                    FFAppState().update(() {
+                                                                                                                      FFAppState().addToProductListCart(gridViewProductsRecord.reference);
+                                                                                                                    });
+
+                                                                                                                    final orderListUpdateData = {
+                                                                                                                      'productsList': FFAppState().ProductListCart,
+                                                                                                                      'order_total': FieldValue.increment(gridViewProductsRecord.productPrice!),
+                                                                                                                      'productsListUnique': FieldValue.arrayUnion([gridViewProductsRecord.reference]),
+                                                                                                                    };
+                                                                                                                    await iconAddProductOrderListRecord!.reference.update(orderListUpdateData);
+
+                                                                                                                    final ordersCreateData = createOrdersRecordData(
+                                                                                                                      orderDate: getCurrentTimestamp,
+                                                                                                                      shopRef: gridViewProductsRecord.shopRef,
+                                                                                                                      productName: gridViewProductsRecord.productName,
+                                                                                                                      productPrice: gridViewProductsRecord.productPrice,
+                                                                                                                      orderStatus: 'Processing',
+                                                                                                                      userRef: currentUserReference,
+                                                                                                                      orderNumber: iconAddProductOrderListRecord!.orderNo,
+                                                                                                                      productImage: gridViewProductsRecord.productPhoto,
+                                                                                                                      orderListRef: iconAddProductOrderListRecord!.reference,
+                                                                                                                      productRef: gridViewProductsRecord.reference,
+                                                                                                                    );
+                                                                                                                    await OrdersRecord.collection.doc().set(ordersCreateData);
+                                                                                                                  } else {
+                                                                                                                    final orderListCreateData = {
+                                                                                                                      ...createOrderListRecordData(
+                                                                                                                        orderDate: getCurrentTimestamp,
+                                                                                                                        userRef: currentUserReference,
+                                                                                                                        isPaid: false,
+                                                                                                                        orderNo: functions.orderNoCalculateNew(containerCount).toString(),
+                                                                                                                        orderTotal: gridViewProductsRecord.productPrice,
+                                                                                                                        shippingTotal: containerUsersRecord.shippingCost,
+                                                                                                                      ),
+                                                                                                                      'productsList': [gridViewProductsRecord.reference],
+                                                                                                                      'productsListUnique': [gridViewProductsRecord.reference],
+                                                                                                                    };
+                                                                                                                    var orderListRecordReference = OrderListRecord.collection.doc();
+                                                                                                                    await orderListRecordReference.set(orderListCreateData);
+                                                                                                                    orderListOutPut = OrderListRecord.getDocumentFromData(orderListCreateData, orderListRecordReference);
+
+                                                                                                                    final ordersCreateData = createOrdersRecordData(
+                                                                                                                      orderDate: getCurrentTimestamp,
+                                                                                                                      shopRef: gridViewProductsRecord.shopRef,
+                                                                                                                      productName: gridViewProductsRecord.productName,
+                                                                                                                      productPrice: gridViewProductsRecord.productPrice,
+                                                                                                                      orderStatus: 'Processing',
+                                                                                                                      userRef: currentUserReference,
+                                                                                                                      orderNumber: orderListOutPut!.orderNo,
+                                                                                                                      productImage: gridViewProductsRecord.productPhoto,
+                                                                                                                      orderListRef: orderListOutPut!.reference,
+                                                                                                                      productRef: gridViewProductsRecord.reference,
+                                                                                                                    );
+                                                                                                                    await OrdersRecord.collection.doc().set(ordersCreateData);
+                                                                                                                  }
+
+                                                                                                                  setState(() {});
+                                                                                                                },
+                                                                                                              );
+                                                                                                            },
+                                                                                                          ),
                                                                                                         ),
                                                                                                       ),
-                                                                                                      duration: Duration(milliseconds: 4000),
-                                                                                                      backgroundColor: Color(0xFF15D1D1),
-                                                                                                    ),
-                                                                                                  );
-                                                                                                },
-                                                                                              ),
-                                                                                            ),
+                                                                                                    );
+                                                                                                  },
+                                                                                                ),
+                                                                                              );
+                                                                                            },
                                                                                           ),
                                                                                         ],
                                                                                       ),
@@ -1220,7 +1328,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                           stream:
                                                                               queryStreamsRecord(
                                                                             queryBuilder: (streamsRecord) =>
-                                                                                streamsRecord.where('channel_reference', arrayContains: columnChannelsRecord.reference).orderBy('stream_view_online', descending: true).orderBy('is_live'),
+                                                                                streamsRecord.where('channel_reference', arrayContains: columnChannelsRecord.reference).orderBy('stream_view_online', descending: true),
                                                                             limit:
                                                                                 4,
                                                                           ),
@@ -1310,7 +1418,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                                           fit: BoxFit.cover,
                                                                                           image: Image.network(
                                                                                             valueOrDefault<String>(
-                                                                                              'https://image.mux.com/${gridViewStreamsRecord.streamId}/animated.webp',
+                                                                                              'https://image.mux.com/${gridViewStreamsRecord.streamId}/animated.webp?width=60&fps=5',
                                                                                               'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
                                                                                             ),
                                                                                           ).image,

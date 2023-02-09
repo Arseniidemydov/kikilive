@@ -468,8 +468,7 @@ class _ChannelListWidgetState extends State<ChannelListWidget> {
                                                                     .reference)
                                                         .orderBy(
                                                             'stream_view_online',
-                                                            descending: true)
-                                                        .orderBy('is_live'),
+                                                            descending: true),
                                                     limit: 4,
                                                   ),
                                                   builder: (context, snapshot) {
@@ -609,7 +608,7 @@ class _ChannelListWidgetState extends State<ChannelListWidget> {
                                                                       .network(
                                                                     valueOrDefault<
                                                                         String>(
-                                                                      'https://image.mux.com/${gridViewStreamsRecord.streamId}/animated.webp',
+                                                                      'https://image.mux.com/${gridViewStreamsRecord.streamId}/animated.webp?width=60&fps=5',
                                                                       'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
                                                                     ),
                                                                   ).image,

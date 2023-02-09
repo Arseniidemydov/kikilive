@@ -121,6 +121,7 @@ class _OrderHistoryListWidgetState extends State<OrderHistoryListWidget> {
                       stream: queryOrderListRecord(
                         queryBuilder: (orderListRecord) => orderListRecord
                             .where('user_Ref', isEqualTo: currentUserReference)
+                            .where('isPaid', isEqualTo: true)
                             .orderBy('order_no', descending: true),
                       ),
                       builder: (context, snapshot) {
@@ -154,12 +155,12 @@ class _OrderHistoryListWidgetState extends State<OrderHistoryListWidget> {
                                   context.pushNamed(
                                     'orderHistory',
                                     queryParams: {
-                                      'orderNo': serializeParam(
-                                        listViewOrderListRecord.orderNo,
-                                        ParamType.String,
-                                      ),
                                       'userRef': serializeParam(
                                         listViewOrderListRecord.userRef,
+                                        ParamType.DocumentReference,
+                                      ),
+                                      'orderList': serializeParam(
+                                        listViewOrderListRecord.reference,
                                         ParamType.DocumentReference,
                                       ),
                                     }.withoutNulls,

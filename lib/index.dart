@@ -1,5 +1,4 @@
 // Export pages
-export 'splash/splash_widget.dart' show SplashWidget;
 export 'get_started/get_started_widget.dart' show GetStartedWidget;
 export 'phone_sign_in/phone_sign_in_widget.dart' show PhoneSignInWidget;
 export 'login_copy/login_copy_widget.dart' show LoginCopyWidget;
@@ -11,8 +10,8 @@ export 'order_mgmt_admin_copy/order_mgmt_admin_copy_widget.dart'
 export 'user_profile_view_copy/user_profile_view_copy_widget.dart'
     show UserProfileViewCopyWidget;
 export 'verify_o_t_p/verify_o_t_p_widget.dart' show VerifyOTPWidget;
-export 'search_results/search_results_widget.dart' show SearchResultsWidget;
 export 'login/login_widget.dart' show LoginWidget;
+export 'search_results/search_results_widget.dart' show SearchResultsWidget;
 export 'shops/shops_widget.dart' show ShopsWidget;
 export 'products/products_widget.dart' show ProductsWidget;
 export 'forgot_password/forgot_password_widget.dart' show ForgotPasswordWidget;
@@ -63,9 +62,9 @@ export 'live/live_widget.dart' show LiveWidget;
 export 'add_product/add_product_widget.dart' show AddProductWidget;
 export 'edit_product/edit_product_widget.dart' show EditProductWidget;
 export 'create_channels/create_channels_widget.dart' show CreateChannelsWidget;
+export 'user_settings/user_settings_widget.dart' show UserSettingsWidget;
 export 'edit_seller_channels/edit_seller_channels_widget.dart'
     show EditSellerChannelsWidget;
-export 'user_settings/user_settings_widget.dart' show UserSettingsWidget;
 export 'account_settings/account_settings_widget.dart'
     show AccountSettingsWidget;
 export 'order_history_list/order_history_list_widget.dart'
@@ -76,10 +75,10 @@ export 'address_details/address_details_widget.dart' show AddressDetailsWidget;
 export 'update_address_details/update_address_details_widget.dart'
     show UpdateAddressDetailsWidget;
 export 'cart_address/cart_address_widget.dart' show CartAddressWidget;
-export 'chat_page/chat_page_widget.dart' show ChatPageWidget;
 export 'all_chats/all_chats_widget.dart' show AllChatsWidget;
-export 'invite_users/invite_users_widget.dart' show InviteUsersWidget;
+export 'chat_page/chat_page_widget.dart' show ChatPageWidget;
 export 'add_chat/add_chat_widget.dart' show AddChatWidget;
+export 'invite_users/invite_users_widget.dart' show InviteUsersWidget;
 export 'search_shop/search_shop_widget.dart' show SearchShopWidget;
 export 'order_management/order_management_widget.dart'
     show OrderManagementWidget;

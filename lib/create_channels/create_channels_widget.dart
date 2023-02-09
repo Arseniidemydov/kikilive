@@ -553,7 +553,7 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                   height: 50,
                                   decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
+                                        .bottomSheet,
                                     borderRadius: BorderRadius.circular(8),
                                     border: Border.all(
                                       color: FlutterFlowTheme.of(context)
@@ -574,15 +574,17 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                           .override(
                                             fontFamily: 'Roboto',
                                             color: FlutterFlowTheme.of(context)
-                                                .secondaryText,
+                                                .primaryText,
                                           ),
                                       hintText: 'Select Sub Category',
                                       icon: Icon(
                                         Icons.keyboard_arrow_down_rounded,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
                                         size: 15,
                                       ),
                                       fillColor: FlutterFlowTheme.of(context)
-                                          .primaryBackground,
+                                          .bottomSheet,
                                       elevation: 2,
                                       borderColor: Colors.transparent,
                                       borderWidth: 0,
@@ -729,6 +731,32 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                 ),
                                 child: FFButtonWidget(
                                   onPressed: () async {
+                                    if (formKey.currentState == null ||
+                                        !formKey.currentState!.validate()) {
+                                      return;
+                                    }
+
+                                    if (ddChannelTypeValue == null) {
+                                      await showDialog(
+                                        context: context,
+                                        builder: (alertDialogContext) {
+                                          return AlertDialog(
+                                            title: Text('Channel Type'),
+                                            content:
+                                                Text('Select Channel Type'),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () => Navigator.pop(
+                                                    alertDialogContext),
+                                                child: Text('Ok'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                      return;
+                                    }
+
                                     final channelsCreateData = {
                                       ...createChannelsRecordData(
                                         channelName:
@@ -763,6 +791,8 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                                 .secondaryColor,
                                       ),
                                     );
+
+                                    context.pushNamed('userProfile');
                                   },
                                   text: 'Save',
                                   options: FFButtonOptions(

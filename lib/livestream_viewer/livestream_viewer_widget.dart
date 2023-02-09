@@ -405,6 +405,10 @@ class _LivestreamViewerWidgetState extends State<LivestreamViewerWidget> {
                                                               .doc()
                                                               .set(
                                                                   streamingCommentsCreateData);
+                                                          setState(() {
+                                                            textController
+                                                                ?.clear();
+                                                          });
                                                         },
                                                         autofocus: true,
                                                         obscureText: false,
@@ -532,7 +536,11 @@ class _LivestreamViewerWidgetState extends State<LivestreamViewerWidget> {
                                                                         .height *
                                                                     0.7,
                                                                 child:
-                                                                    ProductPopWidget(),
+                                                                    ProductPopWidget(
+                                                                  userID:
+                                                                      containerStreamsRecord
+                                                                          .userRef,
+                                                                ),
                                                               ),
                                                             );
                                                           },

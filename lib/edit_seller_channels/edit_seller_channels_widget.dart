@@ -457,7 +457,7 @@ class _EditSellerChannelsWidgetState extends State<EditSellerChannelsWidget> {
                               controller: txtChannelDescController,
                               obscureText: false,
                               decoration: InputDecoration(
-                                hintText: 'Product price in THB',
+                                hintText: 'Tell your audience more about you',
                                 hintStyle: FlutterFlowTheme.of(context)
                                     .bodyText2
                                     .override(

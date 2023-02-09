@@ -137,38 +137,39 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                 child: Form(
                   key: formKey,
                   autovalidateMode: AutovalidateMode.disabled,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(15, 10, 0, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                'Product Photo',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyText1
-                                    .override(
-                                      fontFamily: 'Roboto',
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                    ),
-                              ),
-                            ],
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(
+                                  'Product Photo',
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyText1
+                                      .override(
+                                        fontFamily: 'Roboto',
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                      ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      16, 0, 16, 0),
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
                                   child: Container(
                                     width: MediaQuery.of(context).size.width *
                                         0.98,
@@ -194,7 +195,10 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                                                   BorderRadius.circular(8),
                                               child: CachedNetworkImage(
                                                 imageUrl:
-                                                    'https://picsum.photos/seed/668/600',
+                                                    valueOrDefault<String>(
+                                                  uploadedFileUrl,
+                                                  'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
+                                                ),
                                                 width: MediaQuery.of(context)
                                                     .size
                                                     .width,
@@ -209,132 +213,114 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                                           Align(
                                             alignment:
                                                 AlignmentDirectional(0, 0),
-                                            child: Container(
-                                              width: 100,
-                                              height: 40,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(30),
-                                              ),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Align(
-                                                    alignment:
-                                                        AlignmentDirectional(
-                                                            0.01, -0.09),
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  5, 5, 5, 5),
-                                                      child:
-                                                          FlutterFlowIconButton(
-                                                        borderColor:
-                                                            Colors.transparent,
-                                                        borderRadius: 30,
-                                                        borderWidth: 1,
-                                                        buttonSize: 30,
-                                                        fillColor:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
+                                            child: InkWell(
+                                              onTap: () async {
+                                                final selectedMedia =
+                                                    await selectMediaWithSourceBottomSheet(
+                                                  context: context,
+                                                  allowPhoto: true,
+                                                );
+                                                if (selectedMedia != null &&
+                                                    selectedMedia.every((m) =>
+                                                        validateFileFormat(
+                                                            m.storagePath,
+                                                            context))) {
+                                                  setState(() =>
+                                                      isMediaUploading = true);
+                                                  var downloadUrls = <String>[];
+                                                  try {
+                                                    downloadUrls = (await Future
+                                                            .wait(
+                                                      selectedMedia.map(
+                                                        (m) async =>
+                                                            await uploadData(
+                                                                m.storagePath,
+                                                                m.bytes),
+                                                      ),
+                                                    ))
+                                                        .where((u) => u != null)
+                                                        .map((u) => u!)
+                                                        .toList();
+                                                  } finally {
+                                                    isMediaUploading = false;
+                                                  }
+                                                  if (downloadUrls.length ==
+                                                      selectedMedia.length) {
+                                                    setState(() =>
+                                                        uploadedFileUrl =
+                                                            downloadUrls.first);
+                                                  } else {
+                                                    setState(() {});
+                                                    return;
+                                                  }
+                                                }
+                                              },
+                                              child: Container(
+                                                width: 100,
+                                                height: 40,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(30),
+                                                ),
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Align(
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              0.01, -0.09),
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    5, 5, 5, 5),
+                                                        child:
+                                                            FlutterFlowIconButton(
+                                                          borderColor: Colors
+                                                              .transparent,
+                                                          borderRadius: 30,
+                                                          borderWidth: 1,
+                                                          buttonSize: 30,
+                                                          fillColor:
+                                                              FlutterFlowTheme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                          icon: Icon(
+                                                            Icons.photo_camera,
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
                                                                 .secondaryColor,
-                                                        icon: Icon(
-                                                          Icons.photo_camera,
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryColor,
-                                                          size: 15,
+                                                            size: 15,
+                                                          ),
+                                                          showLoadingIndicator:
+                                                              true,
+                                                          onPressed: () {
+                                                            print(
+                                                                'IconButton pressed ...');
+                                                          },
                                                         ),
-                                                        showLoadingIndicator:
-                                                            true,
-                                                        onPressed: () async {
-                                                          final selectedMedia =
-                                                              await selectMediaWithSourceBottomSheet(
-                                                            context: context,
-                                                            allowPhoto: true,
-                                                          );
-                                                          if (selectedMedia !=
-                                                                  null &&
-                                                              selectedMedia.every((m) =>
-                                                                  validateFileFormat(
-                                                                      m.storagePath,
-                                                                      context))) {
-                                                            setState(() =>
-                                                                isMediaUploading =
-                                                                    true);
-                                                            var downloadUrls =
-                                                                <String>[];
-                                                            try {
-                                                              showUploadMessage(
-                                                                context,
-                                                                'Uploading file...',
-                                                                showLoading:
-                                                                    true,
-                                                              );
-                                                              downloadUrls =
-                                                                  (await Future
-                                                                          .wait(
-                                                                selectedMedia
-                                                                    .map(
-                                                                  (m) async =>
-                                                                      await uploadData(
-                                                                          m.storagePath,
-                                                                          m.bytes),
-                                                                ),
-                                                              ))
-                                                                      .where((u) =>
-                                                                          u !=
-                                                                          null)
-                                                                      .map((u) =>
-                                                                          u!)
-                                                                      .toList();
-                                                            } finally {
-                                                              ScaffoldMessenger
-                                                                      .of(context)
-                                                                  .hideCurrentSnackBar();
-                                                              isMediaUploading =
-                                                                  false;
-                                                            }
-                                                            if (downloadUrls
-                                                                    .length ==
-                                                                selectedMedia
-                                                                    .length) {
-                                                              setState(() =>
-                                                                  uploadedFileUrl =
-                                                                      downloadUrls
-                                                                          .first);
-                                                              showUploadMessage(
-                                                                  context,
-                                                                  'Success!');
-                                                            } else {
-                                                              setState(() {});
-                                                              showUploadMessage(
-                                                                  context,
-                                                                  'Failed to upload media');
-                                                              return;
-                                                            }
-                                                          }
-                                                        },
                                                       ),
                                                     ),
-                                                  ),
-                                                  Text(
-                                                    'Upload',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyText1
-                                                        .override(
-                                                          fontFamily: 'Roboto',
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .primaryColor,
-                                                        ),
-                                                  ),
-                                                ],
+                                                    Text(
+                                                      'Upload',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryColor,
+                                                              ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -343,755 +329,459 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(15, 10, 15, 5),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-                                child: Text(
-                                  'Select Category',
-                                  style: FlutterFlowTheme.of(context).bodyText1,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(15, 0, 15, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color:
-                                          FlutterFlowTheme.of(context).grayIcon,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        3, 3, 3, 3),
-                                    child:
-                                        StreamBuilder<List<CategoriesRecord>>(
-                                      stream: queryCategoriesRecord(),
-                                      builder: (context, snapshot) {
-                                        // Customize what your widget looks like when it's loading.
-                                        if (!snapshot.hasData) {
-                                          return Center(
-                                            child: SizedBox(
-                                              width: 50,
-                                              height: 50,
-                                              child: CircularProgressIndicator(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryColor,
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                        List<CategoriesRecord>
-                                            ddCategoryCategoriesRecordList =
-                                            snapshot.data!;
-                                        return FlutterFlowDropDown<String>(
-                                          options:
-                                              ddCategoryCategoriesRecordList
-                                                  .map((e) => e.categoryName)
-                                                  .withoutNulls
-                                                  .toList()
-                                                  .toList(),
-                                          onChanged: (val) => setState(
-                                              () => ddCategoryValue = val),
-                                          width: 180,
-                                          height: 50,
-                                          textStyle: FlutterFlowTheme.of(
-                                                  context)
-                                              .bodyText1
-                                              .override(
-                                                fontFamily: 'Roboto',
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .grayIcon,
-                                              ),
-                                          hintText: 'Select a Category',
-                                          icon: Icon(
-                                            Icons.keyboard_arrow_down_rounded,
-                                            size: 15,
-                                          ),
-                                          fillColor:
-                                              FlutterFlowTheme.of(context)
-                                                  .primaryBackground,
-                                          elevation: 2,
-                                          borderColor: Colors.transparent,
-                                          borderWidth: 0,
-                                          borderRadius: 10,
-                                          margin:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  12, 4, 12, 4),
-                                          hidesUnderline: true,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(15, 10, 15, 5),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding:
-                                    EdgeInsetsDirectional.fromSTEB(5, 0, 0, 0),
-                                child: Text(
-                                  'Select Sub Category',
-                                  style: FlutterFlowTheme.of(context).bodyText1,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(15, 0, 15, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color:
-                                          FlutterFlowTheme.of(context).grayIcon,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        3, 3, 3, 3),
-                                    child:
-                                        FutureBuilder<List<SubCategoryRecord>>(
-                                      future: querySubCategoryRecordOnce(),
-                                      builder: (context, snapshot) {
-                                        // Customize what your widget looks like when it's loading.
-                                        if (!snapshot.hasData) {
-                                          return Center(
-                                            child: SizedBox(
-                                              width: 50,
-                                              height: 50,
-                                              child: CircularProgressIndicator(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryColor,
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                        List<SubCategoryRecord>
-                                            ddSubCategorySubCategoryRecordList =
-                                            snapshot.data!;
-                                        return FlutterFlowDropDown<String>(
-                                          options:
-                                              ddSubCategorySubCategoryRecordList
-                                                  .map((e) => e.subCategoryName)
-                                                  .withoutNulls
-                                                  .toList()
-                                                  .toList(),
-                                          onChanged: (val) => setState(
-                                              () => ddSubCategoryValue = val),
-                                          width: 180,
-                                          height: 50,
-                                          textStyle: FlutterFlowTheme.of(
-                                                  context)
-                                              .bodyText1
-                                              .override(
-                                                fontFamily: 'Roboto',
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryText,
-                                              ),
-                                          hintText: 'Select Sub Category',
-                                          icon: Icon(
-                                            Icons.keyboard_arrow_down_rounded,
-                                            size: 15,
-                                          ),
-                                          fillColor:
-                                              FlutterFlowTheme.of(context)
-                                                  .primaryBackground,
-                                          elevation: 2,
-                                          borderColor: Colors.transparent,
-                                          borderWidth: 0,
-                                          borderRadius: 0,
-                                          margin:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  12, 4, 12, 4),
-                                          hidesUnderline: true,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(15, 10, 0, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                'Product Name',
-                                style: FlutterFlowTheme.of(context).bodyText1,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(15, 10, 15, 5),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color:
-                                          FlutterFlowTheme.of(context).grayIcon,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 0, 0, 0),
-                                    child: TextFormField(
-                                      controller: txtProductNameController,
-                                      autofocus: true,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        hintText: 'e.g Flat Shoes',
-                                        hintStyle: FlutterFlowTheme.of(context)
-                                            .bodyText2,
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        errorBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedErrorBorder:
-                                            UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 20, 0, 10),
+                            child: StreamBuilder<List<CategoriesRecord>>(
+                              stream: queryCategoriesRecord(),
+                              builder: (context, snapshot) {
+                                // Customize what your widget looks like when it's loading.
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: CircularProgressIndicator(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryColor,
                                       ),
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText1,
-                                      validator: (val) {
-                                        if (val == null || val.isEmpty) {
-                                          return 'Field is required';
-                                        }
-
-                                        if (val.length < 3) {
-                                          return 'Requires at least 3 characters.';
-                                        }
-                                        if (val.length > 60) {
-                                          return 'Maximum 60 characters allowed, currently ${val.length}.';
-                                        }
-
-                                        return null;
-                                      },
                                     ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(15, 5, 0, 5),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                'Product Price',
-                                style: FlutterFlowTheme.of(context).bodyText1,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(15, 0, 15, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: Container(
+                                  );
+                                }
+                                List<CategoriesRecord>
+                                    ddCategoryCategoriesRecordList =
+                                    snapshot.data!;
+                                return FlutterFlowDropDown<String>(
+                                  options: ddCategoryCategoriesRecordList
+                                      .map((e) => e.categoryName)
+                                      .withoutNulls
+                                      .toList()
+                                      .toList(),
+                                  onChanged: (val) =>
+                                      setState(() => ddCategoryValue = val),
                                   width: MediaQuery.of(context).size.width,
                                   height: 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .bodyText1
+                                      .override(
+                                        fontFamily: 'Roboto',
+                                        color: FlutterFlowTheme.of(context)
+                                            .grayIcon,
+                                      ),
+                                  hintText: 'Select a Category',
+                                  icon: Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    size: 15,
+                                  ),
+                                  elevation: 2,
+                                  borderColor:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  borderWidth: 1,
+                                  borderRadius: 5,
+                                  margin: EdgeInsetsDirectional.fromSTEB(
+                                      12, 4, 12, 4),
+                                  hidesUnderline: true,
+                                );
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                            child: FutureBuilder<List<SubCategoryRecord>>(
+                              future: querySubCategoryRecordOnce(),
+                              builder: (context, snapshot) {
+                                // Customize what your widget looks like when it's loading.
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: CircularProgressIndicator(
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryColor,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                List<SubCategoryRecord>
+                                    ddSubCategorySubCategoryRecordList =
+                                    snapshot.data!;
+                                return FlutterFlowDropDown<String>(
+                                  options: ddSubCategorySubCategoryRecordList
+                                      .map((e) => e.subCategoryName)
+                                      .withoutNulls
+                                      .toList()
+                                      .toList(),
+                                  onChanged: (val) =>
+                                      setState(() => ddSubCategoryValue = val),
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 50,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .bodyText1
+                                      .override(
+                                        fontFamily: 'Roboto',
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                      ),
+                                  hintText: 'Select Sub Category',
+                                  icon: Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    size: 15,
+                                  ),
+                                  fillColor: FlutterFlowTheme.of(context)
+                                      .primaryBackground,
+                                  elevation: 2,
+                                  borderColor:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  borderWidth: 1,
+                                  borderRadius: 5,
+                                  margin: EdgeInsetsDirectional.fromSTEB(
+                                      12, 4, 12, 4),
+                                  hidesUnderline: true,
+                                );
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                            child: TextFormField(
+                              controller: txtProductNameController,
+                              autofocus: true,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                labelText: 'Product Name',
+                                hintText: 'e.g Flat Shoes',
+                                hintStyle:
+                                    FlutterFlowTheme.of(context).bodyText2,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .customColor3,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .customColor3,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                              style: FlutterFlowTheme.of(context).bodyText1,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Field is required';
+                                }
+
+                                if (val.length < 3) {
+                                  return 'Requires at least 3 characters.';
+                                }
+                                if (val.length > 60) {
+                                  return 'Maximum 60 characters allowed, currently ${val.length}.';
+                                }
+
+                                return null;
+                              },
+                            ),
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                            child: TextFormField(
+                              controller: txtProductPriceController,
+                              autofocus: true,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                labelText: 'Product Price',
+                                hintText: 'Product price in THB',
+                                hintStyle: FlutterFlowTheme.of(context)
+                                    .bodyText2
+                                    .override(
+                                      fontFamily: 'Roboto',
                                       color:
                                           FlutterFlowTheme.of(context).grayIcon,
                                     ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    width: 1,
                                   ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 0, 0, 0),
-                                    child: TextFormField(
-                                      controller: txtProductPriceController,
-                                      autofocus: true,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        hintText: 'Product price in THB',
-                                        hintStyle: FlutterFlowTheme.of(context)
-                                            .bodyText2
-                                            .override(
-                                              fontFamily: 'Roboto',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .grayIcon,
-                                            ),
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        errorBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedErrorBorder:
-                                            UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText1,
-                                      keyboardType: TextInputType.number,
-                                      validator: (val) {
-                                        if (val == null || val.isEmpty) {
-                                          return 'Field is required';
-                                        }
-
-                                        if (val.length < 1) {
-                                          return 'Requires at least 1 characters.';
-                                        }
-
-                                        return null;
-                                      },
-                                    ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    width: 1,
                                   ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .customColor3,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .customColor3,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
                                 ),
                               ),
-                            ],
+                              style: FlutterFlowTheme.of(context).bodyText1,
+                              keyboardType: TextInputType.number,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Field is required';
+                                }
+
+                                if (val.length < 1) {
+                                  return 'Requires at least 1 characters.';
+                                }
+
+                                return null;
+                              },
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(16, 10, 16, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                'Inventory',
-                                style: FlutterFlowTheme.of(context).bodyText1,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(16, 10, 16, 10),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 50,
-                                  decoration: BoxDecoration(
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                            child: TextFormField(
+                              controller: txtInventoryController,
+                              autofocus: true,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                labelText: 'Inventory',
+                                hintText: 'e.g 100',
+                                hintStyle:
+                                    FlutterFlowTheme.of(context).bodyText2,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
                                     color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
+                                        .primaryText,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .primaryText,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .customColor3,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context)
+                                        .customColor3,
+                                    width: 1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                              ),
+                              style: FlutterFlowTheme.of(context).bodyText1,
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
+                          TextFormField(
+                            controller: txtProDescController,
+                            autofocus: true,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              hintText: 'Enter product desc.',
+                              hintStyle: FlutterFlowTheme.of(context)
+                                  .bodyText2
+                                  .override(
+                                    fontFamily: 'Roboto',
+                                    color:
+                                        FlutterFlowTheme.of(context).grayIcon,
+                                  ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color:
+                                      FlutterFlowTheme.of(context).customColor3,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              focusedErrorBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                  color:
+                                      FlutterFlowTheme.of(context).customColor3,
+                                  width: 1,
+                                ),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                            style: FlutterFlowTheme.of(context)
+                                .bodyText1
+                                .override(
+                                  fontFamily: 'Roboto',
+                                  color: FlutterFlowTheme.of(context).grayIcon,
+                                ),
+                            maxLines: 10,
+                            validator: (val) {
+                              if (val == null || val.isEmpty) {
+                                return 'Field is required';
+                              }
+
+                              if (val.length < 5) {
+                                return 'Requires at least 5 characters.';
+                              }
+                              if (val.length > 50) {
+                                return 'Maximum 50 characters allowed, currently ${val.length}.';
+                              }
+
+                              return null;
+                            },
+                          ),
+                          Padding(
+                            padding:
+                                EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: FFButtonWidget(
+                                    onPressed: () async {
+                                      if (formKey.currentState == null ||
+                                          !formKey.currentState!.validate()) {
+                                        return;
+                                      }
+
+                                      if (ddCategoryValue == null) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Required field',
+                                              style: TextStyle(),
+                                            ),
+                                            duration:
+                                                Duration(milliseconds: 3000),
+                                            backgroundColor: Color(0x00000000),
+                                          ),
+                                        );
+                                        return;
+                                      }
+
+                                      final productsCreateData =
+                                          createProductsRecordData(
+                                        productName:
+                                            txtProductNameController!.text,
+                                        productPrice: double.tryParse(
+                                            txtProductPriceController!.text),
+                                        productDesc: txtProDescController!.text,
+                                        productPhoto: uploadedFileUrl,
+                                        createdAt: getCurrentTimestamp,
+                                        shopName: currentUserDisplayName,
+                                        sku: addProductGenerateSKURecord!.sku
+                                            .toString(),
+                                        status: 'active',
+                                        shopRef: currentUserReference,
+                                        category: ddCategoryValue,
+                                        subCat: ddSubCategoryValue,
+                                        userRef: currentUserReference,
+                                        inventory: int.tryParse(
+                                            txtInventoryController!.text),
+                                      );
+                                      await ProductsRecord.collection
+                                          .doc()
+                                          .set(productsCreateData);
+
+                                      final generateSKUUpdateData =
+                                          createGenerateSKURecordData(
+                                        sku: functions.updateSKU(
+                                            addProductGenerateSKURecord!.sku),
+                                      );
+                                      await addProductGenerateSKURecord!
+                                          .reference
+                                          .update(generateSKUUpdateData);
+                                      context.pop();
+                                    },
+                                    text: 'Save',
+                                    options: FFButtonOptions(
+                                      width: 130,
+                                      height: 40,
                                       color: FlutterFlowTheme.of(context)
-                                          .secondaryText,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 0, 10, 0),
-                                    child: TextFormField(
-                                      controller: txtInventoryController,
-                                      autofocus: true,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        hintText: 'e.g 100',
-                                        hintStyle: FlutterFlowTheme.of(context)
-                                            .bodyText2,
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        errorBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedErrorBorder:
-                                            UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText1,
-                                      keyboardType: TextInputType.number,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(15, 10, 0, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                'Product Description',
-                                style: FlutterFlowTheme.of(context).bodyText1,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.fromSTEB(15, 10, 15, 0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 150,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(
-                                      color:
-                                          FlutterFlowTheme.of(context).grayIcon,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        10, 0, 0, 0),
-                                    child: TextFormField(
-                                      controller: txtProDescController,
-                                      autofocus: true,
-                                      obscureText: false,
-                                      decoration: InputDecoration(
-                                        hintText: 'Enter product desc.',
-                                        hintStyle: FlutterFlowTheme.of(context)
-                                            .bodyText2
-                                            .override(
-                                              fontFamily: 'Roboto',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .grayIcon,
-                                            ),
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        errorBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                        focusedErrorBorder:
-                                            UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0x00000000),
-                                            width: 1,
-                                          ),
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(4.0),
-                                            topRight: Radius.circular(4.0),
-                                          ),
-                                        ),
-                                      ),
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyText1
+                                          .primaryColor,
+                                      textStyle: FlutterFlowTheme.of(context)
+                                          .subtitle2
                                           .override(
                                             fontFamily: 'Roboto',
                                             color: FlutterFlowTheme.of(context)
-                                                .grayIcon,
+                                                .secondaryColor,
+                                            fontWeight: FontWeight.w500,
                                           ),
-                                      validator: (val) {
-                                        if (val == null || val.isEmpty) {
-                                          return 'Field is required';
-                                        }
-
-                                        if (val.length < 5) {
-                                          return 'Requires at least 5 characters.';
-                                        }
-                                        if (val.length > 50) {
-                                          return 'Maximum 50 characters allowed, currently ${val.length}.';
-                                        }
-
-                                        return null;
-                                      },
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                        width: 1,
+                                      ),
+                                      borderRadius: BorderRadius.circular(50),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 20),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 350,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
-                                  borderRadius: BorderRadius.circular(50),
-                                ),
-                                child: FFButtonWidget(
-                                  onPressed: () async {
-                                    if (formKey.currentState == null ||
-                                        !formKey.currentState!.validate()) {
-                                      return;
-                                    }
-
-                                    if (ddCategoryValue == null) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'Required field',
-                                            style: TextStyle(),
-                                          ),
-                                          duration:
-                                              Duration(milliseconds: 3000),
-                                          backgroundColor: Color(0x00000000),
-                                        ),
-                                      );
-                                      return;
-                                    }
-
-                                    if (uploadedFileUrl == null ||
-                                        uploadedFileUrl.isEmpty) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'Required field',
-                                            style: TextStyle(),
-                                          ),
-                                          duration:
-                                              Duration(milliseconds: 4000),
-                                          backgroundColor: Color(0x00000000),
-                                        ),
-                                      );
-                                      return;
-                                    }
-
-                                    final productsCreateData =
-                                        createProductsRecordData(
-                                      productName:
-                                          txtProductNameController!.text,
-                                      productPrice: double.tryParse(
-                                          txtProductPriceController!.text),
-                                      productDesc: txtProDescController!.text,
-                                      productPhoto: uploadedFileUrl,
-                                      createdAt: getCurrentTimestamp,
-                                      shopName: currentUserDisplayName,
-                                      sku: addProductGenerateSKURecord!.sku
-                                          .toString(),
-                                      status: 'active',
-                                      shopRef: currentUserReference,
-                                      category: ddCategoryValue,
-                                      subCat: ddSubCategoryValue,
-                                      userRef: currentUserReference,
-                                      inventory: int.tryParse(
-                                          txtInventoryController!.text),
-                                    );
-                                    await ProductsRecord.collection
-                                        .doc()
-                                        .set(productsCreateData);
-
-                                    final generateSKUUpdateData =
-                                        createGenerateSKURecordData(
-                                      sku: functions.updateSKU(
-                                          addProductGenerateSKURecord!.sku),
-                                    );
-                                    await addProductGenerateSKURecord!.reference
-                                        .update(generateSKUUpdateData);
-
-                                    context.pushNamed('Products');
-                                  },
-                                  text: 'Save',
-                                  options: FFButtonOptions(
-                                    width: 130,
-                                    height: 40,
-                                    color: FlutterFlowTheme.of(context)
-                                        .primaryColor,
-                                    textStyle: FlutterFlowTheme.of(context)
-                                        .subtitle2
-                                        .override(
-                                          fontFamily: 'Roboto',
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
-                                        ),
-                                    borderSide: BorderSide(
-                                      color: Colors.transparent,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

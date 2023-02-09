@@ -233,6 +233,7 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
 
                               final streamsUpdateData = createStreamsRecordData(
                                 isLive: false,
+                                streamViewOnline: 0,
                               );
                               await liveOutput2!.reference
                                   .update(streamsUpdateData);

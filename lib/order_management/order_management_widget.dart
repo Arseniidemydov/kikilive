@@ -104,12 +104,12 @@ class _OrderManagementWidgetState extends State<OrderManagementWidget> {
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).secondaryBackground,
                       ),
-                      child: StreamBuilder<List<OrderListRecord>>(
-                        stream: queryOrderListRecord(
-                          queryBuilder: (orderListRecord) => orderListRecord
-                              .where('shop_Ref',
+                      child: StreamBuilder<List<OrdersRecord>>(
+                        stream: queryOrdersRecord(
+                          queryBuilder: (ordersRecord) => ordersRecord
+                              .where('shop_ref',
                                   isEqualTo: currentUserReference)
-                              .orderBy('order_no', descending: true),
+                              .orderBy('order_number', descending: true),
                         ),
                         builder: (context, snapshot) {
                           // Customize what your widget looks like when it's loading.
@@ -125,15 +125,15 @@ class _OrderManagementWidgetState extends State<OrderManagementWidget> {
                               ),
                             );
                           }
-                          List<OrderListRecord> listViewOrderListRecordList =
+                          List<OrdersRecord> listViewOrdersRecordList =
                               snapshot.data!;
                           return ListView.builder(
                             padding: EdgeInsets.zero,
                             scrollDirection: Axis.vertical,
-                            itemCount: listViewOrderListRecordList.length,
+                            itemCount: listViewOrdersRecordList.length,
                             itemBuilder: (context, listViewIndex) {
-                              final listViewOrderListRecord =
-                                  listViewOrderListRecordList[listViewIndex];
+                              final listViewOrdersRecord =
+                                  listViewOrdersRecordList[listViewIndex];
                               return Padding(
                                 padding:
                                     EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
@@ -142,20 +142,12 @@ class _OrderManagementWidgetState extends State<OrderManagementWidget> {
                                     context.pushNamed(
                                       'orderDetailsPreview',
                                       queryParams: {
-                                        'orderNo': serializeParam(
-                                          listViewOrderListRecord.orderNo,
-                                          ParamType.String,
-                                        ),
-                                        'shopRef': serializeParam(
-                                          listViewOrderListRecord.shopRef,
+                                        'orderList': serializeParam(
+                                          listViewOrdersRecord.orderListRef,
                                           ParamType.DocumentReference,
                                         ),
                                         'userRef': serializeParam(
-                                          listViewOrderListRecord.userRef,
-                                          ParamType.DocumentReference,
-                                        ),
-                                        'addressRef': serializeParam(
-                                          listViewOrderListRecord.addressRef,
+                                          listViewOrdersRecord.userRef,
                                           ParamType.DocumentReference,
                                         ),
                                       }.withoutNulls,
@@ -223,7 +215,7 @@ class _OrderManagementWidgetState extends State<OrderManagementWidget> {
                                                               ),
                                                     ),
                                                     Text(
-                                                      listViewOrderListRecord
+                                                      listViewOrdersRecord
                                                           .orderDate!
                                                           .toString(),
                                                       style:
@@ -259,8 +251,8 @@ class _OrderManagementWidgetState extends State<OrderManagementWidget> {
                                                               ),
                                                     ),
                                                     Text(
-                                                      listViewOrderListRecord
-                                                          .orderNo!,
+                                                      listViewOrdersRecord
+                                                          .orderNumber!,
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)

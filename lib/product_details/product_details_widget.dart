@@ -6,7 +6,6 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
-import '../custom_code/actions/index.dart' as actions;
 import '../flutter_flow/custom_functions.dart' as functions;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expandable/expandable.dart';
@@ -127,8 +126,9 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
       ],
     ),
   };
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  OrderListRecord? orderListOutPut;
   int? countControllerValue;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -314,31 +314,16 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
-                                    InkWell(
-                                      onTap: () async {
-                                        context.pushNamed(
-                                          'userProfileView',
-                                          queryParams: {
-                                            'shopReference': serializeParam(
-                                              productDetailsProductsRecord
-                                                  .shopRef,
-                                              ParamType.DocumentReference,
-                                            ),
-                                          }.withoutNulls,
-                                        );
-                                      },
-                                      child: Text(
-                                        productDetailsProductsRecord.shopName!,
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText1
-                                            .override(
-                                              fontFamily: 'Roboto',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryColor,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                      ),
+                                    Text(
+                                      productDetailsProductsRecord.subCat!,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1
+                                          .override(
+                                            fontFamily: 'Roboto',
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryColor,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -406,111 +391,145 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             16, 0, 16, 5),
-                                        child: Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .brandBg,
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                          ),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    0, 0, 16, 0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 5, 0, 5),
-                                                  child: Container(
-                                                    width: 270,
-                                                    height: 90,
-                                                    decoration: BoxDecoration(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .brandBg,
-                                                    ),
-                                                    child: Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsetsDirectional
-                                                                  .fromSTEB(5,
-                                                                      5, 5, 5),
-                                                          child: Container(
-                                                            width: 60,
-                                                            height: 60,
-                                                            clipBehavior:
-                                                                Clip.antiAlias,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              shape: BoxShape
-                                                                  .circle,
-                                                            ),
-                                                            child:
-                                                                Image.network(
-                                                              'https://picsum.photos/seed/452/600',
-                                                              fit: BoxFit.cover,
+                                        child: InkWell(
+                                          onTap: () async {
+                                            context.pushNamed(
+                                              'userProfileView',
+                                              queryParams: {
+                                                'shopReference': serializeParam(
+                                                  productDetailsProductsRecord
+                                                      .shopRef,
+                                                  ParamType.DocumentReference,
+                                                ),
+                                              }.withoutNulls,
+                                              extra: <String, dynamic>{
+                                                kTransitionInfoKey:
+                                                    TransitionInfo(
+                                                  hasTransition: true,
+                                                  transitionType:
+                                                      PageTransitionType.fade,
+                                                  duration:
+                                                      Duration(milliseconds: 0),
+                                                ),
+                                              },
+                                            );
+                                          },
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .brandBg,
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(0, 0, 16, 0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 5, 0, 5),
+                                                    child: Container(
+                                                      width: 270,
+                                                      height: 90,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .brandBg,
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        5,
+                                                                        5,
+                                                                        5,
+                                                                        5),
+                                                            child: Container(
+                                                              width: 60,
+                                                              height: 60,
+                                                              clipBehavior: Clip
+                                                                  .antiAlias,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                shape: BoxShape
+                                                                    .circle,
+                                                              ),
+                                                              child:
+                                                                  Image.network(
+                                                                'https://picsum.photos/seed/452/600',
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        Text(
-                                                          productDetailsProductsRecord
-                                                              .shopName!,
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyText1
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Roboto',
-                                                                fontSize: 16,
-                                                              ),
-                                                        ),
-                                                      ],
+                                                          Text(
+                                                            productDetailsProductsRecord
+                                                                .shopName!,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  fontSize: 16,
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(0, 5, 0, 5),
-                                                  child: Container(
-                                                    width: 50,
-                                                    height: 100,
-                                                    decoration: BoxDecoration(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .brandBg,
-                                                    ),
-                                                    child: Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                      children: [
-                                                        Icon(
-                                                          Icons
-                                                              .navigate_next_rounded,
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .button,
-                                                          size: 24,
-                                                        ),
-                                                      ],
+                                                  Padding(
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(
+                                                                0, 5, 0, 5),
+                                                    child: Container(
+                                                      width: 50,
+                                                      height: 100,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .brandBg,
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          Icon(
+                                                            Icons
+                                                                .navigate_next_rounded,
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .button,
+                                                            size: 24,
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -775,10 +794,8 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                         ),
                       ),
                     ),
-                    StreamBuilder<List<UserOrderRecord>>(
-                      stream: queryUserOrderRecord(
-                        parent: currentUserReference,
-                      ),
+                    FutureBuilder<int>(
+                      future: queryOrderListRecordCount(),
                       builder: (context, snapshot) {
                         // Customize what your widget looks like when it's loading.
                         if (!snapshot.hasData) {
@@ -793,8 +810,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                             ),
                           );
                         }
-                        List<UserOrderRecord> fullWidthBGUserOrderRecordList =
-                            snapshot.data!;
+                        int fullWidthBGCount = snapshot.data!;
                         return Container(
                           width: double.infinity,
                           height: 90,
@@ -869,11 +885,9 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                     ),
                                   ),
                                 ),
-                                StreamBuilder<List<UserOrderRecord>>(
-                                  stream: queryUserOrderRecord(
-                                    parent: currentUserReference,
-                                    singleRecord: true,
-                                  ),
+                                StreamBuilder<UsersRecord>(
+                                  stream: UsersRecord.getDocument(
+                                      productDetailsProductsRecord.shopRef!),
                                   builder: (context, snapshot) {
                                     // Customize what your widget looks like when it's loading.
                                     if (!snapshot.hasData) {
@@ -888,64 +902,253 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                         ),
                                       );
                                     }
-                                    List<UserOrderRecord>
-                                        buttonUserOrderRecordList =
-                                        snapshot.data!;
-                                    final buttonUserOrderRecord =
-                                        buttonUserOrderRecordList.isNotEmpty
-                                            ? buttonUserOrderRecordList.first
-                                            : null;
-                                    return FFButtonWidget(
-                                      onPressed: () async {
-                                        await actions.addToSameCart(
-                                          productDetailsProductsRecord.sku,
-                                          currentUserUid,
-                                          0.0,
-                                          0.0,
-                                          functions.generateOrderId(
-                                              containerOrderNoRecord!.orderNo),
-                                          countControllerValue,
-                                        );
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              'Added Succesfully',
-                                              style: TextStyle(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBtnText,
+                                    final containerUsersRecord = snapshot.data!;
+                                    return Container(
+                                      decoration: BoxDecoration(),
+                                      child: FutureBuilder<int>(
+                                        future: queryOrderListRecordCount(),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 50,
+                                                height: 50,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryColor,
+                                                ),
                                               ),
+                                            );
+                                          }
+                                          int containerCount = snapshot.data!;
+                                          return Container(
+                                            decoration: BoxDecoration(),
+                                            child: StreamBuilder<
+                                                List<OrderListRecord>>(
+                                              stream: queryOrderListRecord(
+                                                queryBuilder: (orderListRecord) =>
+                                                    orderListRecord
+                                                        .where('isPaid',
+                                                            isEqualTo: false)
+                                                        .where('user_Ref',
+                                                            isEqualTo:
+                                                                currentUserReference),
+                                                singleRecord: true,
+                                              ),
+                                              builder: (context, snapshot) {
+                                                // Customize what your widget looks like when it's loading.
+                                                if (!snapshot.hasData) {
+                                                  return Center(
+                                                    child: SizedBox(
+                                                      width: 50,
+                                                      height: 50,
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .primaryColor,
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                                List<OrderListRecord>
+                                                    buttonOrderListRecordList =
+                                                    snapshot.data!;
+                                                final buttonOrderListRecord =
+                                                    buttonOrderListRecordList
+                                                            .isNotEmpty
+                                                        ? buttonOrderListRecordList
+                                                            .first
+                                                        : null;
+                                                return FFButtonWidget(
+                                                  onPressed: () async {
+                                                    if (buttonOrderListRecord !=
+                                                        null) {
+                                                      FFAppState().update(() {
+                                                        FFAppState()
+                                                                .ProductListCart =
+                                                            buttonOrderListRecord!
+                                                                .productsList!
+                                                                .toList();
+                                                      });
+                                                      FFAppState().update(() {
+                                                        FFAppState()
+                                                            .addToProductListCart(
+                                                                productDetailsProductsRecord
+                                                                    .reference);
+                                                      });
+
+                                                      final orderListUpdateData =
+                                                          {
+                                                        'productsList':
+                                                            FFAppState()
+                                                                .ProductListCart,
+                                                        'order_total':
+                                                            FieldValue.increment(
+                                                                productDetailsProductsRecord
+                                                                    .productPrice!),
+                                                        'productsListUnique':
+                                                            FieldValue
+                                                                .arrayUnion([
+                                                          productDetailsProductsRecord
+                                                              .reference
+                                                        ]),
+                                                      };
+                                                      await buttonOrderListRecord!
+                                                          .reference
+                                                          .update(
+                                                              orderListUpdateData);
+
+                                                      final ordersCreateData =
+                                                          createOrdersRecordData(
+                                                        orderDate:
+                                                            getCurrentTimestamp,
+                                                        shopRef:
+                                                            productDetailsProductsRecord
+                                                                .shopRef,
+                                                        productName:
+                                                            productDetailsProductsRecord
+                                                                .productName,
+                                                        productPrice:
+                                                            productDetailsProductsRecord
+                                                                .productPrice,
+                                                        orderStatus:
+                                                            'Processing',
+                                                        userRef:
+                                                            currentUserReference,
+                                                        orderNumber:
+                                                            buttonOrderListRecord!
+                                                                .orderNo,
+                                                        productImage:
+                                                            productDetailsProductsRecord
+                                                                .productPhoto,
+                                                        orderListRef:
+                                                            buttonOrderListRecord!
+                                                                .reference,
+                                                        productRef:
+                                                            productDetailsProductsRecord
+                                                                .reference,
+                                                      );
+                                                      await OrdersRecord
+                                                          .collection
+                                                          .doc()
+                                                          .set(
+                                                              ordersCreateData);
+                                                    } else {
+                                                      final orderListCreateData =
+                                                          {
+                                                        ...createOrderListRecordData(
+                                                          orderDate:
+                                                              getCurrentTimestamp,
+                                                          userRef:
+                                                              currentUserReference,
+                                                          isPaid: false,
+                                                          orderNo: functions
+                                                              .orderNoCalculateNew(
+                                                                  fullWidthBGCount)
+                                                              .toString(),
+                                                          orderTotal:
+                                                              productDetailsProductsRecord
+                                                                  .productPrice,
+                                                          shippingTotal:
+                                                              containerUsersRecord
+                                                                  .shippingCost,
+                                                        ),
+                                                        'productsList': [
+                                                          productDetailsProductsRecord
+                                                              .reference
+                                                        ],
+                                                        'productsListUnique': [
+                                                          productDetailsProductsRecord
+                                                              .reference
+                                                        ],
+                                                      };
+                                                      var orderListRecordReference =
+                                                          OrderListRecord
+                                                              .collection
+                                                              .doc();
+                                                      await orderListRecordReference
+                                                          .set(
+                                                              orderListCreateData);
+                                                      orderListOutPut = OrderListRecord
+                                                          .getDocumentFromData(
+                                                              orderListCreateData,
+                                                              orderListRecordReference);
+
+                                                      final ordersCreateData =
+                                                          createOrdersRecordData(
+                                                        orderDate:
+                                                            getCurrentTimestamp,
+                                                        shopRef:
+                                                            containerUsersRecord
+                                                                .reference,
+                                                        productName:
+                                                            productDetailsProductsRecord
+                                                                .productName,
+                                                        productPrice:
+                                                            productDetailsProductsRecord
+                                                                .productPrice,
+                                                        orderStatus:
+                                                            'Processing',
+                                                        userRef:
+                                                            currentUserReference,
+                                                        orderNumber:
+                                                            orderListOutPut!
+                                                                .orderNo,
+                                                        productImage:
+                                                            productDetailsProductsRecord
+                                                                .productPhoto,
+                                                        orderListRef:
+                                                            orderListOutPut!
+                                                                .reference,
+                                                        productRef:
+                                                            productDetailsProductsRecord
+                                                                .reference,
+                                                      );
+                                                      await OrdersRecord
+                                                          .collection
+                                                          .doc()
+                                                          .set(
+                                                              ordersCreateData);
+                                                    }
+
+                                                    setState(() {});
+                                                  },
+                                                  text: 'Add to Cart',
+                                                  options: FFButtonOptions(
+                                                    width: 200,
+                                                    height: 50,
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryColor,
+                                                    textStyle: FlutterFlowTheme
+                                                            .of(context)
+                                                        .subtitle2
+                                                        .override(
+                                                          fontFamily: 'Roboto',
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .secondaryColor,
+                                                          fontSize: 14,
+                                                        ),
+                                                    elevation: 2,
+                                                    borderSide: BorderSide(
+                                                      color: Colors.transparent,
+                                                      width: 1,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            30),
+                                                  ),
+                                                );
+                                              },
                                             ),
-                                            duration:
-                                                Duration(milliseconds: 4000),
-                                            backgroundColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .primaryColor,
-                                          ),
-                                        );
-                                      },
-                                      text: 'Add to Cart',
-                                      options: FFButtonOptions(
-                                        width: 200,
-                                        height: 50,
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryColor,
-                                        textStyle: FlutterFlowTheme.of(context)
-                                            .subtitle2
-                                            .override(
-                                              fontFamily: 'Roboto',
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryColor,
-                                              fontSize: 14,
-                                            ),
-                                        elevation: 2,
-                                        borderSide: BorderSide(
-                                          color: Colors.transparent,
-                                          width: 1,
-                                        ),
-                                        borderRadius: BorderRadius.circular(30),
+                                          );
+                                        },
                                       ),
                                     );
                                   },

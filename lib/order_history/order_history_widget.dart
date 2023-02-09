@@ -4,6 +4,7 @@ import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
+import '../flutter_flow/custom_functions.dart' as functions;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,10 +15,12 @@ class OrderHistoryWidget extends StatefulWidget {
     Key? key,
     this.orderNo,
     this.userRef,
+    this.orderList,
   }) : super(key: key);
 
   final String? orderNo;
   final DocumentReference? userRef;
+  final DocumentReference? orderList;
 
   @override
   _OrderHistoryWidgetState createState() => _OrderHistoryWidgetState();
@@ -37,13 +40,8 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return StreamBuilder<List<OrdersRecord>>(
-      stream: queryOrdersRecord(
-        queryBuilder: (ordersRecord) => ordersRecord
-            .where('user_ref', isEqualTo: currentUserReference)
-            .where('order_number', isEqualTo: widget.orderNo),
-        singleRecord: true,
-      ),
+    return StreamBuilder<OrderListRecord>(
+      stream: OrderListRecord.getDocument(widget.orderList!),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -57,14 +55,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
             ),
           );
         }
-        List<OrdersRecord> orderHistoryOrdersRecordList = snapshot.data!;
-        // Return an empty Container when the item does not exist.
-        if (snapshot.data!.isEmpty) {
-          return Container();
-        }
-        final orderHistoryOrdersRecord = orderHistoryOrdersRecordList.isNotEmpty
-            ? orderHistoryOrdersRecordList.first
-            : null;
+        final orderHistoryOrderListRecord = snapshot.data!;
         return Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -76,7 +67,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
           )
               ? AppBar(
                   backgroundColor:
-                      FlutterFlowTheme.of(context).primaryBackground,
+                      FlutterFlowTheme.of(context).secondaryBackground,
                   automaticallyImplyLeading: false,
                   leading: FlutterFlowIconButton(
                     borderColor: Colors.transparent,
@@ -114,114 +105,139 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 5),
                       child: Container(
                         width: MediaQuery.of(context).size.width,
-                        height: 100,
+                        height: 130,
                         decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).primaryBackground,
-                          borderRadius: BorderRadius.circular(10),
+                          color:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          borderRadius: BorderRadius.circular(0),
                         ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(10, 5, 10, 5),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Order Date:',
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyText1,
-                                  ),
-                                  Text(
-                                    orderHistoryOrdersRecord!.orderDate!
-                                        .toString(),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyText1,
-                                  ),
-                                ],
+                        child: Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 5, 0, 10),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Order Date:',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1,
+                                    ),
+                                    Text(
+                                      orderHistoryOrderListRecord.orderDate!
+                                          .toString(),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1
+                                          .override(
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(10, 0, 10, 5),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Order Number:',
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyText1,
-                                  ),
-                                  Text(
-                                    orderHistoryOrdersRecord!.orderNumber!,
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyText1,
-                                  ),
-                                ],
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Order Number:',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1,
+                                    ),
+                                    Text(
+                                      orderHistoryOrderListRecord.orderNo!,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1
+                                          .override(
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(10, 0, 10, 5),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Order Total:',
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyText1,
-                                  ),
-                                  Text(
-                                    orderHistoryOrdersRecord!.finalTotal!
-                                        .toString(),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyText1,
-                                  ),
-                                ],
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Order Total:',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1,
+                                    ),
+                                    Text(
+                                      formatNumber(
+                                        functions.stripeAmountPayNew(
+                                            orderHistoryOrderListRecord
+                                                .shippingTotal!,
+                                            orderHistoryOrderListRecord
+                                                .orderTotal!),
+                                        formatType: FormatType.decimal,
+                                        decimalType: DecimalType.automatic,
+                                        currency: ' THB ',
+                                      ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1
+                                          .override(
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding:
-                                  EdgeInsetsDirectional.fromSTEB(10, 5, 10, 5),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    'Transaction Id:',
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyText1,
-                                  ),
-                                  Text(
-                                    orderHistoryOrdersRecord!.transactionId!,
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyText1,
-                                  ),
-                                ],
+                              Padding(
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      'Transaction Id:',
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1,
+                                    ),
+                                    Text(
+                                      orderHistoryOrderListRecord.paymentID!,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyText1
+                                          .override(
+                                            fontFamily: 'Roboto',
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Divider(
-                              thickness: 0.5,
-                              color: FlutterFlowTheme.of(context).grayIcon,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10, 5, 10, 0),
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 5, 0, 0),
                       child: StreamBuilder<List<AddressRecord>>(
                         stream: queryAddressRecord(
                           queryBuilder: (addressRecord) => addressRecord
@@ -257,180 +273,200 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
                             height: 150,
                             decoration: BoxDecoration(
                               color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              borderRadius: BorderRadius.circular(6),
+                                  .secondaryBackground,
+                              borderRadius: BorderRadius.circular(0),
                             ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      5, 0, 5, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Customer :',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText1
-                                            .override(
-                                              fontFamily: 'Roboto',
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                      ),
-                                      Container(
-                                        width: 250,
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryBackground,
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  10, 10, 10, 10),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        5, 0, 5, 10),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Customer :',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText1
+                                              .override(
+                                                fontFamily: 'Roboto',
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                         ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Text(
-                                              containerAddressRecord!.shipUser!,
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText1,
-                                            ),
-                                          ],
+                                        Container(
+                                          width: 250,
+                                          decoration: BoxDecoration(
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                containerAddressRecord!
+                                                    .shipUser!,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText1
+                                                        .override(
+                                                          fontFamily: 'Roboto',
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      5, 0, 5, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Phone:',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText1
-                                            .override(
-                                              fontFamily: 'Roboto',
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                      ),
-                                      Container(
-                                        width: 250,
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryBackground,
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        5, 0, 5, 10),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Phone:',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText1
+                                              .override(
+                                                fontFamily: 'Roboto',
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                         ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Text(
-                                              containerAddressRecord!.shipPhone!
-                                                  .toString(),
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyText1,
-                                            ),
-                                          ],
+                                        Container(
+                                          width: 250,
+                                          decoration: BoxDecoration(
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                containerAddressRecord!
+                                                    .shipPhone!
+                                                    .toString(),
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText1
+                                                        .override(
+                                                          fontFamily: 'Roboto',
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      5, 0, 0, 8),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Text(
-                                        'Address:',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText1
-                                            .override(
-                                              fontFamily: 'Roboto',
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            45, 0, 0, 0),
-                                        child: Text(
+                                  Divider(
+                                    thickness: 1,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        5, 0, 0, 5),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Address:',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText1
+                                              .override(
+                                                fontFamily: 'Roboto',
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                        ),
+                                        Text(
                                           containerAddressRecord!.addressLabel!,
                                           style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
+                                              .bodyText1
+                                              .override(
+                                                fontFamily: 'Roboto',
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      5, 5, 5, 0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Text(
-                                        containerAddressRecord!.address!,
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyText1,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            5, 0, 0, 0),
-                                        child: Text(
-                                          containerAddressRecord!.address2!,
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        5, 5, 5, 0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Text(
+                                          containerAddressRecord!.address!,
                                           style: FlutterFlowTheme.of(context)
                                               .bodyText1,
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            5, 0, 0, 0),
-                                        child: Text(
-                                          containerAddressRecord!.city!,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  5, 0, 0, 0),
+                                          child: Text(
+                                            containerAddressRecord!.address2!,
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyText1,
+                                          ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            5, 0, 0, 0),
-                                        child: Text(
-                                          containerAddressRecord!.zipcode!
-                                              .toString(),
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  5, 0, 0, 0),
+                                          child: Text(
+                                            containerAddressRecord!.city!,
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyText1,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  5, 0, 0, 0),
+                                          child: Text(
+                                            containerAddressRecord!.zipcode!
+                                                .toString(),
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyText1,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           );
                         },
                       ),
-                    ),
-                    Divider(
-                      thickness: 0.5,
-                      indent: 16,
-                      endIndent: 16,
-                      color: FlutterFlowTheme.of(context).grayIcon,
                     ),
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
                       child: FutureBuilder<List<OrdersRecord>>(
                         future: queryOrdersRecordOnce(
                           queryBuilder: (ordersRecord) => ordersRecord
-                              .where('user_ref', isEqualTo: widget.userRef)
-                              .where('order_number', isEqualTo: widget.orderNo)
+                              .where('OrderListRef',
+                                  isEqualTo: widget.orderList)
                               .orderBy('order_date', descending: true),
                         ),
                         builder: (context, snapshot) {
@@ -459,102 +495,319 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
                               final listViewOrdersRecord =
                                   listViewOrdersRecordList[listViewIndex];
                               return Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    16, 10, 16, 8),
+                                padding:
+                                    EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
                                 child: Container(
                                   width: double.infinity,
-                                  height: 340,
                                   decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context)
-                                        .primaryBackground,
-                                    borderRadius: BorderRadius.circular(8),
+                                        .secondaryBackground,
+                                    borderRadius: BorderRadius.circular(0),
                                   ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    10, 0, 0, 0),
-                                            child: Container(
-                                              width: 100,
-                                              height: 100,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBackground,
-                                              ),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        15, 15, 15, 15),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 0, 0, 5),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width: 32,
+                                                height: 32,
+                                                clipBehavior: Clip.antiAlias,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
                                                 child: Image.network(
-                                                  listViewOrdersRecord
-                                                      .productImage!,
-                                                  width: 100,
-                                                  height: 100,
+                                                  'https://picsum.photos/seed/533/600',
                                                   fit: BoxFit.cover,
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.7,
-                                              height: 100,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryBackground,
-                                              ),
-                                              child: Padding(
+                                              Padding(
                                                 padding: EdgeInsetsDirectional
-                                                    .fromSTEB(5, 0, 5, 0),
+                                                    .fromSTEB(10, 0, 0, 0),
+                                                child: Text(
+                                                  listViewOrdersRecord
+                                                      .shopName!,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyText1
+                                                      .override(
+                                                        fontFamily: 'Roboto',
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Container(
+                                                      height: 30,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(30),
+                                                        border: Border.all(
+                                                          color: valueOrDefault<
+                                                              Color>(
+                                                            () {
+                                                              if (listViewOrdersRecord
+                                                                      .orderStatus ==
+                                                                  'Processing') {
+                                                                return Color(
+                                                                    0xFFFF9F46);
+                                                              } else if (listViewOrdersRecord
+                                                                      .orderStatus ==
+                                                                  'Complete') {
+                                                                return Color(
+                                                                    0xFF39BF67);
+                                                              } else if (listViewOrdersRecord
+                                                                      .orderStatus ==
+                                                                  'Cancel') {
+                                                                return FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .customColor3;
+                                                              } else if (listViewOrdersRecord
+                                                                      .orderStatus ==
+                                                                  'Refunded') {
+                                                                return FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .icons;
+                                                              } else if (listViewOrdersRecord
+                                                                      .orderStatus ==
+                                                                  'Shipping') {
+                                                                return Color(
+                                                                    0xFFFF9F46);
+                                                              } else {
+                                                                return Color(
+                                                                    0xFFF2B8B5);
+                                                              }
+                                                            }(),
+                                                            Color(0xFFF2B8B5),
+                                                          ),
+                                                          width: 1,
+                                                        ),
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        10,
+                                                                        0,
+                                                                        10,
+                                                                        0),
+                                                            child: Text(
+                                                              listViewOrdersRecord
+                                                                  .orderStatus!,
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyText1
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Roboto',
+                                                                    color: valueOrDefault<
+                                                                        Color>(
+                                                                      () {
+                                                                        if (listViewOrdersRecord.orderStatus ==
+                                                                            'Processing') {
+                                                                          return Color(
+                                                                              0xFFFF9F46);
+                                                                        } else if (listViewOrdersRecord.orderStatus ==
+                                                                            'Complete') {
+                                                                          return Color(
+                                                                              0xFF39BF67);
+                                                                        } else if (listViewOrdersRecord.orderStatus ==
+                                                                            'Cancel') {
+                                                                          return FlutterFlowTheme.of(context)
+                                                                              .customColor3;
+                                                                        } else if (listViewOrdersRecord.orderStatus ==
+                                                                            'Refunded') {
+                                                                          return FlutterFlowTheme.of(context)
+                                                                              .icons;
+                                                                        } else if (listViewOrdersRecord.orderStatus ==
+                                                                            'Shipping') {
+                                                                          return Color(
+                                                                              0xFFFF9F46);
+                                                                        } else {
+                                                                          return Color(
+                                                                              0xFFF2B8B5);
+                                                                        }
+                                                                      }(),
+                                                                      Color(
+                                                                          0xFFF2B8B5),
+                                                                    ),
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Divider(
+                                          thickness: 1,
+                                        ),
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 10, 0, 10),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Container(
+                                                width: 72,
+                                                height: 72,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryBackground,
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(5),
+                                                  child: Image.network(
+                                                    listViewOrdersRecord
+                                                        .productImage!,
+                                                    width: 72,
+                                                    height: 72,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(15, 0, 0, 0),
                                                 child: Column(
                                                   mainAxisSize:
                                                       MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0, 0, 0, 10),
+                                                      child: Text(
+                                                        listViewOrdersRecord
+                                                            .productName!,
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .bodyText1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  fontSize: 16,
+                                                                ),
+                                                      ),
+                                                    ),
                                                     Row(
                                                       mainAxisSize:
                                                           MainAxisSize.max,
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
-                                                              .spaceBetween,
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
                                                       children: [
-                                                        SelectionArea(
-                                                            child: Text(
-                                                          'Product Name#',
+                                                        Text(
+                                                          listViewOrdersRecord
+                                                              .productQty!
+                                                              .toString(),
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyText1
                                                               .override(
                                                                 fontFamily:
                                                                     'Roboto',
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
+                                                                fontSize: 16,
                                                               ),
-                                                        )),
+                                                        ),
                                                         Text(
-                                                          listViewOrdersRecord
-                                                              .productName!,
+                                                          ' X ',
                                                           style: FlutterFlowTheme
                                                                   .of(context)
-                                                              .bodyText1,
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                fontSize: 16,
+                                                              ),
+                                                        ),
+                                                        Text(
+                                                          listViewOrdersRecord
+                                                              .productPrice!
+                                                              .toString(),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyText1
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                fontSize: 16,
+                                                              ),
                                                         ),
                                                       ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Expanded(
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Divider(
+                                                      height: 20,
+                                                      thickness: 1,
                                                     ),
                                                     Padding(
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  0, 5, 0, 0),
+                                                                  0, 0, 0, 10),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -564,7 +817,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
                                                         children: [
                                                           SelectionArea(
                                                               child: Text(
-                                                            'Qty:',
+                                                            'Shipping No.',
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyText1
@@ -583,11 +836,10 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
                                                                         0,
                                                                         0,
                                                                         0,
-                                                                        5),
+                                                                        3),
                                                             child: Text(
                                                               listViewOrdersRecord
-                                                                  .productQty!
-                                                                  .toString(),
+                                                                  .shippingNo!,
                                                               style: FlutterFlowTheme
                                                                       .of(context)
                                                                   .bodyText1,
@@ -600,7 +852,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  0, 5, 0, 0),
+                                                                  0, 0, 0, 10),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -610,7 +862,7 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
                                                         children: [
                                                           SelectionArea(
                                                               child: Text(
-                                                            'Price:',
+                                                            'Shipping Company',
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyText1
@@ -622,10 +874,55 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
                                                                           .w500,
                                                                 ),
                                                           )),
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        0,
+                                                                        0,
+                                                                        0,
+                                                                        3),
+                                                            child: Text(
+                                                              listViewOrdersRecord
+                                                                  .shippingCompany!,
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyText1,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Divider(
+                                                      thickness: 1,
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0, 6, 0, 10),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
                                                           Text(
-                                                            listViewOrdersRecord
-                                                                .productPrice!
-                                                                .toString(),
+                                                            'Shipping Fee',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyText1
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500,
+                                                                ),
+                                                          ),
+                                                          Text(
+                                                            'shippingFee',
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyText1,
@@ -633,52 +930,24 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
                                                         ],
                                                       ),
                                                     ),
-                                                    Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        Text(
-                                                          'Shipping Fee:',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyText1
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Roboto',
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500,
-                                                              ),
-                                                        ),
-                                                        Text(
-                                                          'shippingFee',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyText1,
-                                                        ),
-                                                      ],
-                                                    ),
                                                     Padding(
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  0, 5, 0, 10),
+                                                                  0, 0, 0, 10),
                                                       child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
-                                                                .start,
+                                                                .spaceBetween,
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: [
                                                           SelectionArea(
                                                               child: Text(
-                                                            'Subtotal:',
+                                                            'Subtotal',
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyText1
@@ -710,388 +979,180 @@ class _OrderHistoryWidgetState extends State<OrderHistoryWidget> {
                                                         ],
                                                       ),
                                                     ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            8, 8, 8, 8),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(12, 0, 0, 0),
-                                                child: SingleChildScrollView(
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Divider(
-                                                        height: 40,
-                                                        thickness: 1,
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .lineColor,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0, 0, 0, 5),
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            SelectionArea(
-                                                                child: Text(
-                                                              'Shop Name',
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyText1
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Roboto',
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                  ),
-                                                            )),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          5,
-                                                                          0,
-                                                                          0,
-                                                                          0),
-                                                              child: Text(
-                                                                listViewOrdersRecord
-                                                                    .shopName!,
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyText1,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0, 0, 0, 3),
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            SelectionArea(
-                                                                child: Text(
-                                                              'Status',
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyText1
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Roboto',
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                  ),
-                                                            )),
-                                                            Text(
-                                                              listViewOrdersRecord
-                                                                  .orderStatus!,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyText1,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Divider(
-                                                        thickness: 1,
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .lineColor,
-                                                      ),
-                                                      Row(
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0, 10, 0, 0),
+                                                      child: Row(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
                                                                 .spaceBetween,
                                                         children: [
-                                                          SelectionArea(
-                                                              child: Text(
-                                                            'Shipping Company',
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyText1
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Roboto',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500,
+                                                          if (listViewOrdersRecord
+                                                                  .orderStatus ==
+                                                              'Processing')
+                                                            Expanded(
+                                                              child: Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            0,
+                                                                            0,
+                                                                            5,
+                                                                            0),
+                                                                child:
+                                                                    FFButtonWidget(
+                                                                  onPressed:
+                                                                      () async {
+                                                                    final ordersUpdateData =
+                                                                        createOrdersRecordData(
+                                                                      orderStatus:
+                                                                          'Cancel',
+                                                                    );
+                                                                    await listViewOrdersRecord
+                                                                        .reference
+                                                                        .update(
+                                                                            ordersUpdateData);
+                                                                    ScaffoldMessenger.of(
+                                                                            context)
+                                                                        .showSnackBar(
+                                                                      SnackBar(
+                                                                        content:
+                                                                            Text(
+                                                                          'Order Cancelled',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).primaryBtnText,
+                                                                          ),
+                                                                        ),
+                                                                        duration:
+                                                                            Duration(milliseconds: 4000),
+                                                                        backgroundColor:
+                                                                            FlutterFlowTheme.of(context).primaryColor,
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  text:
+                                                                      'Cancel Order',
+                                                                  options:
+                                                                      FFButtonOptions(
+                                                                    width: double
+                                                                        .infinity,
+                                                                    height: 40,
+                                                                    color: Color(
+                                                                        0xFFA5A5A5),
+                                                                    textStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .subtitle2
+                                                                        .override(
+                                                                          fontFamily:
+                                                                              'Roboto',
+                                                                          color:
+                                                                              Color(0xFF1E1E1E),
+                                                                        ),
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                                      width: 1,
+                                                                    ),
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            30),
+                                                                  ),
                                                                 ),
-                                                          )),
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        0,
-                                                                        0,
-                                                                        0,
-                                                                        3),
-                                                            child: Text(
-                                                              'Shipping No',
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyText1
-                                                                  .override(
-                                                                    fontFamily:
-                                                                        'Roboto',
+                                                              ),
+                                                            ),
+                                                          if (listViewOrdersRecord
+                                                                  .orderStatus ==
+                                                              'Shipping')
+                                                            Expanded(
+                                                              child: Padding(
+                                                                padding:
+                                                                    EdgeInsetsDirectional
+                                                                        .fromSTEB(
+                                                                            5,
+                                                                            0,
+                                                                            0,
+                                                                            0),
+                                                                child:
+                                                                    FFButtonWidget(
+                                                                  onPressed:
+                                                                      () async {
+                                                                    final ordersUpdateData =
+                                                                        createOrdersRecordData(
+                                                                      orderStatus:
+                                                                          'Complete',
+                                                                    );
+                                                                    await listViewOrdersRecord
+                                                                        .reference
+                                                                        .update(
+                                                                            ordersUpdateData);
+                                                                    ScaffoldMessenger.of(
+                                                                            context)
+                                                                        .showSnackBar(
+                                                                      SnackBar(
+                                                                        content:
+                                                                            Text(
+                                                                          'Order  Completed',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                FlutterFlowTheme.of(context).primaryBtnText,
+                                                                          ),
+                                                                        ),
+                                                                        duration:
+                                                                            Duration(milliseconds: 4000),
+                                                                        backgroundColor:
+                                                                            FlutterFlowTheme.of(context).primaryColor,
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  text:
+                                                                      'Complete',
+                                                                  options:
+                                                                      FFButtonOptions(
+                                                                    width: double
+                                                                        .infinity,
+                                                                    height: 40,
                                                                     color: FlutterFlowTheme.of(
                                                                             context)
-                                                                        .customColor4,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        0,
-                                                                        0,
-                                                                        0,
-                                                                        3),
-                                                            child: Text(
-                                                              listViewOrdersRecord
-                                                                  .shippingCompany!,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyText1,
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        0,
-                                                                        0,
-                                                                        0,
-                                                                        3),
-                                                            child: Text(
-                                                              listViewOrdersRecord
-                                                                  .shippingNo!,
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyText1,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(0, 10,
-                                                                    0, 0),
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Container(
-                                                              width: 140,
-                                                              height: 40,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .primaryBackground,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            5),
-                                                              ),
-                                                              child: Stack(
-                                                                children: [
-                                                                  if (listViewOrdersRecord
-                                                                          .orderStatus ==
-                                                                      'Processing')
-                                                                    FFButtonWidget(
-                                                                      onPressed:
-                                                                          () async {
-                                                                        final ordersUpdateData =
-                                                                            createOrdersRecordData(
-                                                                          orderStatus:
-                                                                              'Cancel',
-                                                                        );
-                                                                        await listViewOrdersRecord
-                                                                            .reference
-                                                                            .update(ordersUpdateData);
-                                                                        ScaffoldMessenger.of(context)
-                                                                            .showSnackBar(
-                                                                          SnackBar(
-                                                                            content:
-                                                                                Text(
-                                                                              'Order Cancelled',
-                                                                              style: TextStyle(
-                                                                                color: FlutterFlowTheme.of(context).primaryBtnText,
-                                                                              ),
-                                                                            ),
-                                                                            duration:
-                                                                                Duration(milliseconds: 4000),
-                                                                            backgroundColor:
-                                                                                FlutterFlowTheme.of(context).primaryColor,
-                                                                          ),
-                                                                        );
-                                                                      },
-                                                                      text:
-                                                                          'Cancel Order',
-                                                                      options:
-                                                                          FFButtonOptions(
-                                                                        width:
-                                                                            150,
-                                                                        height:
-                                                                            40,
-                                                                        color: FlutterFlowTheme.of(context)
-                                                                            .primaryBackground,
-                                                                        textStyle: FlutterFlowTheme.of(context)
-                                                                            .subtitle2
-                                                                            .override(
-                                                                              fontFamily: 'Roboto',
-                                                                              color: FlutterFlowTheme.of(context).secondaryColor,
-                                                                            ),
-                                                                        borderSide:
-                                                                            BorderSide(
+                                                                        .primaryColor,
+                                                                    textStyle: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .subtitle2
+                                                                        .override(
+                                                                          fontFamily:
+                                                                              'Roboto',
                                                                           color:
                                                                               FlutterFlowTheme.of(context).secondaryColor,
-                                                                          width:
-                                                                              1,
                                                                         ),
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(30),
-                                                                      ),
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                                      color: Colors
+                                                                          .transparent,
+                                                                      width: 1,
                                                                     ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            if (listViewOrdersRecord
-                                                                    .orderStatus ==
-                                                                'Shipping')
-                                                              FFButtonWidget(
-                                                                onPressed:
-                                                                    () async {
-                                                                  final ordersUpdateData =
-                                                                      createOrdersRecordData(
-                                                                    orderStatus:
-                                                                        'Complete',
-                                                                  );
-                                                                  await listViewOrdersRecord
-                                                                      .reference
-                                                                      .update(
-                                                                          ordersUpdateData);
-                                                                  ScaffoldMessenger.of(
-                                                                          context)
-                                                                      .showSnackBar(
-                                                                    SnackBar(
-                                                                      content:
-                                                                          Text(
-                                                                        'Order  Completed',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              FlutterFlowTheme.of(context).primaryBtnText,
-                                                                        ),
-                                                                      ),
-                                                                      duration: Duration(
-                                                                          milliseconds:
-                                                                              4000),
-                                                                      backgroundColor:
-                                                                          FlutterFlowTheme.of(context)
-                                                                              .primaryColor,
-                                                                    ),
-                                                                  );
-                                                                },
-                                                                text:
-                                                                    'Complete',
-                                                                options:
-                                                                    FFButtonOptions(
-                                                                  width: 150,
-                                                                  height: 40,
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .secondaryColor,
-                                                                  textStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .subtitle2
-                                                                      .override(
-                                                                        fontFamily:
-                                                                            'Roboto',
-                                                                        color: FlutterFlowTheme.of(context)
-                                                                            .customColor4,
-                                                                      ),
-                                                                  borderSide:
-                                                                      BorderSide(
-                                                                    color: Colors
-                                                                        .transparent,
-                                                                    width: 1,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            30),
                                                                   ),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              30),
                                                                 ),
                                                               ),
-                                                          ],
-                                                        ),
+                                                            ),
+                                                        ],
                                                       ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ),
                                           ],
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );

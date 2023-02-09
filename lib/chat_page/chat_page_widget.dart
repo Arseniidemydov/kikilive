@@ -85,7 +85,8 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
             desktop: false,
           )
               ? AppBar(
-                  backgroundColor: FlutterFlowTheme.of(context).tertiaryColor,
+                  backgroundColor:
+                      FlutterFlowTheme.of(context).secondaryBackground,
                   automaticallyImplyLeading: false,
                   leading: FlutterFlowIconButton(
                     borderColor: Colors.transparent,
@@ -104,28 +105,47 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                   title: Align(
                     alignment: AlignmentDirectional(0, 0),
                     child: Text(
-                      'Group Chat',
+                      'Chat',
                       textAlign: TextAlign.start,
                       style: FlutterFlowTheme.of(context).bodyText1.override(
                             fontFamily: 'Roboto',
                             color: FlutterFlowTheme.of(context).primaryText,
                             fontSize: 20,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                           ),
                     ),
                   ),
                   actions: [
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(0, 0, 10, 0),
-                      child: Icon(
-                        Icons.chat,
-                        color: FlutterFlowTheme.of(context).primaryBackground,
-                        size: 24,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () async {
+                              context.pushNamed(
+                                'inviteUsers',
+                                queryParams: {
+                                  'chatRef': serializeParam(
+                                    widget.chatRef,
+                                    ParamType.DocumentReference,
+                                  ),
+                                }.withoutNulls,
+                              );
+                            },
+                            child: Icon(
+                              Icons.add_circle,
+                              color: FlutterFlowTheme.of(context).primaryColor,
+                              size: 24,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                   centerTitle: false,
-                  elevation: 2,
+                  elevation: 0,
                 )
               : null,
           body: SafeArea(
@@ -142,14 +162,14 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                           FlutterFlowTheme.of(context).primaryBackground,
                       timeDisplaySetting: TimeDisplaySetting.visibleOnTap,
                       currentUserBoxDecoration: BoxDecoration(
-                        color: Colors.white,
+                        color: FlutterFlowTheme.of(context).primaryColor,
                         border: Border.all(
                           color: Colors.transparent,
                         ),
                         borderRadius: BorderRadius.circular(15),
                       ),
                       otherUsersBoxDecoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).primaryColor,
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
                         border: Border.all(
                           color: Colors.transparent,
                         ),
@@ -157,26 +177,26 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                       ),
                       currentUserTextStyle: GoogleFonts.getFont(
                         'DM Sans',
-                        color: Color(0xFF1E2429),
+                        color: FlutterFlowTheme.of(context).secondaryColor,
                         fontWeight: FontWeight.w500,
                         fontSize: 14,
                         fontStyle: FontStyle.normal,
                       ),
                       otherUsersTextStyle: GoogleFonts.getFont(
                         'DM Sans',
-                        color: FlutterFlowTheme.of(context).primaryBackground,
+                        color: FlutterFlowTheme.of(context).primaryText,
                         fontWeight: FontWeight.w500,
                         fontSize: 14,
                       ),
                       inputHintTextStyle: GoogleFonts.getFont(
                         'Roboto',
-                        color: Color(0xFF95A1AC),
+                        color: FlutterFlowTheme.of(context).secondaryText,
                         fontWeight: FontWeight.normal,
                         fontSize: 14,
                       ),
                       inputTextStyle: GoogleFonts.getFont(
                         'DM Sans',
-                        color: Colors.black,
+                        color: FlutterFlowTheme.of(context).primaryText,
                         fontWeight: FontWeight.normal,
                         fontSize: 14,
                       ),

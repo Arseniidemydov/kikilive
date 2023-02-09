@@ -118,7 +118,7 @@ class LightModeTheme extends FlutterFlowTheme {
   late Color backgroundChat = Color(0xB3FFFFFF);
   late Color greyText = Color(0xFF525252);
   late Color verifiedIcon = Color(0xFF16AF77);
-  late Color dimLine = Color(0xFFCACACA);
+  late Color dimLine = Color(0xFFDADADA);
   late Color brandBg = Color(0xFFFFFFFF);
   late Color bottomSheet = Color(0xFFFFFFFF);
   late Color paymentbg = Color(0xFFEDEDED);

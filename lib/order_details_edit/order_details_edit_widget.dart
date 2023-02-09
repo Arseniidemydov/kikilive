@@ -239,18 +239,44 @@ class _OrderDetailsEditWidgetState extends State<OrderDetailsEditWidget> {
                                             ),
                                           ),
                                           Container(
-                                            width: 90,
-                                            height: 35,
+                                            height: 30,
                                             decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryBackground,
                                               borderRadius:
                                                   BorderRadius.circular(30),
                                               border: Border.all(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .secondaryColor,
+                                                color: valueOrDefault<Color>(
+                                                  () {
+                                                    if (orderDetailsEditOrdersRecord
+                                                            .orderStatus ==
+                                                        'Processing') {
+                                                      return Color(0xFFFF9F46);
+                                                    } else if (orderDetailsEditOrdersRecord
+                                                            .orderStatus ==
+                                                        'Complete') {
+                                                      return Color(0xFF39BF67);
+                                                    } else if (orderDetailsEditOrdersRecord
+                                                            .orderStatus ==
+                                                        'Cancel') {
+                                                      return FlutterFlowTheme
+                                                              .of(context)
+                                                          .customColor3;
+                                                    } else if (orderDetailsEditOrdersRecord
+                                                            .orderStatus ==
+                                                        'Refunded') {
+                                                      return FlutterFlowTheme
+                                                              .of(context)
+                                                          .icons;
+                                                    } else if (orderDetailsEditOrdersRecord
+                                                            .orderStatus ==
+                                                        'Shipping') {
+                                                      return Color(0xFFFF9F46);
+                                                    } else {
+                                                      return Color(0xFFF2B8B5);
+                                                    }
+                                                  }(),
+                                                  Color(0xFFF2B8B5),
+                                                ),
+                                                width: 1,
                                               ),
                                             ),
                                             child: Row(
@@ -258,18 +284,56 @@ class _OrderDetailsEditWidgetState extends State<OrderDetailsEditWidget> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: [
-                                                Text(
-                                                  'No Status',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyText1
-                                                      .override(
-                                                        fontFamily: 'Roboto',
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryColor,
-                                                      ),
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(10, 0, 10, 0),
+                                                  child: Text(
+                                                    orderDetailsEditOrdersRecord
+                                                        .orderStatus!,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .bodyText1
+                                                        .override(
+                                                          fontFamily: 'Roboto',
+                                                          color: valueOrDefault<
+                                                              Color>(
+                                                            () {
+                                                              if (orderDetailsEditOrdersRecord
+                                                                      .orderStatus ==
+                                                                  'Processing') {
+                                                                return Color(
+                                                                    0xFFFF9F46);
+                                                              } else if (orderDetailsEditOrdersRecord
+                                                                      .orderStatus ==
+                                                                  'Complete') {
+                                                                return Color(
+                                                                    0xFF39BF67);
+                                                              } else if (orderDetailsEditOrdersRecord
+                                                                      .orderStatus ==
+                                                                  'Cancel') {
+                                                                return FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .customColor3;
+                                                              } else if (orderDetailsEditOrdersRecord
+                                                                      .orderStatus ==
+                                                                  'Refunded') {
+                                                                return FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .icons;
+                                                              } else if (orderDetailsEditOrdersRecord
+                                                                      .orderStatus ==
+                                                                  'Shipping') {
+                                                                return Color(
+                                                                    0xFFFF9F46);
+                                                              } else {
+                                                                return Color(
+                                                                    0xFFF2B8B5);
+                                                              }
+                                                            }(),
+                                                            Color(0xFFF2B8B5),
+                                                          ),
+                                                        ),
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -952,7 +1016,11 @@ class _OrderDetailsEditWidgetState extends State<OrderDetailsEditWidget> {
                                                                   .where(
                                                                       'isActive',
                                                                       isEqualTo:
-                                                                          true),
+                                                                          true)
+                                                                  .where(
+                                                                      'status_name',
+                                                                      isNotEqualTo:
+                                                                          'Complete'),
                                                         ),
                                                         builder: (context,
                                                             snapshot) {

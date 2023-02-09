@@ -66,6 +66,47 @@ class _$OrderListRecordSerializer
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
     }
+    value = object.productsList;
+    if (value != null) {
+      result
+        ..add('productsList')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(BuiltList, const [
+              const FullType(
+                  DocumentReference, const [const FullType.nullable(Object)])
+            ])));
+    }
+    value = object.isPaid;
+    if (value != null) {
+      result
+        ..add('isPaid')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.productsListUnique;
+    if (value != null) {
+      result
+        ..add('productsListUnique')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(BuiltList, const [
+              const FullType(
+                  DocumentReference, const [const FullType.nullable(Object)])
+            ])));
+    }
+    value = object.shippingTotal;
+    if (value != null) {
+      result
+        ..add('shippingTotal')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(double)));
+    }
+    value = object.paymentID;
+    if (value != null) {
+      result
+        ..add('PaymentID')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -119,6 +160,32 @@ class _$OrderListRecordSerializer
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
           break;
+        case 'productsList':
+          result.productsList.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(
+                    DocumentReference, const [const FullType.nullable(Object)])
+              ]))! as BuiltList<Object?>);
+          break;
+        case 'isPaid':
+          result.isPaid = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool?;
+          break;
+        case 'productsListUnique':
+          result.productsListUnique.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(
+                    DocumentReference, const [const FullType.nullable(Object)])
+              ]))! as BuiltList<Object?>);
+          break;
+        case 'shippingTotal':
+          result.shippingTotal = serializers.deserialize(value,
+              specifiedType: const FullType(double)) as double?;
+          break;
+        case 'PaymentID':
+          result.paymentID = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -146,6 +213,16 @@ class _$OrderListRecord extends OrderListRecord {
   @override
   final DocumentReference<Object?>? addressRef;
   @override
+  final BuiltList<DocumentReference<Object?>>? productsList;
+  @override
+  final bool? isPaid;
+  @override
+  final BuiltList<DocumentReference<Object?>>? productsListUnique;
+  @override
+  final double? shippingTotal;
+  @override
+  final String? paymentID;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$OrderListRecord([void Function(OrderListRecordBuilder)? updates]) =>
@@ -158,6 +235,11 @@ class _$OrderListRecord extends OrderListRecord {
       this.userRef,
       this.shopRef,
       this.addressRef,
+      this.productsList,
+      this.isPaid,
+      this.productsListUnique,
+      this.shippingTotal,
+      this.paymentID,
       this.ffRef})
       : super._();
 
@@ -179,6 +261,11 @@ class _$OrderListRecord extends OrderListRecord {
         userRef == other.userRef &&
         shopRef == other.shopRef &&
         addressRef == other.addressRef &&
+        productsList == other.productsList &&
+        isPaid == other.isPaid &&
+        productsListUnique == other.productsListUnique &&
+        shippingTotal == other.shippingTotal &&
+        paymentID == other.paymentID &&
         ffRef == other.ffRef;
   }
 
@@ -188,11 +275,23 @@ class _$OrderListRecord extends OrderListRecord {
         $jc(
             $jc(
                 $jc(
-                    $jc($jc($jc(0, orderNo.hashCode), orderDate.hashCode),
-                        orderTotal.hashCode),
-                    userRef.hashCode),
-                shopRef.hashCode),
-            addressRef.hashCode),
+                    $jc(
+                        $jc(
+                            $jc(
+                                $jc(
+                                    $jc(
+                                        $jc(
+                                            $jc($jc(0, orderNo.hashCode),
+                                                orderDate.hashCode),
+                                            orderTotal.hashCode),
+                                        userRef.hashCode),
+                                    shopRef.hashCode),
+                                addressRef.hashCode),
+                            productsList.hashCode),
+                        isPaid.hashCode),
+                    productsListUnique.hashCode),
+                shippingTotal.hashCode),
+            paymentID.hashCode),
         ffRef.hashCode));
   }
 
@@ -205,6 +304,11 @@ class _$OrderListRecord extends OrderListRecord {
           ..add('userRef', userRef)
           ..add('shopRef', shopRef)
           ..add('addressRef', addressRef)
+          ..add('productsList', productsList)
+          ..add('isPaid', isPaid)
+          ..add('productsListUnique', productsListUnique)
+          ..add('shippingTotal', shippingTotal)
+          ..add('paymentID', paymentID)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -239,6 +343,33 @@ class OrderListRecordBuilder
   set addressRef(DocumentReference<Object?>? addressRef) =>
       _$this._addressRef = addressRef;
 
+  ListBuilder<DocumentReference<Object?>>? _productsList;
+  ListBuilder<DocumentReference<Object?>> get productsList =>
+      _$this._productsList ??= new ListBuilder<DocumentReference<Object?>>();
+  set productsList(ListBuilder<DocumentReference<Object?>>? productsList) =>
+      _$this._productsList = productsList;
+
+  bool? _isPaid;
+  bool? get isPaid => _$this._isPaid;
+  set isPaid(bool? isPaid) => _$this._isPaid = isPaid;
+
+  ListBuilder<DocumentReference<Object?>>? _productsListUnique;
+  ListBuilder<DocumentReference<Object?>> get productsListUnique =>
+      _$this._productsListUnique ??=
+          new ListBuilder<DocumentReference<Object?>>();
+  set productsListUnique(
+          ListBuilder<DocumentReference<Object?>>? productsListUnique) =>
+      _$this._productsListUnique = productsListUnique;
+
+  double? _shippingTotal;
+  double? get shippingTotal => _$this._shippingTotal;
+  set shippingTotal(double? shippingTotal) =>
+      _$this._shippingTotal = shippingTotal;
+
+  String? _paymentID;
+  String? get paymentID => _$this._paymentID;
+  set paymentID(String? paymentID) => _$this._paymentID = paymentID;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -256,6 +387,11 @@ class OrderListRecordBuilder
       _userRef = $v.userRef;
       _shopRef = $v.shopRef;
       _addressRef = $v.addressRef;
+      _productsList = $v.productsList?.toBuilder();
+      _isPaid = $v.isPaid;
+      _productsListUnique = $v.productsListUnique?.toBuilder();
+      _shippingTotal = $v.shippingTotal;
+      _paymentID = $v.paymentID;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -277,15 +413,36 @@ class OrderListRecordBuilder
   OrderListRecord build() => _build();
 
   _$OrderListRecord _build() {
-    final _$result = _$v ??
-        new _$OrderListRecord._(
-            orderNo: orderNo,
-            orderDate: orderDate,
-            orderTotal: orderTotal,
-            userRef: userRef,
-            shopRef: shopRef,
-            addressRef: addressRef,
-            ffRef: ffRef);
+    _$OrderListRecord _$result;
+    try {
+      _$result = _$v ??
+          new _$OrderListRecord._(
+              orderNo: orderNo,
+              orderDate: orderDate,
+              orderTotal: orderTotal,
+              userRef: userRef,
+              shopRef: shopRef,
+              addressRef: addressRef,
+              productsList: _productsList?.build(),
+              isPaid: isPaid,
+              productsListUnique: _productsListUnique?.build(),
+              shippingTotal: shippingTotal,
+              paymentID: paymentID,
+              ffRef: ffRef);
+    } catch (_) {
+      late String _$failedField;
+      try {
+        _$failedField = 'productsList';
+        _productsList?.build();
+
+        _$failedField = 'productsListUnique';
+        _productsListUnique?.build();
+      } catch (e) {
+        throw new BuiltValueNestedFieldError(
+            r'OrderListRecord', _$failedField, e.toString());
+      }
+      rethrow;
+    }
     replace(_$result);
     return _$result;
   }

@@ -154,6 +154,22 @@ class _$OrdersRecordSerializer implements StructuredSerializer<OrdersRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.orderListRef;
+    if (value != null) {
+      result
+        ..add('OrderListRef')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(
+                DocumentReference, const [const FullType.nullable(Object)])));
+    }
+    value = object.productRef;
+    if (value != null) {
+      result
+        ..add('ProductRef')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(
+                DocumentReference, const [const FullType.nullable(Object)])));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -257,6 +273,18 @@ class _$OrdersRecordSerializer implements StructuredSerializer<OrdersRecord> {
           result.date = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
+        case 'OrderListRef':
+          result.orderListRef = serializers.deserialize(value,
+              specifiedType: const FullType(DocumentReference, const [
+                const FullType.nullable(Object)
+              ])) as DocumentReference<Object?>?;
+          break;
+        case 'ProductRef':
+          result.productRef = serializers.deserialize(value,
+              specifiedType: const FullType(DocumentReference, const [
+                const FullType.nullable(Object)
+              ])) as DocumentReference<Object?>?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -310,6 +338,10 @@ class _$OrdersRecord extends OrdersRecord {
   @override
   final String? date;
   @override
+  final DocumentReference<Object?>? orderListRef;
+  @override
+  final DocumentReference<Object?>? productRef;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$OrdersRecord([void Function(OrdersRecordBuilder)? updates]) =>
@@ -335,6 +367,8 @@ class _$OrdersRecord extends OrdersRecord {
       this.productImage,
       this.transactionId,
       this.date,
+      this.orderListRef,
+      this.productRef,
       this.ffRef})
       : super._();
 
@@ -368,6 +402,8 @@ class _$OrdersRecord extends OrdersRecord {
         productImage == other.productImage &&
         transactionId == other.transactionId &&
         date == other.date &&
+        orderListRef == other.orderListRef &&
+        productRef == other.productRef &&
         ffRef == other.ffRef;
   }
 
@@ -391,25 +427,25 @@ class _$OrdersRecord extends OrdersRecord {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc(0, orderDate.hashCode),
-                                                                                shopRef.hashCode),
-                                                                            shopName.hashCode),
-                                                                        shippingNo.hashCode),
-                                                                    shippingCompany.hashCode),
-                                                                productName.hashCode),
-                                                            productQty.hashCode),
-                                                        productPrice.hashCode),
-                                                    productSubtotal.hashCode),
-                                                finalTotal.hashCode),
-                                            orderStatus.hashCode),
-                                        deposit.hashCode),
-                                    subOrder.hashCode),
-                                depostDate.hashCode),
-                            userRef.hashCode),
-                        orderNumber.hashCode),
-                    productImage.hashCode),
-                transactionId.hashCode),
-            date.hashCode),
+                                                                            $jc($jc($jc($jc(0, orderDate.hashCode), shopRef.hashCode), shopName.hashCode),
+                                                                                shippingNo.hashCode),
+                                                                            shippingCompany.hashCode),
+                                                                        productName.hashCode),
+                                                                    productQty.hashCode),
+                                                                productPrice.hashCode),
+                                                            productSubtotal.hashCode),
+                                                        finalTotal.hashCode),
+                                                    orderStatus.hashCode),
+                                                deposit.hashCode),
+                                            subOrder.hashCode),
+                                        depostDate.hashCode),
+                                    userRef.hashCode),
+                                orderNumber.hashCode),
+                            productImage.hashCode),
+                        transactionId.hashCode),
+                    date.hashCode),
+                orderListRef.hashCode),
+            productRef.hashCode),
         ffRef.hashCode));
   }
 
@@ -435,6 +471,8 @@ class _$OrdersRecord extends OrdersRecord {
           ..add('productImage', productImage)
           ..add('transactionId', transactionId)
           ..add('date', date)
+          ..add('orderListRef', orderListRef)
+          ..add('productRef', productRef)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -523,6 +561,16 @@ class OrdersRecordBuilder
   String? get date => _$this._date;
   set date(String? date) => _$this._date = date;
 
+  DocumentReference<Object?>? _orderListRef;
+  DocumentReference<Object?>? get orderListRef => _$this._orderListRef;
+  set orderListRef(DocumentReference<Object?>? orderListRef) =>
+      _$this._orderListRef = orderListRef;
+
+  DocumentReference<Object?>? _productRef;
+  DocumentReference<Object?>? get productRef => _$this._productRef;
+  set productRef(DocumentReference<Object?>? productRef) =>
+      _$this._productRef = productRef;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -553,6 +601,8 @@ class OrdersRecordBuilder
       _productImage = $v.productImage;
       _transactionId = $v.transactionId;
       _date = $v.date;
+      _orderListRef = $v.orderListRef;
+      _productRef = $v.productRef;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -595,6 +645,8 @@ class OrdersRecordBuilder
             productImage: productImage,
             transactionId: transactionId,
             date: date,
+            orderListRef: orderListRef,
+            productRef: productRef,
             ffRef: ffRef);
     replace(_$result);
     return _$result;

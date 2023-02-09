@@ -1,3 +1,4 @@
+import '../auth/auth_util.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -82,6 +83,51 @@ class _UserSettingsWidgetState extends State<UserSettingsWidget> {
                             fontFamily: 'Roboto',
                             fontWeight: FontWeight.w600,
                           ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(10, 10, 10, 10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
+                      child: Text(
+                        'Total Points',
+                        style: FlutterFlowTheme.of(context).bodyText1,
+                      ),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Icon(
+                          Icons.bolt,
+                          color: FlutterFlowTheme.of(context).primaryColor,
+                          size: 20,
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
+                          child: AuthUserStreamWidget(
+                            builder: (context) => Text(
+                              formatNumber(
+                                valueOrDefault(
+                                    currentUserDocument?.userPoints, 0.0),
+                                formatType: FormatType.decimal,
+                                decimalType: DecimalType.automatic,
+                              ),
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyText1
+                                  .override(
+                                    fontFamily: 'Roboto',
+                                    fontSize: 25,
+                                  ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

@@ -5,11 +5,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "user_ref",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "order_number",
+          "fieldPath": "OrderListRef",
           "order": "ASCENDING"
         },
         {
@@ -103,10 +99,6 @@
         {
           "fieldPath": "stream_view_online",
           "order": "DESCENDING"
-        },
-        {
-          "fieldPath": "is_live",
-          "order": "ASCENDING"
         }
       ]
     },
@@ -185,6 +177,20 @@
       ]
     },
     {
+      "collectionGroup": "shippingStatus",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "isActive",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "status_name",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
       "collectionGroup": "orders",
       "queryScope": "COLLECTION",
       "fields": [
@@ -239,21 +245,11 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "shop_Ref",
+          "fieldPath": "user_Ref",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "order_no",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "orderList",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "user_Ref",
+          "fieldPath": "isPaid",
           "order": "ASCENDING"
         },
         {
@@ -287,24 +283,6 @@
         {
           "fieldPath": "product_name",
           "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "streams",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "channel_reference",
-          "arrayConfig": "CONTAINS"
-        },
-        {
-          "fieldPath": "is_live",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "stream_view_online",
-          "order": "DESCENDING"
         }
       ]
     },

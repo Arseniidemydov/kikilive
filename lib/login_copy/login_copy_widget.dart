@@ -350,7 +350,7 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                             }
 
                                             context.goNamedAuth(
-                                                'Products', mounted);
+                                                'live', mounted);
                                           },
                                           child: Container(
                                             width: 50,
@@ -390,7 +390,7 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                             }
 
                                             context.goNamedAuth(
-                                                'Products', mounted);
+                                                'live', mounted);
                                           },
                                           child: Container(
                                             width: 50,
@@ -695,8 +695,7 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                             const Duration(milliseconds: 3000));
                                         Navigator.pop(context);
 
-                                        context.goNamedAuth(
-                                            'Products', mounted);
+                                        context.goNamedAuth('live', mounted);
                                       },
                                       text: 'Create Account',
                                       options: FFButtonOptions(
@@ -767,7 +766,7 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                             }
 
                                             context.goNamedAuth(
-                                                'Products', mounted);
+                                                'live', mounted);
                                           },
                                           child: Container(
                                             width: 50,
@@ -807,7 +806,7 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                             }
 
                                             context.goNamedAuth(
-                                                'Products', mounted);
+                                                'live', mounted);
                                           },
                                           child: Container(
                                             width: 50,

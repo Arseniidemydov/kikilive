@@ -73,20 +73,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       errorBuilder: (context, _) =>
-          appStateNotifier.loggedIn ? NavBarPage() : SplashWidget(),
+          appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
       navigatorBuilder: (_, __, child) => DynamicLinksHandler(child: child),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? NavBarPage() : SplashWidget(),
+              appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
           routes: [
-            FFRoute(
-              name: 'splash',
-              path: 'splash',
-              builder: (context, params) => SplashWidget(),
-            ),
             FFRoute(
               name: 'getStarted',
               path: 'getStarted',
@@ -131,14 +126,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => VerifyOTPWidget(),
             ),
             FFRoute(
-              name: 'searchResults',
-              path: 'searchResults',
-              builder: (context, params) => SearchResultsWidget(),
-            ),
-            FFRoute(
               name: 'login',
               path: 'login',
               builder: (context, params) => LoginWidget(),
+            ),
+            FFRoute(
+              name: 'searchResults',
+              path: 'searchResults',
+              builder: (context, params) => SearchResultsWidget(),
             ),
             FFRoute(
               name: 'shops',
@@ -182,11 +177,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'paymentSuccess',
               path: 'paymentSuccess',
               builder: (context, params) => PaymentSuccessWidget(
-                orderDetails: params.getParam('orderDetails',
-                    ParamType.DocumentReference, false, ['users', 'userOrder']),
                 paymentStatus: params.getParam('paymentStatus', ParamType.bool),
                 transactionId:
                     params.getParam('transactionId', ParamType.String),
+                orderlist: params.getParam('orderlist',
+                    ParamType.DocumentReference, false, ['orderList']),
               ),
             ),
             FFRoute(
@@ -226,6 +221,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                     'userRef', ParamType.DocumentReference, false, ['users']),
                 addressRef: params.getParam('addressRef',
                     ParamType.DocumentReference, false, ['address']),
+                orderList: params.getParam('orderList',
+                    ParamType.DocumentReference, false, ['orderList']),
               ),
             ),
             FFRoute(
@@ -373,17 +370,17 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => CreateChannelsWidget(),
             ),
             FFRoute(
+              name: 'userSettings',
+              path: 'userSettings',
+              builder: (context, params) => UserSettingsWidget(),
+            ),
+            FFRoute(
               name: 'editSellerChannels',
               path: 'editSellerChannels',
               builder: (context, params) => EditSellerChannelsWidget(
                 channelRef: params.getParam('channelRef',
                     ParamType.DocumentReference, false, ['channels']),
               ),
-            ),
-            FFRoute(
-              name: 'userSettings',
-              path: 'userSettings',
-              builder: (context, params) => UserSettingsWidget(),
             ),
             FFRoute(
               name: 'accountSettings',
@@ -402,6 +399,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 orderNo: params.getParam('orderNo', ParamType.String),
                 userRef: params.getParam(
                     'userRef', ParamType.DocumentReference, false, ['users']),
+                orderList: params.getParam('orderList',
+                    ParamType.DocumentReference, false, ['orderList']),
               ),
             ),
             FFRoute(
@@ -434,6 +433,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
+              name: 'allChats',
+              path: 'allChats',
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'allChats')
+                  : AllChatsWidget(),
+            ),
+            FFRoute(
               name: 'chatPage',
               path: 'chatPage',
               asyncParams: {
@@ -446,25 +452,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'allChats',
-              path: 'allChats',
-              builder: (context, params) => params.isEmpty
-                  ? NavBarPage(initialPage: 'allChats')
-                  : AllChatsWidget(),
+              name: 'addChat',
+              path: 'addChat',
+              builder: (context, params) => AddChatWidget(),
             ),
             FFRoute(
               name: 'inviteUsers',
               path: 'inviteUsers',
-              builder: (context, params) => InviteUsersWidget(),
-            ),
-            FFRoute(
-              name: 'addChat',
-              path: 'addChat',
-              asyncParams: {
-                'chat': getDoc(['chats'], ChatsRecord.serializer),
-              },
-              builder: (context, params) => AddChatWidget(
-                chat: params.getParam('chat', ParamType.Document),
+              builder: (context, params) => InviteUsersWidget(
+                chatRef: params.getParam(
+                    'chatRef', ParamType.DocumentReference, false, ['chats']),
               ),
             ),
             FFRoute(
@@ -697,7 +694,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.location);
-            return '/splash';
+            return '/login';
           }
           return null;
         },
@@ -711,10 +708,14 @@ class FFRoute {
               : builder(context, ffParams);
           final child = appStateNotifier.loading
               ? Container(
-                  color: Colors.transparent,
-                  child: Image.asset(
-                    'assets/images/Screenshot_2022-11-22_at_10.59.54_PM.png',
-                    fit: BoxFit.cover,
+                  color: FlutterFlowTheme.of(context).primaryBackground,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/Sem_ttulo.png',
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 )
               : page;

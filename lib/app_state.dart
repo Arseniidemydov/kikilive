@@ -359,6 +359,34 @@ class FFAppState extends ChangeNotifier {
   set isOrderOpen(DocumentReference? _value) {
     _isOrderOpen = _value;
   }
+
+  List<DocumentReference> _ChatUser = [];
+  List<DocumentReference> get ChatUser => _ChatUser;
+  set ChatUser(List<DocumentReference> _value) {
+    _ChatUser = _value;
+  }
+
+  void addToChatUser(DocumentReference _value) {
+    _ChatUser.add(_value);
+  }
+
+  void removeFromChatUser(DocumentReference _value) {
+    _ChatUser.remove(_value);
+  }
+
+  List<DocumentReference> _ProductListCart = [];
+  List<DocumentReference> get ProductListCart => _ProductListCart;
+  set ProductListCart(List<DocumentReference> _value) {
+    _ProductListCart = _value;
+  }
+
+  void addToProductListCart(DocumentReference _value) {
+    _ProductListCart.add(_value);
+  }
+
+  void removeFromProductListCart(DocumentReference _value) {
+    _ProductListCart.remove(_value);
+  }
 }
 
 LatLng? _latLngFromString(String? val) {

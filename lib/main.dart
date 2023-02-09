@@ -118,7 +118,7 @@ class NavBarPage extends StatefulWidget {
 
 /// This is the private State class that goes with NavBarPage.
 class _NavBarPageState extends State<NavBarPage> {
-  String _currentPageName = 'Products';
+  String _currentPageName = 'live';
   late Widget? _currentPage;
 
   @override
@@ -151,11 +151,11 @@ class _NavBarPageState extends State<NavBarPage> {
             _currentPage = null;
             _currentPageName = tabs.keys.toList()[i];
           }),
-          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-          selectedItemColor: Color(0xFF8C5EF7),
-          unselectedItemColor: FlutterFlowTheme.of(context).grayIcon,
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
+          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          selectedItemColor: FlutterFlowTheme.of(context).primaryColor,
+          unselectedItemColor: FlutterFlowTheme.of(context).primaryText,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
           type: BottomNavigationBarType.fixed,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(

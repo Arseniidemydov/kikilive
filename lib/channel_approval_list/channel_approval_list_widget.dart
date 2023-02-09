@@ -144,7 +144,10 @@ class _ChannelApprovalListWidgetState extends State<ChannelApprovalListWidget> {
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(6),
                                         child: Image.network(
-                                          listViewChannelsRecord.channelImage!,
+                                          valueOrDefault<String>(
+                                            listViewChannelsRecord.channelImage,
+                                            'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
+                                          ),
                                           width: 80,
                                           height: 80,
                                           fit: BoxFit.cover,

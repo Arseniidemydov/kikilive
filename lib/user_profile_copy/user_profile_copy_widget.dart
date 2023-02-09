@@ -66,7 +66,7 @@ class _UserProfileCopyWidgetState extends State<UserProfileCopyWidget> {
                     GoRouter.of(context).prepareAuthEvent();
                     await signOut();
 
-                    context.goNamedAuth('splash', mounted);
+                    context.goNamedAuth('login', mounted);
                   },
                 ),
               ],
