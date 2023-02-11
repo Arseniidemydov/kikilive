@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'payment_success_model.dart';
+export 'payment_success_model.dart';
 
 class PaymentSuccessWidget extends StatefulWidget {
   const PaymentSuccessWidget({
@@ -25,7 +27,22 @@ class PaymentSuccessWidget extends StatefulWidget {
 }
 
 class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
+  late PaymentSuccessModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => PaymentSuccessModel());
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +50,7 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
 
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: FlutterFlowTheme.of(context).paymentbg,
+      backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
       body: SafeArea(
         child: Align(
           alignment: AlignmentDirectional(0, 0),
@@ -50,7 +67,7 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                         width: MediaQuery.of(context).size.width,
                         height: 150,
                         decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).paymentbg,
+                          color: FlutterFlowTheme.of(context).primaryBackground,
                         ),
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
@@ -110,7 +127,7 @@ class _PaymentSuccessWidgetState extends State<PaymentSuccessWidget> {
                       width: MediaQuery.of(context).size.width,
                       height: 150,
                       decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).paymentbg,
+                        color: FlutterFlowTheme.of(context).primaryBackground,
                       ),
                       child: Visibility(
                         visible: widget.paymentStatus ?? true,

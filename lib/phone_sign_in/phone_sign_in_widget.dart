@@ -9,6 +9,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'phone_sign_in_model.dart';
+export 'phone_sign_in_model.dart';
 
 class PhoneSignInWidget extends StatefulWidget {
   const PhoneSignInWidget({Key? key}) : super(key: key);
@@ -19,20 +21,22 @@ class PhoneSignInWidget extends StatefulWidget {
 
 class _PhoneSignInWidgetState extends State<PhoneSignInWidget>
     with TickerProviderStateMixin {
-  String? dropDownValue;
-  TextEditingController? phoneNumberController;
-  final formKey = GlobalKey<FormState>();
+  late PhoneSignInModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    phoneNumberController = TextEditingController();
+    _model = createModel(context, () => PhoneSignInModel());
+
+    _model.phoneNumberController = TextEditingController();
   }
 
   @override
   void dispose() {
-    phoneNumberController?.dispose();
+    _model.dispose();
+
     super.dispose();
   }
 
@@ -68,7 +72,7 @@ class _PhoneSignInWidgetState extends State<PhoneSignInWidget>
             ],
           ),
           Form(
-            key: formKey,
+            key: _model.formKey,
             autovalidateMode: AutovalidateMode.disabled,
             child: Padding(
               padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
@@ -88,9 +92,10 @@ class _PhoneSignInWidgetState extends State<PhoneSignInWidget>
                     Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(5, 2, 0, 2),
                       child: FlutterFlowDropDown<String>(
-                        initialOption: dropDownValue ??= '+66',
+                        initialOption: _model.dropDownValue ??= '+66',
                         options: ['+91', '+66', '+55'],
-                        onChanged: (val) => setState(() => dropDownValue = val),
+                        onChanged: (val) =>
+                            setState(() => _model.dropDownValue = val),
                         width: 50,
                         height: 50,
                         textStyle: FlutterFlowTheme.of(context)
@@ -116,7 +121,7 @@ class _PhoneSignInWidgetState extends State<PhoneSignInWidget>
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(0, 0, 16, 0),
                         child: TextFormField(
-                          controller: phoneNumberController,
+                          controller: _model.phoneNumberController,
                           obscureText: false,
                           decoration: InputDecoration(
                             labelStyle:
@@ -141,22 +146,8 @@ class _PhoneSignInWidgetState extends State<PhoneSignInWidget>
                               ),
                           minLines: 1,
                           keyboardType: TextInputType.phone,
-                          validator: (val) {
-                            if (val == null || val.isEmpty) {
-                              return 'Field is required';
-                            }
-
-                            if (val.length < 9) {
-                              return 'Requires at least 9 characters.';
-                            }
-                            if (val.length > 9) {
-                              return 'Enter valid Phone number';
-                            }
-                            if (!RegExp('\\d').hasMatch(val)) {
-                              return 'Invalid value';
-                            }
-                            return null;
-                          },
+                          validator: _model.phoneNumberControllerValidator
+                              .asValidator(context),
                         ),
                       ),
                     ),
@@ -170,7 +161,7 @@ class _PhoneSignInWidgetState extends State<PhoneSignInWidget>
             child: FFButtonWidget(
               onPressed: () async {
                 final phoneNumberVal =
-                    '${dropDownValue}${phoneNumberController!.text}';
+                    '${_model.dropDownValue}${_model.phoneNumberController.text}';
                 if (phoneNumberVal == null ||
                     phoneNumberVal.isEmpty ||
                     !phoneNumberVal.startsWith('+')) {
@@ -196,7 +187,7 @@ class _PhoneSignInWidgetState extends State<PhoneSignInWidget>
 
                 FFAppState().update(() {
                   FFAppState().verifyNumber =
-                      '${dropDownValue}${phoneNumberController!.text}';
+                      '${_model.dropDownValue}${_model.phoneNumberController.text}';
                 });
               },
               text: 'Sign In with Phone',

@@ -10,6 +10,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:text_search/text_search.dart';
+import 'shops_model.dart';
+export 'shops_model.dart';
 
 class ShopsWidget extends StatefulWidget {
   const ShopsWidget({
@@ -24,16 +26,16 @@ class ShopsWidget extends StatefulWidget {
 }
 
 class _ShopsWidgetState extends State<ShopsWidget> {
-  List<UsersRecord> simpleSearchResults = [];
-  final txtShopSearchKey = GlobalKey();
-  TextEditingController? txtShopSearchController;
-  String? txtShopSearchSelectedOption;
-  final _unfocusNode = FocusNode();
+  late ShopsModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => ShopsModel());
+
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       FFAppState().update(() {
@@ -41,11 +43,13 @@ class _ShopsWidgetState extends State<ShopsWidget> {
       });
     });
 
-    txtShopSearchController = TextEditingController();
+    _model.txtShopSearchController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -160,8 +164,9 @@ class _ShopsWidgetState extends State<ShopsWidget> {
                                   optionsViewBuilder:
                                       (context, onSelected, options) {
                                     return AutocompleteOptionsList(
-                                      textFieldKey: txtShopSearchKey,
-                                      textController: txtShopSearchController!,
+                                      textFieldKey: _model.txtShopSearchKey,
+                                      textController:
+                                          _model.txtShopSearchController!,
                                       options: options.toList(),
                                       onSelected: onSelected,
                                       textStyle: FlutterFlowTheme.of(context)
@@ -178,8 +183,9 @@ class _ShopsWidgetState extends State<ShopsWidget> {
                                     );
                                   },
                                   onSelected: (String selection) {
-                                    setState(() => txtShopSearchSelectedOption =
-                                        selection);
+                                    setState(() =>
+                                        _model.txtShopSearchSelectedOption =
+                                            selection);
                                     FocusScope.of(context).unfocus();
                                   },
                                   fieldViewBuilder: (
@@ -188,19 +194,20 @@ class _ShopsWidgetState extends State<ShopsWidget> {
                                     focusNode,
                                     onEditingComplete,
                                   ) {
-                                    txtShopSearchController =
+                                    _model.txtShopSearchController =
                                         textEditingController;
                                     return TextFormField(
-                                      key: txtShopSearchKey,
+                                      key: _model.txtShopSearchKey,
                                       controller: textEditingController,
                                       focusNode: focusNode,
                                       onEditingComplete: onEditingComplete,
                                       onChanged: (_) => EasyDebounce.debounce(
-                                        'txtShopSearchController',
+                                        '_model.txtShopSearchController',
                                         Duration(milliseconds: 2000),
                                         () async {
                                           setState(() {
-                                            simpleSearchResults = TextSearch(
+                                            _model.simpleSearchResults =
+                                                TextSearch(
                                               shopsUsersRecordList
                                                   .map(
                                                     (record) => TextSearchItem(
@@ -211,10 +218,11 @@ class _ShopsWidgetState extends State<ShopsWidget> {
                                                   )
                                                   .toList(),
                                             )
-                                                .search(txtShopSearchController!
-                                                    .text)
-                                                .map((r) => r.object)
-                                                .toList();
+                                                    .search(_model
+                                                        .txtShopSearchController
+                                                        .text)
+                                                    .map((r) => r.object)
+                                                    .toList();
                                           });
                                           FFAppState().update(() {
                                             FFAppState().shopActive = true;
@@ -279,6 +287,9 @@ class _ShopsWidgetState extends State<ShopsWidget> {
                                             color: FlutterFlowTheme.of(context)
                                                 .primaryText,
                                           ),
+                                      validator: _model
+                                          .txtShopSearchControllerValidator
+                                          .asValidator(context),
                                     );
                                   },
                                 ),
@@ -287,7 +298,7 @@ class _ShopsWidgetState extends State<ShopsWidget> {
                             InkWell(
                               onTap: () async {
                                 setState(() {
-                                  txtShopSearchController?.clear();
+                                  _model.txtShopSearchController?.clear();
                                 });
                                 FFAppState().update(() {
                                   FFAppState().shopActive = false;
@@ -577,7 +588,7 @@ class _ShopsWidgetState extends State<ShopsWidget> {
                                 child: Builder(
                                   builder: (context) {
                                     final shopSearch =
-                                        simpleSearchResults.toList();
+                                        _model.simpleSearchResults.toList();
                                     return Column(
                                       mainAxisSize: MainAxisSize.max,
                                       children: List.generate(shopSearch.length,

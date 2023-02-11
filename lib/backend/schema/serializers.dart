@@ -26,6 +26,8 @@ import 'channels_record.dart';
 import 'country_code_record.dart';
 import 'user_skills_record.dart';
 import 'streaming_comments_record.dart';
+import 'channel_join_payment_record.dart';
+import 'deposit_record.dart';
 
 import 'index.dart';
 
@@ -62,6 +64,8 @@ const kDocumentReferenceField = 'Document__Reference__Field';
   CountryCodeRecord,
   UserSkillsRecord,
   StreamingCommentsRecord,
+  ChannelJoinPaymentRecord,
+  DepositRecord,
   EmailStruct,
 ])
 final Serializers serializers = (_$serializers.toBuilder()

@@ -12,6 +12,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'live_model.dart';
+export 'live_model.dart';
 
 class LiveWidget extends StatefulWidget {
   const LiveWidget({Key? key}) : super(key: key);
@@ -21,20 +23,28 @@ class LiveWidget extends StatefulWidget {
 }
 
 class _LiveWidgetState extends State<LiveWidget> {
-  ApiCallResponse? apiResulto0b;
-  ApiCallResponse? apiResultvaf;
-  List<String>? checkboxGroupValues;
+  late LiveModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => LiveModel());
+
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       FFAppState().update(() {
         FFAppState().chatOpen = false;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -56,12 +66,12 @@ class _LiveWidgetState extends State<LiveWidget> {
                   child: FlutterFlowCheckboxGroup(
                     options: ['Tops', 'Bottoms'],
                     onChanged: (val) =>
-                        setState(() => checkboxGroupValues = val),
+                        setState(() => _model.checkboxGroupValues = val),
                     activeColor: FlutterFlowTheme.of(context).primaryColor,
                     checkColor: Colors.white,
                     checkboxBorderColor: Color(0xFF95A1AC),
                     textStyle: FlutterFlowTheme.of(context).bodyText1,
-                    initialized: checkboxGroupValues != null,
+                    initialized: _model.checkboxGroupValues != null,
                   ),
                 ),
               ],
@@ -149,8 +159,11 @@ class _LiveWidgetState extends State<LiveWidget> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Expanded(
-                        child: FutureBuilder<List<ChannelsRecord>>(
-                          future: queryChannelsRecordOnce(),
+                        child: StreamBuilder<List<ChannelsRecord>>(
+                          stream: queryChannelsRecord(
+                            queryBuilder: (channelsRecord) =>
+                                channelsRecord.orderBy('channel_created_on'),
+                          ),
                           builder: (context, snapshot) {
                             // Customize what your widget looks like when it's loading.
                             if (!snapshot.hasData) {
@@ -314,18 +327,19 @@ class _LiveWidgetState extends State<LiveWidget> {
                                           }.withoutNulls,
                                         );
                                       } else {
-                                        apiResultvaf =
+                                        _model.apiResultvaf =
                                             await GetLiveStreamIdCall.call(
                                           playbackId:
                                               functions.getPlaybackIdFromUrl(
                                                   listViewStreamsRecord
                                                       .playbackUrl),
                                         );
-                                        apiResulto0b =
+                                        _model.apiResulto0b =
                                             await GetPastLiveStreamCall.call(
                                           streamId:
                                               GetLiveStreamIdCall.playBackID(
-                                            (apiResultvaf?.jsonBody ?? ''),
+                                            (_model.apiResultvaf?.jsonBody ??
+                                                ''),
                                           ).toString(),
                                         );
 
@@ -336,7 +350,9 @@ class _LiveWidgetState extends State<LiveWidget> {
                                               functions.createUrlFromPlayId(
                                                   GetPastLiveStreamCall
                                                       .playbackID(
-                                                (apiResulto0b?.jsonBody ?? ''),
+                                                (_model.apiResulto0b
+                                                        ?.jsonBody ??
+                                                    ''),
                                               ).toString()),
                                               ParamType.String,
                                             ),

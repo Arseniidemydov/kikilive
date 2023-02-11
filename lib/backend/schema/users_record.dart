@@ -59,6 +59,10 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
 
   double? get userPoints;
 
+  double? get earnings;
+
+  double? get payout;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -80,7 +84,9 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
     ..bankName = ''
     ..bankAccount = 0
     ..isAdmin = false
-    ..userPoints = 0.0;
+    ..userPoints = 0.0
+    ..earnings = 0.0
+    ..payout = 0.0;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('users');
@@ -114,6 +120,8 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
           ..bankAccount = snapshot.data['bank_account']?.round()
           ..isAdmin = snapshot.data['IsAdmin']
           ..userPoints = snapshot.data['userPoints']?.toDouble()
+          ..earnings = snapshot.data['earnings']?.toDouble()
+          ..payout = snapshot.data['payout']?.toDouble()
           ..ffRef = UsersRecord.collection.doc(snapshot.objectID),
       );
 
@@ -161,6 +169,8 @@ Map<String, dynamic> createUsersRecordData({
   int? bankAccount,
   bool? isAdmin,
   double? userPoints,
+  double? earnings,
+  double? payout,
 }) {
   final firestoreData = serializers.toFirestore(
     UsersRecord.serializer,
@@ -183,7 +193,9 @@ Map<String, dynamic> createUsersRecordData({
         ..bankName = bankName
         ..bankAccount = bankAccount
         ..isAdmin = isAdmin
-        ..userPoints = userPoints,
+        ..userPoints = userPoints
+        ..earnings = earnings
+        ..payout = payout,
     ),
   );
 

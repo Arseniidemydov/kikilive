@@ -4,6 +4,8 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'get_started_model.dart';
+export 'get_started_model.dart';
 
 class GetStartedWidget extends StatefulWidget {
   const GetStartedWidget({Key? key}) : super(key: key);
@@ -13,11 +15,21 @@ class GetStartedWidget extends StatefulWidget {
 }
 
 class _GetStartedWidgetState extends State<GetStartedWidget> {
-  final _unfocusNode = FocusNode();
+  late GetStartedModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => GetStartedModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }

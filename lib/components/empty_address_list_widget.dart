@@ -3,6 +3,8 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'empty_address_list_model.dart';
+export 'empty_address_list_model.dart';
 
 class EmptyAddressListWidget extends StatefulWidget {
   const EmptyAddressListWidget({Key? key}) : super(key: key);
@@ -12,6 +14,27 @@ class EmptyAddressListWidget extends StatefulWidget {
 }
 
 class _EmptyAddressListWidgetState extends State<EmptyAddressListWidget> {
+  late EmptyAddressListModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => EmptyAddressListModel());
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     context.watch<FFAppState>();

@@ -156,11 +156,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => ForgotPasswordWidget(),
             ),
             FFRoute(
-              name: 'shoppingCart',
-              path: 'shoppingCart',
-              builder: (context, params) => ShoppingCartWidget(),
-            ),
-            FFRoute(
               name: 'productDetails',
               path: 'productDetails',
               builder: (context, params) => ProductDetailsWidget(
@@ -172,6 +167,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'termsConditions',
               path: 'termsConditions',
               builder: (context, params) => TermsConditionsWidget(),
+            ),
+            FFRoute(
+              name: 'shoppingCart',
+              path: 'shoppingCart',
+              builder: (context, params) => ShoppingCartWidget(),
             ),
             FFRoute(
               name: 'paymentSuccess',
@@ -203,11 +203,32 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
+              name: 'orderDetailsEdit',
+              path: 'orderDetailsEdit',
+              builder: (context, params) => OrderDetailsEditWidget(
+                orderReference: params.getParam('orderReference',
+                    ParamType.DocumentReference, false, ['orders']),
+              ),
+            ),
+            FFRoute(
               name: 'sellersDetailsEdit',
               path: 'sellersDetailsEdit',
               builder: (context, params) => SellersDetailsEditWidget(
                 userReference: params.getParam('userReference',
                     ParamType.DocumentReference, false, ['users']),
+              ),
+            ),
+            FFRoute(
+              name: 'adminSettings',
+              path: 'adminSettings',
+              builder: (context, params) => AdminSettingsWidget(),
+            ),
+            FFRoute(
+              name: 'AdminShopEarnings',
+              path: 'adminShopEarnings',
+              builder: (context, params) => AdminShopEarningsWidget(
+                userRef: params.getParam(
+                    'userRef', ParamType.DocumentReference, false, ['users']),
               ),
             ),
             FFRoute(
@@ -224,19 +245,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 orderList: params.getParam('orderList',
                     ParamType.DocumentReference, false, ['orderList']),
               ),
-            ),
-            FFRoute(
-              name: 'orderDetailsEdit',
-              path: 'orderDetailsEdit',
-              builder: (context, params) => OrderDetailsEditWidget(
-                orderReference: params.getParam('orderReference',
-                    ParamType.DocumentReference, false, ['orders']),
-              ),
-            ),
-            FFRoute(
-              name: 'adminSettings',
-              path: 'adminSettings',
-              builder: (context, params) => AdminSettingsWidget(),
             ),
             FFRoute(
               name: 'sellerApproval',
@@ -270,21 +278,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'AdminShopEarningsList',
-              path: 'adminShopEarningsList',
-              builder: (context, params) => AdminShopEarningsListWidget(),
-            ),
-            FFRoute(
-              name: 'AdminShopEarnings',
-              path: 'adminShopEarnings',
-              builder: (context, params) => AdminShopEarningsWidget(),
-            ),
-            FFRoute(
               name: 'AdminEarningsDeposit',
               path: 'adminEarningsDeposit',
               builder: (context, params) => AdminEarningsDepositWidget(
-                orderRef: params.getParam(
-                    'orderRef', ParamType.DocumentReference, false, ['orders']),
+                userRef: params.getParam(
+                    'userRef', ParamType.DocumentReference, false, ['users']),
               ),
             ),
             FFRoute(
@@ -296,6 +294,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               name: 'orderMgmtAdmin',
               path: 'orderMgmtAdmin',
               builder: (context, params) => OrderMgmtAdminWidget(),
+            ),
+            FFRoute(
+              name: 'AdminShopEarningsList',
+              path: 'adminShopEarningsList',
+              builder: (context, params) => AdminShopEarningsListWidget(),
             ),
             FFRoute(
               name: 'orderDetailsPreviewAdmin',
@@ -457,6 +460,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               builder: (context, params) => AddChatWidget(),
             ),
             FFRoute(
+              name: 'AddUser',
+              path: 'addUser',
+              builder: (context, params) => AddUserWidget(
+                chat: params.getParam(
+                    'chat', ParamType.DocumentReference, false, ['chats']),
+              ),
+            ),
+            FFRoute(
               name: 'inviteUsers',
               path: 'inviteUsers',
               builder: (context, params) => InviteUsersWidget(
@@ -472,30 +483,20 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'orderManagement',
-              path: 'orderManagement',
-              builder: (context, params) => OrderManagementWidget(),
-            ),
-            FFRoute(
               name: 'ShopEarnings',
               path: 'shopEarnings',
               builder: (context, params) => ShopEarningsWidget(),
+            ),
+            FFRoute(
+              name: 'orderManagement',
+              path: 'orderManagement',
+              builder: (context, params) => OrderManagementWidget(),
             ),
             FFRoute(
               name: 'shopEarningDetails',
               path: 'shopEarningDetails',
               builder: (context, params) => ShopEarningDetailsWidget(
                 orderDate: params.getParam('orderDate', ParamType.String),
-              ),
-            ),
-            FFRoute(
-              name: 'AddUser',
-              path: 'addUser',
-              asyncParams: {
-                'chat': getDoc(['chats'], ChatsRecord.serializer),
-              },
-              builder: (context, params) => AddUserWidget(
-                chat: params.getParam('chat', ParamType.Document),
               ),
             ),
             FFRoute(

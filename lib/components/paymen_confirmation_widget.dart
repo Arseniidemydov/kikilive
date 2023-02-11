@@ -9,6 +9,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'paymen_confirmation_model.dart';
+export 'paymen_confirmation_model.dart';
 
 class PaymenConfirmationWidget extends StatefulWidget {
   const PaymenConfirmationWidget({
@@ -26,6 +28,27 @@ class PaymenConfirmationWidget extends StatefulWidget {
 }
 
 class _PaymenConfirmationWidgetState extends State<PaymenConfirmationWidget> {
+  late PaymenConfirmationModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => PaymenConfirmationModel());
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     context.watch<FFAppState>();

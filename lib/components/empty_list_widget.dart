@@ -3,6 +3,8 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'empty_list_model.dart';
+export 'empty_list_model.dart';
 
 class EmptyListWidget extends StatefulWidget {
   const EmptyListWidget({Key? key}) : super(key: key);
@@ -12,6 +14,27 @@ class EmptyListWidget extends StatefulWidget {
 }
 
 class _EmptyListWidgetState extends State<EmptyListWidget> {
+  late EmptyListModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => EmptyListModel());
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     context.watch<FFAppState>();

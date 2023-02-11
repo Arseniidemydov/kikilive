@@ -432,3 +432,10 @@ double? sumEarnings(
 double? pointsCalulator(double orderTotal) {
   return orderTotal * 0.0001;
 }
+
+double? calculateNetProfit(
+  double earnings,
+  double payoutAmount,
+) {
+  return earnings - payoutAmount;
+}

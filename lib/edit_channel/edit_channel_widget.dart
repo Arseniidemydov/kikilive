@@ -10,6 +10,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'edit_channel_model.dart';
+export 'edit_channel_model.dart';
 
 class EditChannelWidget extends StatefulWidget {
   const EditChannelWidget({
@@ -24,22 +26,22 @@ class EditChannelWidget extends StatefulWidget {
 }
 
 class _EditChannelWidgetState extends State<EditChannelWidget> {
-  bool isMediaUploading = false;
-  String uploadedFileUrl = '';
+  late EditChannelModel _model;
 
-  TextEditingController? txtChannelNameController;
-  TextEditingController? txtChannelDescController;
-  TextEditingController? txtChannelFeeController;
-  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => EditChannelModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    txtChannelDescController?.dispose();
-    txtChannelNameController?.dispose();
-    txtChannelFeeController?.dispose();
     super.dispose();
   }
 
@@ -114,7 +116,7 @@ class _EditChannelWidgetState extends State<EditChannelWidget> {
                   color: FlutterFlowTheme.of(context).primaryBackground,
                 ),
                 child: Form(
-                  key: formKey,
+                  key: _model.formKey,
                   autovalidateMode: AutovalidateMode.disabled,
                   child: Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
@@ -191,10 +193,30 @@ class _EditChannelWidgetState extends State<EditChannelWidget> {
                                                       validateFileFormat(
                                                           m.storagePath,
                                                           context))) {
-                                                setState(() =>
-                                                    isMediaUploading = true);
+                                                setState(() => _model
+                                                    .isMediaUploading = true);
+                                                var selectedUploadedFiles =
+                                                    <FFUploadedFile>[];
                                                 var downloadUrls = <String>[];
                                                 try {
+                                                  selectedUploadedFiles =
+                                                      selectedMedia
+                                                          .map((m) =>
+                                                              FFUploadedFile(
+                                                                name: m
+                                                                    .storagePath
+                                                                    .split('/')
+                                                                    .last,
+                                                                bytes: m.bytes,
+                                                                height: m
+                                                                    .dimensions
+                                                                    ?.height,
+                                                                width: m
+                                                                    .dimensions
+                                                                    ?.width,
+                                                              ))
+                                                          .toList();
+
                                                   downloadUrls =
                                                       (await Future.wait(
                                                     selectedMedia.map(
@@ -209,13 +231,21 @@ class _EditChannelWidgetState extends State<EditChannelWidget> {
                                                           .map((u) => u!)
                                                           .toList();
                                                 } finally {
-                                                  isMediaUploading = false;
+                                                  _model.isMediaUploading =
+                                                      false;
                                                 }
-                                                if (downloadUrls.length ==
-                                                    selectedMedia.length) {
-                                                  setState(() =>
-                                                      uploadedFileUrl =
-                                                          downloadUrls.first);
+                                                if (selectedUploadedFiles
+                                                            .length ==
+                                                        selectedMedia.length &&
+                                                    downloadUrls.length ==
+                                                        selectedMedia.length) {
+                                                  setState(() {
+                                                    _model.uploadedLocalFile =
+                                                        selectedUploadedFiles
+                                                            .first;
+                                                    _model.uploadedFileUrl =
+                                                        downloadUrls.first;
+                                                  });
                                                 } else {
                                                   setState(() {});
                                                   return;
@@ -264,7 +294,7 @@ class _EditChannelWidgetState extends State<EditChannelWidget> {
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                             child: TextFormField(
-                              controller: txtChannelNameController ??=
+                              controller: _model.txtChannelNameController ??=
                                   TextEditingController(
                                 text: editChannelChannelsRecord.channelName,
                               ),
@@ -308,13 +338,16 @@ class _EditChannelWidgetState extends State<EditChannelWidget> {
                                 ),
                               ),
                               style: FlutterFlowTheme.of(context).bodyText1,
+                              validator: _model
+                                  .txtChannelNameControllerValidator
+                                  .asValidator(context),
                             ),
                           ),
                           Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
                             child: TextFormField(
-                              controller: txtChannelDescController ??=
+                              controller: _model.txtChannelDescController ??=
                                   TextEditingController(
                                 text: editChannelChannelsRecord.channelDesc,
                               ),
@@ -366,10 +399,13 @@ class _EditChannelWidgetState extends State<EditChannelWidget> {
                               ),
                               style: FlutterFlowTheme.of(context).bodyText1,
                               maxLines: 4,
+                              validator: _model
+                                  .txtChannelDescControllerValidator
+                                  .asValidator(context),
                             ),
                           ),
                           TextFormField(
-                            controller: txtChannelFeeController ??=
+                            controller: _model.txtChannelFeeController ??=
                                 TextEditingController(
                               text: editChannelChannelsRecord.channelPrice
                                   ?.toString(),
@@ -415,6 +451,8 @@ class _EditChannelWidgetState extends State<EditChannelWidget> {
                             style: FlutterFlowTheme.of(context).bodyText1,
                             keyboardType: const TextInputType.numberWithOptions(
                                 signed: true, decimal: true),
+                            validator: _model.txtChannelFeeControllerValidator
+                                .asValidator(context),
                           ),
                           Padding(
                             padding:
@@ -429,9 +467,9 @@ class _EditChannelWidgetState extends State<EditChannelWidget> {
                                         0, 10, 0, 0),
                                     child: FFButtonWidget(
                                       onPressed: () async {
-                                        if (uploadedFileUrl != null &&
-                                            uploadedFileUrl != '') {
-                                          final channelsUpdateData =
+                                        if (_model.uploadedFileUrl != null &&
+                                            _model.uploadedFileUrl != '') {
+                                          final channelsUpdateData1 =
                                               createChannelsRecordData(
                                             channelName:
                                                 editChannelChannelsRecord
@@ -442,10 +480,11 @@ class _EditChannelWidgetState extends State<EditChannelWidget> {
                                             channelPrice:
                                                 editChannelChannelsRecord
                                                     .channelPrice,
-                                            channelImage: uploadedFileUrl,
+                                            channelImage:
+                                                _model.uploadedFileUrl,
                                           );
                                           await widget.channelReference!
-                                              .update(channelsUpdateData);
+                                              .update(channelsUpdateData1);
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             SnackBar(
@@ -468,7 +507,7 @@ class _EditChannelWidgetState extends State<EditChannelWidget> {
                                           context
                                               .pushNamed('ChannelApprovalList');
                                         } else {
-                                          final channelsUpdateData =
+                                          final channelsUpdateData2 =
                                               createChannelsRecordData(
                                             channelName:
                                                 editChannelChannelsRecord
@@ -481,7 +520,7 @@ class _EditChannelWidgetState extends State<EditChannelWidget> {
                                                     .channelPrice,
                                           );
                                           await widget.channelReference!
-                                              .update(channelsUpdateData);
+                                              .update(channelsUpdateData2);
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             SnackBar(

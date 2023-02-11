@@ -12,6 +12,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'create_channels_model.dart';
+export 'create_channels_model.dart';
 
 class CreateChannelsWidget extends StatefulWidget {
   const CreateChannelsWidget({Key? key}) : super(key: key);
@@ -21,31 +23,26 @@ class CreateChannelsWidget extends StatefulWidget {
 }
 
 class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
-  bool isMediaUploading = false;
-  String uploadedFileUrl = '';
+  late CreateChannelsModel _model;
 
-  TextEditingController? txtChannelNameController;
-  TextEditingController? txtChannelDescController;
-  String? ddChannelTypeValue;
-  TextEditingController? txtChannelFeeController;
-  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    txtChannelDescController = TextEditingController();
-    txtChannelNameController = TextEditingController();
-    txtChannelFeeController = TextEditingController();
+    _model = createModel(context, () => CreateChannelsModel());
+
+    _model.txtChannelNameController = TextEditingController();
+    _model.txtChannelDescController = TextEditingController();
+    _model.txtChannelFeeController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    txtChannelDescController?.dispose();
-    txtChannelNameController?.dispose();
-    txtChannelFeeController?.dispose();
     super.dispose();
   }
 
@@ -102,7 +99,7 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
               color: FlutterFlowTheme.of(context).primaryBackground,
             ),
             child: Form(
-              key: formKey,
+              key: _model.formKey,
               autovalidateMode: AutovalidateMode.disabled,
               child: ListView(
                 padding: EdgeInsets.zero,
@@ -172,7 +169,7 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                               child: CachedNetworkImage(
                                                 imageUrl:
                                                     valueOrDefault<String>(
-                                                  uploadedFileUrl,
+                                                  _model.uploadedFileUrl,
                                                   'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
                                                 ),
                                                 width: MediaQuery.of(context)
@@ -201,8 +198,10 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                                         validateFileFormat(
                                                             m.storagePath,
                                                             context))) {
-                                                  setState(() =>
-                                                      isMediaUploading = true);
+                                                  setState(() => _model
+                                                      .isMediaUploading = true);
+                                                  var selectedUploadedFiles =
+                                                      <FFUploadedFile>[];
                                                   var downloadUrls = <String>[];
                                                   try {
                                                     showUploadMessage(
@@ -210,6 +209,26 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                                       'Uploading file...',
                                                       showLoading: true,
                                                     );
+                                                    selectedUploadedFiles =
+                                                        selectedMedia
+                                                            .map((m) =>
+                                                                FFUploadedFile(
+                                                                  name: m
+                                                                      .storagePath
+                                                                      .split(
+                                                                          '/')
+                                                                      .last,
+                                                                  bytes:
+                                                                      m.bytes,
+                                                                  height: m
+                                                                      .dimensions
+                                                                      ?.height,
+                                                                  width: m
+                                                                      .dimensions
+                                                                      ?.width,
+                                                                ))
+                                                            .toList();
+
                                                     downloadUrls = (await Future
                                                             .wait(
                                                       selectedMedia.map(
@@ -226,13 +245,23 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                                     ScaffoldMessenger.of(
                                                             context)
                                                         .hideCurrentSnackBar();
-                                                    isMediaUploading = false;
+                                                    _model.isMediaUploading =
+                                                        false;
                                                   }
-                                                  if (downloadUrls.length ==
-                                                      selectedMedia.length) {
-                                                    setState(() =>
-                                                        uploadedFileUrl =
-                                                            downloadUrls.first);
+                                                  if (selectedUploadedFiles
+                                                              .length ==
+                                                          selectedMedia
+                                                              .length &&
+                                                      downloadUrls.length ==
+                                                          selectedMedia
+                                                              .length) {
+                                                    setState(() {
+                                                      _model.uploadedLocalFile =
+                                                          selectedUploadedFiles
+                                                              .first;
+                                                      _model.uploadedFileUrl =
+                                                          downloadUrls.first;
+                                                    });
                                                     showUploadMessage(
                                                         context, 'Success!');
                                                   } else {
@@ -360,7 +389,8 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         10, 0, 10, 0),
                                     child: TextFormField(
-                                      controller: txtChannelNameController,
+                                      controller:
+                                          _model.txtChannelNameController,
                                       autofocus: true,
                                       obscureText: false,
                                       decoration: InputDecoration(
@@ -411,17 +441,9 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
-                                      validator: (val) {
-                                        if (val == null || val.isEmpty) {
-                                          return 'Field is required';
-                                        }
-
-                                        if (val.length < 3) {
-                                          return 'Requires at least 3 characters.';
-                                        }
-
-                                        return null;
-                                      },
+                                      validator: _model
+                                          .txtChannelNameControllerValidator
+                                          .asValidator(context),
                                     ),
                                   ),
                                 ),
@@ -457,7 +479,7 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                         .secondaryBackground,
                                   ),
                                   child: TextFormField(
-                                    controller: txtChannelDescController,
+                                    controller: _model.txtChannelDescController,
                                     obscureText: false,
                                     decoration: InputDecoration(
                                       hintText: 'Product price in THB',
@@ -505,20 +527,9 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                     style:
                                         FlutterFlowTheme.of(context).bodyText1,
                                     maxLines: 4,
-                                    validator: (val) {
-                                      if (val == null || val.isEmpty) {
-                                        return 'Field is required';
-                                      }
-
-                                      if (val.length < 20) {
-                                        return 'Requires at least 20 characters.';
-                                      }
-                                      if (val.length > 250) {
-                                        return 'Maximum 250 characters allowed, currently ${val.length}.';
-                                      }
-
-                                      return null;
-                                    },
+                                    validator: _model
+                                        .txtChannelDescControllerValidator
+                                        .asValidator(context),
                                   ),
                                 ),
                               ),
@@ -565,8 +576,8 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                         3, 3, 3, 3),
                                     child: FlutterFlowDropDown<String>(
                                       options: ['Free', 'Paid'],
-                                      onChanged: (val) => setState(
-                                          () => ddChannelTypeValue = val),
+                                      onChanged: (val) => setState(() =>
+                                          _model.ddChannelTypeValue = val),
                                       width: 180,
                                       height: 50,
                                       textStyle: FlutterFlowTheme.of(context)
@@ -599,7 +610,7 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                             ],
                           ),
                         ),
-                        if (ddChannelTypeValue == 'Paid')
+                        if (_model.ddChannelTypeValue == 'Paid')
                           Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(15, 10, 15, 0),
@@ -613,7 +624,7 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                               ],
                             ),
                           ),
-                        if (ddChannelTypeValue == 'Paid')
+                        if (_model.ddChannelTypeValue == 'Paid')
                           Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(15, 10, 15, 5),
@@ -635,7 +646,8 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           10, 0, 0, 0),
                                       child: TextFormField(
-                                        controller: txtChannelFeeController,
+                                        controller:
+                                            _model.txtChannelFeeController,
                                         autofocus: true,
                                         obscureText: false,
                                         decoration: InputDecoration(
@@ -694,20 +706,9 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                         keyboardType: const TextInputType
                                                 .numberWithOptions(
                                             signed: true, decimal: true),
-                                        validator: (val) {
-                                          if (val == null || val.isEmpty) {
-                                            return 'Field is required';
-                                          }
-
-                                          if (val.length < 1) {
-                                            return 'Requires at least 1 characters.';
-                                          }
-                                          if (val.length > 3) {
-                                            return 'Maximum 3 characters allowed, currently ${val.length}.';
-                                          }
-
-                                          return null;
-                                        },
+                                        validator: _model
+                                            .txtChannelFeeControllerValidator
+                                            .asValidator(context),
                                       ),
                                     ),
                                   ),
@@ -731,81 +732,131 @@ class _CreateChannelsWidgetState extends State<CreateChannelsWidget> {
                                 ),
                                 child: FFButtonWidget(
                                   onPressed: () async {
-                                    if (formKey.currentState == null ||
-                                        !formKey.currentState!.validate()) {
-                                      return;
-                                    }
+                                    if (_model.uploadedFileUrl != null &&
+                                        _model.uploadedFileUrl != '') {
+                                      if (_model.formKey.currentState == null ||
+                                          !_model.formKey.currentState!
+                                              .validate()) {
+                                        return;
+                                      }
+                                      if (_model.ddChannelTypeValue == null) {
+                                        await showDialog(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return AlertDialog(
+                                              title: Text('Channel Type'),
+                                              content:
+                                                  Text('Select Channel Type'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          alertDialogContext),
+                                                  child: Text('Ok'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                        return;
+                                      }
 
-                                    if (ddChannelTypeValue == null) {
-                                      await showDialog(
-                                        context: context,
-                                        builder: (alertDialogContext) {
-                                          return AlertDialog(
-                                            title: Text('Channel Type'),
-                                            content:
-                                                Text('Select Channel Type'),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () => Navigator.pop(
-                                                    alertDialogContext),
-                                                child: Text('Ok'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                      return;
-                                    }
-
-                                    final channelsCreateData = {
-                                      ...createChannelsRecordData(
-                                        channelName:
-                                            txtChannelNameController!.text,
-                                        channelDesc:
-                                            txtChannelDescController!.text,
-                                        channelType: ddChannelTypeValue,
-                                        channelOwner: currentUserReference,
-                                        channelPrice: double.tryParse(
-                                            txtChannelFeeController!.text),
-                                        channelCreatedOn: getCurrentTimestamp,
-                                        channelStatus: false,
-                                        channelImage: uploadedFileUrl,
-                                      ),
-                                      'channel_members': [currentUserReference],
-                                    };
-                                    await ChannelsRecord.collection
-                                        .doc()
-                                        .set(channelsCreateData);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'Channel Create Successfully',
-                                          style: TextStyle(
-                                            color: FlutterFlowTheme.of(context)
-                                                .primaryBackground,
-                                          ),
+                                      final channelsCreateData = {
+                                        ...createChannelsRecordData(
+                                          channelName: _model
+                                              .txtChannelNameController.text,
+                                          channelDesc: _model
+                                              .txtChannelDescController.text,
+                                          channelType:
+                                              _model.ddChannelTypeValue,
+                                          channelOwner: currentUserReference,
+                                          channelPrice: double.tryParse(_model
+                                              .txtChannelFeeController.text),
+                                          channelCreatedOn: getCurrentTimestamp,
+                                          channelStatus: false,
+                                          channelImage: _model.uploadedFileUrl,
                                         ),
-                                        duration: Duration(milliseconds: 4000),
-                                        backgroundColor:
-                                            FlutterFlowTheme.of(context)
-                                                .secondaryColor,
-                                      ),
-                                    );
+                                        'channel_members': [
+                                          currentUserReference
+                                        ],
+                                      };
+                                      var channelsRecordReference =
+                                          ChannelsRecord.collection.doc();
+                                      await channelsRecordReference
+                                          .set(channelsCreateData);
+                                      _model.channelcreated =
+                                          ChannelsRecord.getDocumentFromData(
+                                              channelsCreateData,
+                                              channelsRecordReference);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'Channel Create Successfully',
+                                            style: TextStyle(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryBackground,
+                                            ),
+                                          ),
+                                          duration:
+                                              Duration(milliseconds: 4000),
+                                          backgroundColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondaryColor,
+                                        ),
+                                      );
 
-                                    context.pushNamed('userProfile');
+                                      context.pushNamed('userProfile');
+
+                                      final chatsCreateData = {
+                                        ...createChatsRecordData(
+                                          lastMessage:
+                                              'Hello, I\'ve created a channel',
+                                          lastMessageSentBy:
+                                              currentUserReference,
+                                          channelRef:
+                                              _model.channelcreated!.reference,
+                                          lastMessageTime: getCurrentTimestamp,
+                                        ),
+                                        'users': [currentUserReference],
+                                      };
+                                      await ChatsRecord.collection
+                                          .doc()
+                                          .set(chatsCreateData);
+                                    } else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                            'Imag Required!',
+                                            style: TextStyle(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                            ),
+                                          ),
+                                          duration:
+                                              Duration(milliseconds: 4000),
+                                          backgroundColor: Color(0x00000000),
+                                        ),
+                                      );
+                                    }
+
+                                    setState(() {});
                                   },
                                   text: 'Save',
                                   options: FFButtonOptions(
                                     width: 130,
                                     height: 40,
                                     color: FlutterFlowTheme.of(context)
-                                        .secondaryColor,
+                                        .primaryColor,
                                     textStyle: FlutterFlowTheme.of(context)
                                         .subtitle2
                                         .override(
                                           fontFamily: 'Roboto',
                                           color: FlutterFlowTheme.of(context)
-                                              .primaryBackground,
+                                              .secondaryColor,
                                         ),
                                     borderSide: BorderSide(
                                       color: Colors.transparent,

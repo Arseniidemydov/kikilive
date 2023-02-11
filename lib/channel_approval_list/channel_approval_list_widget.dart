@@ -5,6 +5,8 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'channel_approval_list_model.dart';
+export 'channel_approval_list_model.dart';
 
 class ChannelApprovalListWidget extends StatefulWidget {
   const ChannelApprovalListWidget({Key? key}) : super(key: key);
@@ -15,11 +17,21 @@ class ChannelApprovalListWidget extends StatefulWidget {
 }
 
 class _ChannelApprovalListWidgetState extends State<ChannelApprovalListWidget> {
-  final _unfocusNode = FocusNode();
+  late ChannelApprovalListModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => ChannelApprovalListModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -51,7 +63,7 @@ class _ChannelApprovalListWidgetState extends State<ChannelApprovalListWidget> {
                   size: 20,
                 ),
                 onPressed: () async {
-                  context.pushNamed('adminSettings');
+                  context.pop();
                 },
               ),
               title: Text(

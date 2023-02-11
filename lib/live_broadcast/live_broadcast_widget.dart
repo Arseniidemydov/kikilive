@@ -20,6 +20,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
+import 'live_broadcast_model.dart';
+export 'live_broadcast_model.dart';
 
 class LiveBroadcastWidget extends StatefulWidget {
   const LiveBroadcastWidget({
@@ -36,6 +38,10 @@ class LiveBroadcastWidget extends StatefulWidget {
 }
 
 class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
+  late LiveBroadcastModel _model;
+
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
   String? muxBroadcastPlaybackUrl;
   bool muxBroadcastIsLive = false;
   LiveStreamController? muxBroadcastController;
@@ -52,38 +58,29 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
   final _stopwatch = Stopwatch();
   String? _durationString;
   Timer? _timer;
-  ApiCallResponse? apiResult1;
-  StreamsRecord? liveOutput2;
-  ApiCallResponse? apiResult2;
-  PagingController<DocumentSnapshot?, StreamingCommentsRecord>?
-      _pagingController;
-  Query? _pagingQuery;
-  List<StreamSubscription?> _streamSubscriptions = [];
-
-  TextEditingController? textController;
-  final _unfocusNode = FocusNode();
-  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => LiveBroadcastModel());
+
     if (Platform.isAndroid || Platform.isIOS) {
       _isSupportedPlatform = true;
       _initCamera();
     }
 
-    textController = TextEditingController();
+    _model.textController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
+    _unfocusNode.dispose();
     _stopwatch.stop();
     _timer?.cancel();
     Wakelock.disable();
 
-    _streamSubscriptions.forEach((s) => s?.cancel());
-    textController?.dispose();
-    _unfocusNode.dispose();
     super.dispose();
   }
 
@@ -96,6 +93,42 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        appBar: responsiveVisibility(
+          context: context,
+          tablet: false,
+          tabletLandscape: false,
+          desktop: false,
+        )
+            ? AppBar(
+                backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+                automaticallyImplyLeading: false,
+                leading: FlutterFlowIconButton(
+                  borderColor: Colors.transparent,
+                  borderRadius: 30,
+                  borderWidth: 1,
+                  buttonSize: 60,
+                  icon: Icon(
+                    Icons.arrow_back_ios_rounded,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 20,
+                  ),
+                  onPressed: () async {
+                    context.pop();
+                  },
+                ),
+                title: Text(
+                  'Broadcast',
+                  style: FlutterFlowTheme.of(context).title2.override(
+                        fontFamily: 'Roboto',
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        fontSize: 20,
+                      ),
+                ),
+                actions: [],
+                centerTitle: true,
+                elevation: 0,
+              )
+            : null,
         body: SafeArea(
           child: GestureDetector(
             onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
@@ -206,24 +239,28 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                                   StreamsRecord.collection.doc();
                               await streamsRecordReference
                                   .set(streamsCreateData);
-                              liveOutput2 = StreamsRecord.getDocumentFromData(
-                                  streamsCreateData, streamsRecordReference);
-                              apiResult1 = await GetLiveStreamIdCall.call(
+                              _model.liveOutput2 =
+                                  StreamsRecord.getDocumentFromData(
+                                      streamsCreateData,
+                                      streamsRecordReference);
+                              _model.apiResult1 =
+                                  await GetLiveStreamIdCall.call(
                                 playbackId: functions.getPlaybackIdFromUrl(
-                                    liveOutput2!.playbackUrl),
+                                    _model.liveOutput2!.playbackUrl),
                               );
-                              apiResult2 = await GetPastLiveStreamCall.call(
+                              _model.apiResult2 =
+                                  await GetPastLiveStreamCall.call(
                                 streamId: GetLiveStreamIdCall.playBackID(
-                                  (apiResult1?.jsonBody ?? ''),
+                                  (_model.apiResult1?.jsonBody ?? ''),
                                 ).toString(),
                               );
 
                               final streamsUpdateData = createStreamsRecordData(
                                 streamId: GetPastLiveStreamCall.playbackID(
-                                  (apiResult2?.jsonBody ?? ''),
+                                  (_model.apiResult2?.jsonBody ?? ''),
                                 ).toString(),
                               );
-                              await liveOutput2!.reference
+                              await _model.liveOutput2!.reference
                                   .update(streamsUpdateData);
 
                               setState(() {});
@@ -235,7 +272,7 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                                 isLive: false,
                                 streamViewOnline: 0,
                               );
-                              await liveOutput2!.reference
+                              await _model.liveOutput2!.reference
                                   .update(streamsUpdateData);
                               context.pop();
                             },
@@ -248,7 +285,7 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                                     10, 0, 10, 16),
                                 child: StreamBuilder<StreamsRecord>(
                                   stream: StreamsRecord.getDocument(
-                                      liveOutput2!.reference),
+                                      _model.liveOutput2!.reference),
                                   builder: (context, snapshot) {
                                     // Customize what your widget looks like when it's loading.
                                     if (!snapshot.hasData) {
@@ -309,34 +346,42 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                                                                       'created_at',
                                                                       descending:
                                                                           true);
-                                                      if (_pagingController !=
+                                                      if (_model
+                                                              .pagingController !=
                                                           null) {
                                                         final query = queryBuilder(
                                                             StreamingCommentsRecord
                                                                 .collection);
                                                         if (query !=
-                                                            _pagingQuery) {
+                                                            _model
+                                                                .pagingQuery) {
                                                           // The query has changed
-                                                          _pagingQuery = query;
-                                                          _streamSubscriptions
+                                                          _model.pagingQuery =
+                                                              query;
+                                                          _model
+                                                              .streamSubscriptions
                                                               .forEach((s) =>
                                                                   s?.cancel());
-                                                          _streamSubscriptions
+                                                          _model
+                                                              .streamSubscriptions
                                                               .clear();
-                                                          _pagingController!
+                                                          _model
+                                                              .pagingController!
                                                               .refresh();
                                                         }
-                                                        return _pagingController!;
+                                                        return _model
+                                                            .pagingController!;
                                                       }
 
-                                                      _pagingController =
+                                                      _model.pagingController =
                                                           PagingController(
                                                               firstPageKey:
                                                                   null);
-                                                      _pagingQuery = queryBuilder(
-                                                          StreamingCommentsRecord
-                                                              .collection);
-                                                      _pagingController!
+                                                      _model.pagingQuery =
+                                                          queryBuilder(
+                                                              StreamingCommentsRecord
+                                                                  .collection);
+                                                      _model.pagingController!
                                                           .addPageRequestListener(
                                                               (nextPageMarker) {
                                                         queryStreamingCommentsRecordPage(
@@ -356,7 +401,8 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                                                           pageSize: 25,
                                                           isStream: true,
                                                         ).then((page) {
-                                                          _pagingController!
+                                                          _model
+                                                              .pagingController!
                                                               .appendPage(
                                                             page.data,
                                                             page.nextPageMarker,
@@ -367,11 +413,12 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                                                                       (data) {
                                                             data.forEach(
                                                                 (item) {
-                                                              final itemIndexes =
-                                                                  _pagingController!
-                                                                      .itemList!
-                                                                      .asMap()
-                                                                      .map((k, v) => MapEntry(
+                                                              final itemIndexes = _model
+                                                                  .pagingController!
+                                                                  .itemList!
+                                                                  .asMap()
+                                                                  .map((k, v) =>
+                                                                      MapEntry(
                                                                           v.reference
                                                                               .id,
                                                                           k));
@@ -379,9 +426,9 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                                                                   itemIndexes[item
                                                                       .reference
                                                                       .id];
-                                                              final items =
-                                                                  _pagingController!
-                                                                      .itemList!;
+                                                              final items = _model
+                                                                  .pagingController!
+                                                                  .itemList!;
                                                               if (index !=
                                                                   null) {
                                                                 items
@@ -390,7 +437,8 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                                                                         index +
                                                                             1,
                                                                         [item]);
-                                                                _pagingController!
+                                                                _model
+                                                                    .pagingController!
                                                                     .itemList = {
                                                                   for (var item
                                                                       in items)
@@ -403,11 +451,14 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                                                             });
                                                             setState(() {});
                                                           });
-                                                          _streamSubscriptions.add(
-                                                              streamSubscription);
+                                                          _model
+                                                              .streamSubscriptions
+                                                              .add(
+                                                                  streamSubscription);
                                                         });
                                                       });
-                                                      return _pagingController!;
+                                                      return _model
+                                                          .pagingController!;
                                                     }(),
                                                     padding: EdgeInsets.zero,
                                                     scrollDirection:
@@ -436,7 +487,7 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                                                       itemBuilder: (context, _,
                                                           listViewIndex) {
                                                         final listViewStreamingCommentsRecord =
-                                                            _pagingController!
+                                                            _model.pagingController!
                                                                     .itemList![
                                                                 listViewIndex];
                                                         return Padding(
@@ -555,16 +606,17 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                                                   Expanded(
                                                     child: TextFormField(
                                                       controller:
-                                                          textController,
+                                                          _model.textController,
                                                       onFieldSubmitted:
                                                           (_) async {
                                                         final streamingCommentsCreateData =
                                                             createStreamingCommentsRecordData(
-                                                          streamID: liveOutput2!
+                                                          streamID: _model
+                                                              .liveOutput2!
                                                               .reference,
-                                                          comment:
-                                                              textController!
-                                                                  .text,
+                                                          comment: _model
+                                                              .textController
+                                                              .text,
                                                           userID:
                                                               currentUserReference,
                                                           createdAt:
@@ -659,6 +711,9 @@ class _LiveBroadcastWidgetState extends State<LiveBroadcastWidget> {
                                                                         context)
                                                                     .lineColor,
                                                               ),
+                                                      validator: _model
+                                                          .textControllerValidator
+                                                          .asValidator(context),
                                                     ),
                                                   ),
                                                   FlutterFlowIconButton(

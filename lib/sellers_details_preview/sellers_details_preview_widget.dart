@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'sellers_details_preview_model.dart';
+export 'sellers_details_preview_model.dart';
 
 class SellersDetailsPreviewWidget extends StatefulWidget {
   const SellersDetailsPreviewWidget({
@@ -24,12 +26,21 @@ class SellersDetailsPreviewWidget extends StatefulWidget {
 
 class _SellersDetailsPreviewWidgetState
     extends State<SellersDetailsPreviewWidget> {
-  final _unfocusNode = FocusNode();
+  late SellersDetailsPreviewModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => SellersDetailsPreviewModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -279,7 +290,7 @@ class _SellersDetailsPreviewWidgetState
                                           .primaryBackground,
                                     ),
                                     child: Form(
-                                      key: formKey,
+                                      key: _model.formKey,
                                       autovalidateMode:
                                           AutovalidateMode.disabled,
                                       child: Container(),

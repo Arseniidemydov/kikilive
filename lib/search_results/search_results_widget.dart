@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'search_results_model.dart';
+export 'search_results_model.dart';
 
 class SearchResultsWidget extends StatefulWidget {
   const SearchResultsWidget({Key? key}) : super(key: key);
@@ -20,23 +22,24 @@ class SearchResultsWidget extends StatefulWidget {
 }
 
 class _SearchResultsWidgetState extends State<SearchResultsWidget> {
-  ApiCallResponse? apiResulto0b;
-  ApiCallResponse? apiResultvaf;
-  OrderListRecord? orderListOutPut;
-  TextEditingController? textController;
-  final _unfocusNode = FocusNode();
+  late SearchResultsModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
+    _model = createModel(context, () => SearchResultsModel());
+
+    _model.textController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    textController?.dispose();
     super.dispose();
   }
 
@@ -124,9 +127,9 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           TextFormField(
-                            controller: textController,
+                            controller: _model.textController,
                             onChanged: (_) => EasyDebounce.debounce(
-                              'textController',
+                              '_model.textController',
                               Duration(milliseconds: 2000),
                               () => setState(() {}),
                             ),
@@ -168,10 +171,10 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                 Icons.search,
                                 size: 15,
                               ),
-                              suffixIcon: textController!.text.isNotEmpty
+                              suffixIcon: _model.textController!.text.isNotEmpty
                                   ? InkWell(
                                       onTap: () async {
-                                        textController?.clear();
+                                        _model.textController?.clear();
                                         setState(() {});
                                       },
                                       child: Icon(
@@ -183,6 +186,8 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                   : null,
                             ),
                             style: FlutterFlowTheme.of(context).bodyText1,
+                            validator: _model.textControllerValidator
+                                .asValidator(context),
                           ),
                         ],
                       ),
@@ -247,7 +252,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                   .fromSTEB(0,
                                                                       10, 0, 0),
                                                           child: Text(
-                                                            'Search Results for \"${textController!.text}\"',
+                                                            'Search Results for \"${_model.textController.text}\"',
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyText1
@@ -301,10 +306,12 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                       'active')
                                                               .where(
                                                                   'product_name',
-                                                                  isEqualTo: textController!
+                                                                  isEqualTo: _model
+                                                                              .textController
                                                                               .text !=
                                                                           ''
-                                                                      ? textController!
+                                                                      ? _model
+                                                                          .textController
                                                                           .text
                                                                       : null)
                                                               .orderBy(
@@ -625,7 +632,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                                                                     };
                                                                                                                     await iconAddProductOrderListRecord!.reference.update(orderListUpdateData);
 
-                                                                                                                    final ordersCreateData = createOrdersRecordData(
+                                                                                                                    final ordersCreateData1 = createOrdersRecordData(
                                                                                                                       orderDate: getCurrentTimestamp,
                                                                                                                       shopRef: gridViewProductsRecord.shopRef,
                                                                                                                       productName: gridViewProductsRecord.productName,
@@ -637,7 +644,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                                                                       orderListRef: iconAddProductOrderListRecord!.reference,
                                                                                                                       productRef: gridViewProductsRecord.reference,
                                                                                                                     );
-                                                                                                                    await OrdersRecord.collection.doc().set(ordersCreateData);
+                                                                                                                    await OrdersRecord.collection.doc().set(ordersCreateData1);
                                                                                                                   } else {
                                                                                                                     final orderListCreateData = {
                                                                                                                       ...createOrderListRecordData(
@@ -653,22 +660,42 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                                                                     };
                                                                                                                     var orderListRecordReference = OrderListRecord.collection.doc();
                                                                                                                     await orderListRecordReference.set(orderListCreateData);
-                                                                                                                    orderListOutPut = OrderListRecord.getDocumentFromData(orderListCreateData, orderListRecordReference);
+                                                                                                                    _model.orderListOutPut = OrderListRecord.getDocumentFromData(orderListCreateData, orderListRecordReference);
 
-                                                                                                                    final ordersCreateData = createOrdersRecordData(
+                                                                                                                    final ordersCreateData2 = createOrdersRecordData(
                                                                                                                       orderDate: getCurrentTimestamp,
                                                                                                                       shopRef: gridViewProductsRecord.shopRef,
                                                                                                                       productName: gridViewProductsRecord.productName,
                                                                                                                       productPrice: gridViewProductsRecord.productPrice,
                                                                                                                       orderStatus: 'Processing',
                                                                                                                       userRef: currentUserReference,
-                                                                                                                      orderNumber: orderListOutPut!.orderNo,
+                                                                                                                      orderNumber: _model.orderListOutPut!.orderNo,
                                                                                                                       productImage: gridViewProductsRecord.productPhoto,
-                                                                                                                      orderListRef: orderListOutPut!.reference,
+                                                                                                                      orderListRef: _model.orderListOutPut!.reference,
                                                                                                                       productRef: gridViewProductsRecord.reference,
                                                                                                                     );
-                                                                                                                    await OrdersRecord.collection.doc().set(ordersCreateData);
+                                                                                                                    await OrdersRecord.collection.doc().set(ordersCreateData2);
                                                                                                                   }
+
+                                                                                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                                                                                    SnackBar(
+                                                                                                                      content: Text(
+                                                                                                                        'Product added to car',
+                                                                                                                        style: TextStyle(
+                                                                                                                          color: FlutterFlowTheme.of(context).primaryText,
+                                                                                                                        ),
+                                                                                                                      ),
+                                                                                                                      duration: Duration(milliseconds: 4000),
+                                                                                                                      backgroundColor: Color(0x00000000),
+                                                                                                                      action: SnackBarAction(
+                                                                                                                        label: 'Cart',
+                                                                                                                        textColor: Color(0x00000000),
+                                                                                                                        onPressed: () async {
+                                                                                                                          context.pushNamed('shoppingCart');
+                                                                                                                        },
+                                                                                                                      ),
+                                                                                                                    ),
+                                                                                                                  );
 
                                                                                                                   setState(() {});
                                                                                                                 },
@@ -732,7 +759,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                 .fromSTEB(0, 10,
                                                                     0, 0),
                                                         child: Text(
-                                                          'Search Results for \"${textController!.text}\"',
+                                                          'Search Results for \"${_model.textController.text}\"',
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyText1
@@ -759,9 +786,10 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                         true)
                                                                 .where(
                                                                     'display_name',
-                                                                    isEqualTo: textController!.text !=
+                                                                    isEqualTo: _model.textController.text !=
                                                                             ''
-                                                                        ? textController!
+                                                                        ? _model
+                                                                            .textController
                                                                             .text
                                                                         : null),
                                                           ),
@@ -819,10 +847,12 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                         .where('is_Seller',
                                                             isEqualTo: true)
                                                         .where('display_name',
-                                                            isEqualTo: textController!
+                                                            isEqualTo: _model
+                                                                        .textController
                                                                         .text !=
                                                                     ''
-                                                                ? textController!
+                                                                ? _model
+                                                                    .textController
                                                                     .text
                                                                 : null),
                                                   ),
@@ -1006,7 +1036,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                 .fromSTEB(0, 10,
                                                                     0, 0),
                                                         child: Text(
-                                                          'Search Results for \"${textController!.text}\"',
+                                                          'Search Results for \"${_model.textController.text}\"',
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyText1
@@ -1034,9 +1064,10 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                         true)
                                                                 .where(
                                                                     'channel_name',
-                                                                    isEqualTo: textController!.text !=
+                                                                    isEqualTo: _model.textController.text !=
                                                                             ''
-                                                                        ? textController!
+                                                                        ? _model
+                                                                            .textController
                                                                             .text
                                                                         : null),
                                                           ),
@@ -1097,10 +1128,12 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                 isEqualTo: true)
                                                             .where(
                                                                 'channel_name',
-                                                                isEqualTo: textController!
+                                                                isEqualTo: _model
+                                                                            .textController
                                                                             .text !=
                                                                         ''
-                                                                    ? textController!
+                                                                    ? _model
+                                                                        .textController
                                                                         .text
                                                                     : null),
                                                   ),
@@ -1381,12 +1414,12 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                                           }.withoutNulls,
                                                                                         );
                                                                                       } else {
-                                                                                        apiResultvaf = await GetLiveStreamIdCall.call(
+                                                                                        _model.apiResultvaf = await GetLiveStreamIdCall.call(
                                                                                           playbackId: functions.getPlaybackIdFromUrl(gridViewStreamsRecord.playbackUrl),
                                                                                         );
-                                                                                        apiResulto0b = await GetPastLiveStreamCall.call(
+                                                                                        _model.apiResulto0b = await GetPastLiveStreamCall.call(
                                                                                           streamId: GetLiveStreamIdCall.playBackID(
-                                                                                            (apiResultvaf?.jsonBody ?? ''),
+                                                                                            (_model.apiResultvaf?.jsonBody ?? ''),
                                                                                           ).toString(),
                                                                                         );
 
@@ -1395,7 +1428,7 @@ class _SearchResultsWidgetState extends State<SearchResultsWidget> {
                                                                                           queryParams: {
                                                                                             'url': serializeParam(
                                                                                               functions.createUrlFromPlayId(GetPastLiveStreamCall.playbackID(
-                                                                                                (apiResulto0b?.jsonBody ?? ''),
+                                                                                                (_model.apiResulto0b?.jsonBody ?? ''),
                                                                                               ).toString()),
                                                                                               ParamType.String,
                                                                                             ),

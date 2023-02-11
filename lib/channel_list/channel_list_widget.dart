@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'channel_list_model.dart';
+export 'channel_list_model.dart';
 
 class ChannelListWidget extends StatefulWidget {
   const ChannelListWidget({
@@ -23,22 +25,24 @@ class ChannelListWidget extends StatefulWidget {
 }
 
 class _ChannelListWidgetState extends State<ChannelListWidget> {
-  ApiCallResponse? apiResulto0b;
-  ApiCallResponse? apiResultvaf;
-  TextEditingController? textController;
-  final _unfocusNode = FocusNode();
+  late ChannelListModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
+    _model = createModel(context, () => ChannelListModel());
+
+    _model.textController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    textController?.dispose();
     super.dispose();
   }
 
@@ -124,9 +128,9 @@ class _ChannelListWidgetState extends State<ChannelListWidget> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     TextFormField(
-                      controller: textController,
+                      controller: _model.textController,
                       onChanged: (_) => EasyDebounce.debounce(
-                        'textController',
+                        '_model.textController',
                         Duration(milliseconds: 2000),
                         () => setState(() {}),
                       ),
@@ -166,10 +170,10 @@ class _ChannelListWidgetState extends State<ChannelListWidget> {
                           Icons.search,
                           size: 15,
                         ),
-                        suffixIcon: textController!.text.isNotEmpty
+                        suffixIcon: _model.textController!.text.isNotEmpty
                             ? InkWell(
                                 onTap: () async {
-                                  textController?.clear();
+                                  _model.textController?.clear();
                                   setState(() {});
                                 },
                                 child: Icon(
@@ -181,6 +185,8 @@ class _ChannelListWidgetState extends State<ChannelListWidget> {
                             : null,
                       ),
                       style: FlutterFlowTheme.of(context).bodyText1,
+                      validator:
+                          _model.textControllerValidator.asValidator(context),
                     ),
                     Expanded(
                       child: Padding(
@@ -190,8 +196,8 @@ class _ChannelListWidgetState extends State<ChannelListWidget> {
                             queryBuilder: (channelsRecord) => channelsRecord
                                 .where('channel_status', isEqualTo: true)
                                 .where('channel_name',
-                                    isEqualTo: textController!.text != ''
-                                        ? textController!.text
+                                    isEqualTo: _model.textController.text != ''
+                                        ? _model.textController.text
                                         : null),
                           ),
                           builder: (context, snapshot) {
@@ -540,7 +546,7 @@ class _ChannelListWidgetState extends State<ChannelListWidget> {
                                                                   }.withoutNulls,
                                                                 );
                                                               } else {
-                                                                apiResultvaf =
+                                                                _model.apiResultvaf =
                                                                     await GetLiveStreamIdCall
                                                                         .call(
                                                                   playbackId: functions
@@ -548,13 +554,13 @@ class _ChannelListWidgetState extends State<ChannelListWidget> {
                                                                           gridViewStreamsRecord
                                                                               .playbackUrl),
                                                                 );
-                                                                apiResulto0b =
+                                                                _model.apiResulto0b =
                                                                     await GetPastLiveStreamCall
                                                                         .call(
                                                                   streamId:
                                                                       GetLiveStreamIdCall
                                                                           .playBackID(
-                                                                    (apiResultvaf
+                                                                    (_model.apiResultvaf
                                                                             ?.jsonBody ??
                                                                         ''),
                                                                   ).toString(),
@@ -569,7 +575,7 @@ class _ChannelListWidgetState extends State<ChannelListWidget> {
                                                                       functions.createUrlFromPlayId(
                                                                           GetPastLiveStreamCall
                                                                               .playbackID(
-                                                                        (apiResulto0b?.jsonBody ??
+                                                                        (_model.apiResulto0b?.jsonBody ??
                                                                             ''),
                                                                       ).toString()),
                                                                       ParamType

@@ -5,6 +5,8 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'user_settings_model.dart';
+export 'user_settings_model.dart';
 
 class UserSettingsWidget extends StatefulWidget {
   const UserSettingsWidget({Key? key}) : super(key: key);
@@ -14,11 +16,21 @@ class UserSettingsWidget extends StatefulWidget {
 }
 
 class _UserSettingsWidgetState extends State<UserSettingsWidget> {
-  final _unfocusNode = FocusNode();
+  late UserSettingsModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => UserSettingsModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }

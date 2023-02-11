@@ -9,6 +9,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'address_list_model.dart';
+export 'address_list_model.dart';
 
 class AddressListWidget extends StatefulWidget {
   const AddressListWidget({Key? key}) : super(key: key);
@@ -18,7 +20,22 @@ class AddressListWidget extends StatefulWidget {
 }
 
 class _AddressListWidgetState extends State<AddressListWidget> {
+  late AddressListModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => AddressListModel());
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

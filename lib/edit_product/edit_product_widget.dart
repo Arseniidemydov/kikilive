@@ -12,6 +12,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'edit_product_model.dart';
+export 'edit_product_model.dart';
 
 class EditProductWidget extends StatefulWidget {
   const EditProductWidget({
@@ -26,26 +28,22 @@ class EditProductWidget extends StatefulWidget {
 }
 
 class _EditProductWidgetState extends State<EditProductWidget> {
-  bool isMediaUploading = false;
-  String uploadedFileUrl = '';
+  late EditProductModel _model;
 
-  String? ddCategoryValue;
-  String? ddSubCategoryValue;
-  TextEditingController? txtProductNameController;
-  TextEditingController? txtProductPriceController;
-  TextEditingController? txtInventoryController;
-  TextEditingController? txtProDescController;
-  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => EditProductModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    txtInventoryController?.dispose();
-    txtProductNameController?.dispose();
-    txtProductPriceController?.dispose();
-    txtProDescController?.dispose();
     super.dispose();
   }
 
@@ -120,7 +118,7 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                   color: FlutterFlowTheme.of(context).primaryBackground,
                 ),
                 child: Form(
-                  key: formKey,
+                  key: _model.formKey,
                   autovalidateMode: AutovalidateMode.disabled,
                   child: Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
@@ -179,10 +177,11 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                                               borderRadius:
                                                   BorderRadius.circular(8),
                                               child: CachedNetworkImage(
-                                                imageUrl: uploadedFileUrl !=
+                                                imageUrl: _model.uploadedFileUrl !=
                                                             null &&
-                                                        uploadedFileUrl != ''
-                                                    ? uploadedFileUrl
+                                                        _model.uploadedFileUrl !=
+                                                            ''
+                                                    ? _model.uploadedFileUrl
                                                     : editProductProductsRecord
                                                         .productPhoto!,
                                                 width: MediaQuery.of(context)
@@ -211,10 +210,32 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                                                         validateFileFormat(
                                                             m.storagePath,
                                                             context))) {
-                                                  setState(() =>
-                                                      isMediaUploading = true);
+                                                  setState(() => _model
+                                                      .isMediaUploading = true);
+                                                  var selectedUploadedFiles =
+                                                      <FFUploadedFile>[];
                                                   var downloadUrls = <String>[];
                                                   try {
+                                                    selectedUploadedFiles =
+                                                        selectedMedia
+                                                            .map((m) =>
+                                                                FFUploadedFile(
+                                                                  name: m
+                                                                      .storagePath
+                                                                      .split(
+                                                                          '/')
+                                                                      .last,
+                                                                  bytes:
+                                                                      m.bytes,
+                                                                  height: m
+                                                                      .dimensions
+                                                                      ?.height,
+                                                                  width: m
+                                                                      .dimensions
+                                                                      ?.width,
+                                                                ))
+                                                            .toList();
+
                                                     downloadUrls = (await Future
                                                             .wait(
                                                       selectedMedia.map(
@@ -228,13 +249,23 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                                                         .map((u) => u!)
                                                         .toList();
                                                   } finally {
-                                                    isMediaUploading = false;
+                                                    _model.isMediaUploading =
+                                                        false;
                                                   }
-                                                  if (downloadUrls.length ==
-                                                      selectedMedia.length) {
-                                                    setState(() =>
-                                                        uploadedFileUrl =
-                                                            downloadUrls.first);
+                                                  if (selectedUploadedFiles
+                                                              .length ==
+                                                          selectedMedia
+                                                              .length &&
+                                                      downloadUrls.length ==
+                                                          selectedMedia
+                                                              .length) {
+                                                    setState(() {
+                                                      _model.uploadedLocalFile =
+                                                          selectedUploadedFiles
+                                                              .first;
+                                                      _model.uploadedFileUrl =
+                                                          downloadUrls.first;
+                                                    });
                                                   } else {
                                                     setState(() {});
                                                     return;
@@ -341,15 +372,15 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                                     ddCategoryCategoriesRecordList =
                                     snapshot.data!;
                                 return FlutterFlowDropDown<String>(
-                                  initialOption: ddCategoryValue ??=
+                                  initialOption: _model.ddCategoryValue ??=
                                       editProductProductsRecord.category,
                                   options: ddCategoryCategoriesRecordList
                                       .map((e) => e.categoryName)
                                       .withoutNulls
                                       .toList()
                                       .toList(),
-                                  onChanged: (val) =>
-                                      setState(() => ddCategoryValue = val),
+                                  onChanged: (val) => setState(
+                                      () => _model.ddCategoryValue = val),
                                   width: MediaQuery.of(context).size.width,
                                   height: 50,
                                   textStyle: FlutterFlowTheme.of(context)
@@ -399,15 +430,15 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                                     ddSubCategorySubCategoryRecordList =
                                     snapshot.data!;
                                 return FlutterFlowDropDown<String>(
-                                  initialOption: ddSubCategoryValue ??=
+                                  initialOption: _model.ddSubCategoryValue ??=
                                       editProductProductsRecord.subCat,
                                   options: ddSubCategorySubCategoryRecordList
                                       .map((e) => e.subCategoryName)
                                       .withoutNulls
                                       .toList()
                                       .toList(),
-                                  onChanged: (val) =>
-                                      setState(() => ddSubCategoryValue = val),
+                                  onChanged: (val) => setState(
+                                      () => _model.ddSubCategoryValue = val),
                                   width: MediaQuery.of(context).size.width,
                                   height: 50,
                                   textStyle: FlutterFlowTheme.of(context)
@@ -440,7 +471,7 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                             child: TextFormField(
-                              controller: txtProductNameController ??=
+                              controller: _model.txtProductNameController ??=
                                   TextEditingController(
                                 text: editProductProductsRecord.productName,
                               ),
@@ -485,13 +516,16 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                                 ),
                               ),
                               style: FlutterFlowTheme.of(context).bodyText1,
+                              validator: _model
+                                  .txtProductNameControllerValidator
+                                  .asValidator(context),
                             ),
                           ),
                           Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                             child: TextFormField(
-                              controller: txtProductPriceController ??=
+                              controller: _model.txtProductPriceController ??=
                                   TextEditingController(
                                 text: editProductProductsRecord.productPrice
                                     ?.toString(),
@@ -543,13 +577,16 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                               ),
                               style: FlutterFlowTheme.of(context).bodyText1,
                               keyboardType: TextInputType.number,
+                              validator: _model
+                                  .txtProductPriceControllerValidator
+                                  .asValidator(context),
                             ),
                           ),
                           Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                             child: TextFormField(
-                              controller: txtInventoryController ??=
+                              controller: _model.txtInventoryController ??=
                                   TextEditingController(
                                 text: editProductProductsRecord.inventory
                                     ?.toString(),
@@ -596,10 +633,12 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                               ),
                               style: FlutterFlowTheme.of(context).bodyText1,
                               keyboardType: TextInputType.number,
+                              validator: _model.txtInventoryControllerValidator
+                                  .asValidator(context),
                             ),
                           ),
                           TextFormField(
-                            controller: txtProDescController ??=
+                            controller: _model.txtProDescController ??=
                                 TextEditingController(
                               text: editProductProductsRecord.productDesc,
                             ),
@@ -654,6 +693,8 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                                   color: FlutterFlowTheme.of(context).grayIcon,
                                 ),
                             maxLines: 10,
+                            validator: _model.txtProDescControllerValidator
+                                .asValidator(context),
                           ),
                           Padding(
                             padding:
@@ -704,52 +745,46 @@ class _EditProductWidgetState extends State<EditProductWidget> {
                                 Expanded(
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      if (formKey.currentState == null ||
-                                          !formKey.currentState!.validate()) {
+                                      if (_model.formKey.currentState == null ||
+                                          !_model.formKey.currentState!
+                                              .validate()) {
                                         return;
                                       }
-
-                                      if (uploadedFileUrl != null &&
-                                          uploadedFileUrl != '') {
-                                        final productsUpdateData =
+                                      if (_model.uploadedFileUrl != null &&
+                                          _model.uploadedFileUrl != '') {
+                                        final productsUpdateData1 =
                                             createProductsRecordData(
-                                          productName:
-                                              txtProductNameController?.text ??
-                                                  '',
-                                          productPrice: double.tryParse(
-                                              txtProductPriceController?.text ??
-                                                  ''),
+                                          productName: _model
+                                              .txtProductNameController.text,
+                                          productPrice: double.tryParse(_model
+                                              .txtProductPriceController.text),
                                           productDesc:
-                                              txtProDescController?.text ?? '',
-                                          productPhoto: uploadedFileUrl,
-                                          category: ddCategoryValue,
-                                          subCat: ddSubCategoryValue,
-                                          inventory: int.tryParse(
-                                              txtInventoryController?.text ??
-                                                  ''),
+                                              _model.txtProDescController.text,
+                                          productPhoto: _model.uploadedFileUrl,
+                                          category: _model.ddCategoryValue,
+                                          subCat: _model.ddSubCategoryValue,
+                                          inventory: int.tryParse(_model
+                                              .txtInventoryController.text),
                                         );
                                         await widget.productRef!
-                                            .update(productsUpdateData);
+                                            .update(productsUpdateData1);
                                         context.pop();
                                       } else {
-                                        final productsUpdateData =
+                                        final productsUpdateData2 =
                                             createProductsRecordData(
-                                          productName:
-                                              txtProductNameController?.text ??
-                                                  '',
-                                          productPrice: double.tryParse(
-                                              txtProductPriceController?.text ??
-                                                  ''),
+                                          productName: _model
+                                              .txtProductNameController.text,
+                                          productPrice: double.tryParse(_model
+                                              .txtProductPriceController.text),
                                           productDesc:
-                                              txtProDescController?.text ?? '',
-                                          category: ddCategoryValue,
-                                          subCat: ddSubCategoryValue,
-                                          inventory: int.tryParse(
-                                              txtInventoryController?.text ??
-                                                  ''),
+                                              _model.txtProDescController.text,
+                                          category: _model.ddCategoryValue,
+                                          subCat: _model.ddSubCategoryValue,
+                                          inventory: int.tryParse(_model
+                                              .txtInventoryController.text),
                                         );
                                         await widget.productRef!
-                                            .update(productsUpdateData);
+                                            .update(productsUpdateData2);
                                         context.pop();
                                       }
                                     },

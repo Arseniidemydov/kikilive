@@ -144,6 +144,20 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(double)));
     }
+    value = object.earnings;
+    if (value != null) {
+      result
+        ..add('earnings')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(double)));
+    }
+    value = object.payout;
+    if (value != null) {
+      result
+        ..add('payout')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(double)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -238,6 +252,14 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
           result.userPoints = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double?;
           break;
+        case 'earnings':
+          result.earnings = serializers.deserialize(value,
+              specifiedType: const FullType(double)) as double?;
+          break;
+        case 'payout':
+          result.payout = serializers.deserialize(value,
+              specifiedType: const FullType(double)) as double?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -289,6 +311,10 @@ class _$UsersRecord extends UsersRecord {
   @override
   final double? userPoints;
   @override
+  final double? earnings;
+  @override
+  final double? payout;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$UsersRecord([void Function(UsersRecordBuilder)? updates]) =>
@@ -313,6 +339,8 @@ class _$UsersRecord extends UsersRecord {
       this.bankAccount,
       this.isAdmin,
       this.userPoints,
+      this.earnings,
+      this.payout,
       this.ffRef})
       : super._();
 
@@ -345,6 +373,8 @@ class _$UsersRecord extends UsersRecord {
         bankAccount == other.bankAccount &&
         isAdmin == other.isAdmin &&
         userPoints == other.userPoints &&
+        earnings == other.earnings &&
+        payout == other.payout &&
         ffRef == other.ffRef;
   }
 
@@ -368,32 +398,25 @@ class _$UsersRecord extends UsersRecord {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc(
-                                                                                0,
-                                                                                email
-                                                                                    .hashCode),
-                                                                            displayName
-                                                                                .hashCode),
-                                                                        photoUrl
-                                                                            .hashCode),
-                                                                    uid
-                                                                        .hashCode),
-                                                                createdTime
-                                                                    .hashCode),
-                                                            phoneNumber
-                                                                .hashCode),
-                                                        coverPhoto.hashCode),
-                                                    userBio.hashCode),
-                                                userVerified.hashCode),
-                                            isSeller.hashCode),
-                                        shippingCost.hashCode),
-                                    accountType.hashCode),
-                                instagram.hashCode),
-                            line.hashCode),
-                        bankName.hashCode),
-                    bankAccount.hashCode),
-                isAdmin.hashCode),
-            userPoints.hashCode),
+                                                                            $jc($jc($jc(0, email.hashCode), displayName.hashCode),
+                                                                                photoUrl.hashCode),
+                                                                            uid.hashCode),
+                                                                        createdTime.hashCode),
+                                                                    phoneNumber.hashCode),
+                                                                coverPhoto.hashCode),
+                                                            userBio.hashCode),
+                                                        userVerified.hashCode),
+                                                    isSeller.hashCode),
+                                                shippingCost.hashCode),
+                                            accountType.hashCode),
+                                        instagram.hashCode),
+                                    line.hashCode),
+                                bankName.hashCode),
+                            bankAccount.hashCode),
+                        isAdmin.hashCode),
+                    userPoints.hashCode),
+                earnings.hashCode),
+            payout.hashCode),
         ffRef.hashCode));
   }
 
@@ -418,6 +441,8 @@ class _$UsersRecord extends UsersRecord {
           ..add('bankAccount', bankAccount)
           ..add('isAdmin', isAdmin)
           ..add('userPoints', userPoints)
+          ..add('earnings', earnings)
+          ..add('payout', payout)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -498,6 +523,14 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
   double? get userPoints => _$this._userPoints;
   set userPoints(double? userPoints) => _$this._userPoints = userPoints;
 
+  double? _earnings;
+  double? get earnings => _$this._earnings;
+  set earnings(double? earnings) => _$this._earnings = earnings;
+
+  double? _payout;
+  double? get payout => _$this._payout;
+  set payout(double? payout) => _$this._payout = payout;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -527,6 +560,8 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
       _bankAccount = $v.bankAccount;
       _isAdmin = $v.isAdmin;
       _userPoints = $v.userPoints;
+      _earnings = $v.earnings;
+      _payout = $v.payout;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -568,6 +603,8 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
             bankAccount: bankAccount,
             isAdmin: isAdmin,
             userPoints: userPoints,
+            earnings: earnings,
+            payout: payout,
             ffRef: ffRef);
     replace(_$result);
     return _$result;

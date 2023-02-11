@@ -6,6 +6,8 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'order_history_list_model.dart';
+export 'order_history_list_model.dart';
 
 class OrderHistoryListWidget extends StatefulWidget {
   const OrderHistoryListWidget({Key? key}) : super(key: key);
@@ -15,11 +17,21 @@ class OrderHistoryListWidget extends StatefulWidget {
 }
 
 class _OrderHistoryListWidgetState extends State<OrderHistoryListWidget> {
-  final _unfocusNode = FocusNode();
+  late OrderHistoryListModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => OrderHistoryListModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }

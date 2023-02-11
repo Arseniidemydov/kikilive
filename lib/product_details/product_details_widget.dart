@@ -14,6 +14,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'product_details_model.dart';
+export 'product_details_model.dart';
 
 class ProductDetailsWidget extends StatefulWidget {
   const ProductDetailsWidget({
@@ -29,6 +31,10 @@ class ProductDetailsWidget extends StatefulWidget {
 
 class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
     with TickerProviderStateMixin {
+  late ProductDetailsModel _model;
+
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   final animationsMap = {
     'textOnPageLoadAnimation1': AnimationInfo(
       trigger: AnimationTrigger.onPageLoad,
@@ -126,19 +132,25 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
       ],
     ),
   };
-  OrderListRecord? orderListOutPut;
-  int? countControllerValue;
-  final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => ProductDetailsModel());
+
     setupAnimations(
       animationsMap.values.where((anim) =>
           anim.trigger == AnimationTrigger.onActionTrigger ||
           !anim.applyInitialState),
       this,
     );
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -877,9 +889,9 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                                       .primaryText,
                                             ),
                                       ),
-                                      count: countControllerValue ??= 1,
-                                      updateCount: (count) => setState(
-                                          () => countControllerValue = count),
+                                      count: _model.countControllerValue ??= 1,
+                                      updateCount: (count) => setState(() =>
+                                          _model.countControllerValue = count),
                                       stepSize: 1,
                                       minimum: 1,
                                     ),
@@ -1003,7 +1015,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                                           .update(
                                                               orderListUpdateData);
 
-                                                      final ordersCreateData =
+                                                      final ordersCreateData1 =
                                                           createOrdersRecordData(
                                                         orderDate:
                                                             getCurrentTimestamp,
@@ -1037,7 +1049,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                                           .collection
                                                           .doc()
                                                           .set(
-                                                              ordersCreateData);
+                                                              ordersCreateData1);
                                                     } else {
                                                       final orderListCreateData =
                                                           {
@@ -1074,12 +1086,13 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                                       await orderListRecordReference
                                                           .set(
                                                               orderListCreateData);
-                                                      orderListOutPut = OrderListRecord
-                                                          .getDocumentFromData(
-                                                              orderListCreateData,
-                                                              orderListRecordReference);
+                                                      _model.orderListOutPut =
+                                                          OrderListRecord
+                                                              .getDocumentFromData(
+                                                                  orderListCreateData,
+                                                                  orderListRecordReference);
 
-                                                      final ordersCreateData =
+                                                      final ordersCreateData2 =
                                                           createOrdersRecordData(
                                                         orderDate:
                                                             getCurrentTimestamp,
@@ -1096,15 +1109,15 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                                             'Processing',
                                                         userRef:
                                                             currentUserReference,
-                                                        orderNumber:
-                                                            orderListOutPut!
-                                                                .orderNo,
+                                                        orderNumber: _model
+                                                            .orderListOutPut!
+                                                            .orderNo,
                                                         productImage:
                                                             productDetailsProductsRecord
                                                                 .productPhoto,
-                                                        orderListRef:
-                                                            orderListOutPut!
-                                                                .reference,
+                                                        orderListRef: _model
+                                                            .orderListOutPut!
+                                                            .reference,
                                                         productRef:
                                                             productDetailsProductsRecord
                                                                 .reference,
@@ -1113,7 +1126,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                                           .collection
                                                           .doc()
                                                           .set(
-                                                              ordersCreateData);
+                                                              ordersCreateData2);
                                                     }
 
                                                     setState(() {});

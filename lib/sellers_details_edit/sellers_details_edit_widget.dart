@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'sellers_details_edit_model.dart';
+export 'sellers_details_edit_model.dart';
 
 class SellersDetailsEditWidget extends StatefulWidget {
   const SellersDetailsEditWidget({
@@ -23,54 +25,36 @@ class SellersDetailsEditWidget extends StatefulWidget {
 }
 
 class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
-  TextEditingController? txtAddress1Controller;
-  TextEditingController? txtEmailController;
-  TextEditingController? txtNameController;
-  TextEditingController? txtPhoneController;
-  TextEditingController? txtAddressline2Controller;
-  TextEditingController? txtCityController;
-  TextEditingController? txtZipcodeController;
-  TextEditingController? txtshippingFeeController;
-  TextEditingController? txtInstaController;
-  TextEditingController? txtLineController;
-  TextEditingController? txtbankController;
-  TextEditingController? txtbankAccountController;
-  final _unfocusNode = FocusNode();
+  late SellersDetailsEditModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    txtAddress1Controller = TextEditingController();
-    txtEmailController = TextEditingController(text: currentUserEmail);
-    txtNameController = TextEditingController(text: currentUserDisplayName);
-    txtPhoneController = TextEditingController(text: currentPhoneNumber);
-    txtAddressline2Controller = TextEditingController();
-    txtCityController = TextEditingController();
-    txtZipcodeController = TextEditingController();
-    txtshippingFeeController = TextEditingController();
-    txtInstaController = TextEditingController();
-    txtLineController = TextEditingController();
-    txtbankController = TextEditingController();
-    txtbankAccountController = TextEditingController();
+    _model = createModel(context, () => SellersDetailsEditModel());
+
+    _model.txtNameController =
+        TextEditingController(text: currentUserDisplayName);
+    _model.txtPhoneController = TextEditingController(text: currentPhoneNumber);
+    _model.txtEmailController = TextEditingController(text: currentUserEmail);
+    _model.txtAddress1Controller = TextEditingController();
+    _model.txtAddressline2Controller = TextEditingController();
+    _model.txtCityController = TextEditingController();
+    _model.txtZipcodeController = TextEditingController();
+    _model.txtshippingFeeController = TextEditingController();
+    _model.txtInstaController = TextEditingController();
+    _model.txtLineController = TextEditingController();
+    _model.txtbankController = TextEditingController();
+    _model.txtbankAccountController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    txtAddress1Controller?.dispose();
-    txtEmailController?.dispose();
-    txtNameController?.dispose();
-    txtPhoneController?.dispose();
-    txtAddressline2Controller?.dispose();
-    txtCityController?.dispose();
-    txtZipcodeController?.dispose();
-    txtshippingFeeController?.dispose();
-    txtInstaController?.dispose();
-    txtLineController?.dispose();
-    txtbankController?.dispose();
-    txtbankAccountController?.dispose();
     super.dispose();
   }
 
@@ -287,7 +271,7 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Form(
-                              key: formKey,
+                              key: _model.formKey,
                               autovalidateMode: AutovalidateMode.disabled,
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
@@ -306,7 +290,8 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                             child: AuthUserStreamWidget(
                                               builder: (context) =>
                                                   TextFormField(
-                                                controller: txtNameController,
+                                                controller:
+                                                    _model.txtNameController,
                                                 autofocus: true,
                                                 obscureText: false,
                                                 decoration: InputDecoration(
@@ -366,6 +351,9 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyText1,
+                                                validator: _model
+                                                    .txtNameControllerValidator
+                                                    .asValidator(context),
                                               ),
                                             ),
                                           ),
@@ -376,7 +364,8 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                             child: AuthUserStreamWidget(
                                               builder: (context) =>
                                                   TextFormField(
-                                                controller: txtPhoneController,
+                                                controller:
+                                                    _model.txtPhoneController,
                                                 autofocus: true,
                                                 obscureText: false,
                                                 decoration: InputDecoration(
@@ -436,6 +425,9 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyText1,
+                                                validator: _model
+                                                    .txtPhoneControllerValidator
+                                                    .asValidator(context),
                                               ),
                                             ),
                                           ),
@@ -444,7 +436,8 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0, 0, 0, 15),
                                             child: TextFormField(
-                                              controller: txtEmailController,
+                                              controller:
+                                                  _model.txtEmailController,
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -496,6 +489,9 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText1,
+                                              validator: _model
+                                                  .txtEmailControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
                                           Padding(
@@ -503,7 +499,8 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0, 0, 0, 15),
                                             child: TextFormField(
-                                              controller: txtAddress1Controller,
+                                              controller:
+                                                  _model.txtAddress1Controller,
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -556,6 +553,9 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText1,
+                                              validator: _model
+                                                  .txtAddress1ControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
                                           Padding(
@@ -563,8 +563,8 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0, 0, 0, 15),
                                             child: TextFormField(
-                                              controller:
-                                                  txtAddressline2Controller,
+                                              controller: _model
+                                                  .txtAddressline2Controller,
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -617,6 +617,9 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText1,
+                                              validator: _model
+                                                  .txtAddressline2ControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
                                           Padding(
@@ -624,7 +627,8 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0, 0, 0, 15),
                                             child: TextFormField(
-                                              controller: txtCityController,
+                                              controller:
+                                                  _model.txtCityController,
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -677,6 +681,9 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText1,
                                               keyboardType: TextInputType.phone,
+                                              validator: _model
+                                                  .txtCityControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
                                           Padding(
@@ -684,7 +691,8 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0, 0, 0, 15),
                                             child: TextFormField(
-                                              controller: txtZipcodeController,
+                                              controller:
+                                                  _model.txtZipcodeController,
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -738,6 +746,9 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                       .bodyText1,
                                               keyboardType:
                                                   TextInputType.number,
+                                              validator: _model
+                                                  .txtZipcodeControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
                                           Padding(
@@ -745,8 +756,8 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0, 0, 0, 15),
                                             child: TextFormField(
-                                              controller:
-                                                  txtshippingFeeController,
+                                              controller: _model
+                                                  .txtshippingFeeController,
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -804,6 +815,9 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                       .bodyText1,
                                               keyboardType:
                                                   TextInputType.number,
+                                              validator: _model
+                                                  .txtshippingFeeControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
                                           Padding(
@@ -811,7 +825,8 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0, 0, 0, 15),
                                             child: TextFormField(
-                                              controller: txtInstaController,
+                                              controller:
+                                                  _model.txtInstaController,
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -869,6 +884,9 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                       .bodyText1,
                                               keyboardType:
                                                   TextInputType.number,
+                                              validator: _model
+                                                  .txtInstaControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
                                           Padding(
@@ -876,7 +894,8 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0, 0, 0, 15),
                                             child: TextFormField(
-                                              controller: txtLineController,
+                                              controller:
+                                                  _model.txtLineController,
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -933,6 +952,9 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                       .bodyText1,
                                               keyboardType:
                                                   TextInputType.number,
+                                              validator: _model
+                                                  .txtLineControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
                                           Padding(
@@ -940,7 +962,8 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0, 0, 0, 15),
                                             child: TextFormField(
-                                              controller: txtbankController,
+                                              controller:
+                                                  _model.txtbankController,
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -995,6 +1018,9 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText1,
+                                              validator: _model
+                                                  .txtbankControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
                                           Padding(
@@ -1002,8 +1028,8 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     0, 0, 0, 20),
                                             child: TextFormField(
-                                              controller:
-                                                  txtbankAccountController,
+                                              controller: _model
+                                                  .txtbankAccountController,
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -1059,6 +1085,9 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText1,
+                                              validator: _model
+                                                  .txtbankAccountControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
                                         ],
@@ -1073,43 +1102,49 @@ class _SellersDetailsEditWidgetState extends State<SellersDetailsEditWidget> {
                                             0, 0, 0, 20),
                                         child: FFButtonWidget(
                                           onPressed: () async {
-                                            if (formKey.currentState == null ||
-                                                !formKey.currentState!
+                                            if (_model.formKey.currentState ==
+                                                    null ||
+                                                !_model.formKey.currentState!
                                                     .validate()) {
                                               return;
                                             }
 
                                             final usersUpdateData =
                                                 createUsersRecordData(
-                                              email: txtEmailController!.text,
+                                              email: _model
+                                                  .txtEmailController.text,
                                               displayName:
-                                                  txtNameController!.text,
-                                              phoneNumber:
-                                                  txtPhoneController!.text,
+                                                  _model.txtNameController.text,
+                                              phoneNumber: _model
+                                                  .txtPhoneController.text,
                                               shippingCost: double.tryParse(
-                                                  txtshippingFeeController!
+                                                  _model
+                                                      .txtshippingFeeController
                                                       .text),
-                                              instagram:
-                                                  txtInstaController!.text,
-                                              line: txtLineController!.text,
-                                              bankName: txtbankController!.text,
-                                              bankAccount: int.tryParse(
-                                                  txtbankAccountController!
-                                                      .text),
+                                              instagram: _model
+                                                  .txtInstaController.text,
+                                              line:
+                                                  _model.txtLineController.text,
+                                              bankName:
+                                                  _model.txtbankController.text,
+                                              bankAccount: int.tryParse(_model
+                                                  .txtbankAccountController
+                                                  .text),
                                             );
                                             await currentUserReference!
                                                 .update(usersUpdateData);
 
                                             final addressUpdateData =
                                                 createAddressRecordData(
-                                              address:
-                                                  txtAddress1Controller!.text,
-                                              address2:
-                                                  txtAddressline2Controller!
-                                                      .text,
-                                              city: txtCityController!.text,
-                                              zipcode: int.tryParse(
-                                                  txtZipcodeController!.text),
+                                              address: _model
+                                                  .txtAddress1Controller.text,
+                                              address2: _model
+                                                  .txtAddressline2Controller
+                                                  .text,
+                                              city:
+                                                  _model.txtCityController.text,
+                                              zipcode: int.tryParse(_model
+                                                  .txtZipcodeController.text),
                                             );
                                             await sellersDetailsEditAddressRecord!
                                                 .reference

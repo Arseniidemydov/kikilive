@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'register_model.dart';
+export 'register_model.dart';
 
 class RegisterWidget extends StatefulWidget {
   const RegisterWidget({Key? key}) : super(key: key);
@@ -15,31 +17,26 @@ class RegisterWidget extends StatefulWidget {
 }
 
 class _RegisterWidgetState extends State<RegisterWidget> {
-  TextEditingController? txtEmailController;
-  TextEditingController? txtPasswordController;
-  late bool txtPasswordVisibility;
-  TextEditingController? txtPasswordReTypeController;
-  late bool txtPasswordReTypeVisibility;
-  final _unfocusNode = FocusNode();
+  late RegisterModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    txtEmailController = TextEditingController();
-    txtPasswordController = TextEditingController();
-    txtPasswordVisibility = false;
-    txtPasswordReTypeController = TextEditingController();
-    txtPasswordReTypeVisibility = false;
+    _model = createModel(context, () => RegisterModel());
+
+    _model.txtEmailController = TextEditingController();
+    _model.txtPasswordController = TextEditingController();
+    _model.txtPasswordReTypeController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    txtEmailController?.dispose();
-    txtPasswordController?.dispose();
-    txtPasswordReTypeController?.dispose();
     super.dispose();
   }
 
@@ -107,7 +104,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Form(
-                                key: formKey,
+                                key: _model.formKey,
                                 autovalidateMode: AutovalidateMode.disabled,
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -144,8 +141,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                                               .fromSTEB(
                                                                   5, 0, 10, 0),
                                                       child: TextFormField(
-                                                        controller:
-                                                            txtEmailController,
+                                                        controller: _model
+                                                            .txtEmailController,
                                                         autofocus: true,
                                                         obscureText: false,
                                                         decoration:
@@ -243,6 +240,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .bodyText1,
+                                                        validator: _model
+                                                            .txtEmailControllerValidator
+                                                            .asValidator(
+                                                                context),
                                                       ),
                                                     ),
                                                   ),
@@ -284,10 +285,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                                                 .fromSTEB(
                                                                     5, 0, 0, 0),
                                                         child: TextFormField(
-                                                          controller:
-                                                              txtPasswordController,
-                                                          obscureText:
-                                                              !txtPasswordVisibility,
+                                                          controller: _model
+                                                              .txtPasswordController,
+                                                          obscureText: !_model
+                                                              .txtPasswordVisibility,
                                                           decoration:
                                                               InputDecoration(
                                                             hintText:
@@ -384,14 +385,16 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                                             suffixIcon: InkWell(
                                                               onTap: () =>
                                                                   setState(
-                                                                () => txtPasswordVisibility =
-                                                                    !txtPasswordVisibility,
+                                                                () => _model
+                                                                        .txtPasswordVisibility =
+                                                                    !_model
+                                                                        .txtPasswordVisibility,
                                                               ),
                                                               focusNode: FocusNode(
                                                                   skipTraversal:
                                                                       true),
                                                               child: Icon(
-                                                                txtPasswordVisibility
+                                                                _model.txtPasswordVisibility
                                                                     ? Icons
                                                                         .visibility_outlined
                                                                     : Icons
@@ -405,6 +408,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyText1,
+                                                          validator: _model
+                                                              .txtPasswordControllerValidator
+                                                              .asValidator(
+                                                                  context),
                                                         ),
                                                       ),
                                                     ),
@@ -447,10 +454,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                                                 .fromSTEB(
                                                                     5, 0, 0, 0),
                                                         child: TextFormField(
-                                                          controller:
-                                                              txtPasswordReTypeController,
-                                                          obscureText:
-                                                              !txtPasswordReTypeVisibility,
+                                                          controller: _model
+                                                              .txtPasswordReTypeController,
+                                                          obscureText: !_model
+                                                              .txtPasswordReTypeVisibility,
                                                           decoration:
                                                               InputDecoration(
                                                             hintText:
@@ -547,14 +554,16 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                                             suffixIcon: InkWell(
                                                               onTap: () =>
                                                                   setState(
-                                                                () => txtPasswordReTypeVisibility =
-                                                                    !txtPasswordReTypeVisibility,
+                                                                () => _model
+                                                                        .txtPasswordReTypeVisibility =
+                                                                    !_model
+                                                                        .txtPasswordReTypeVisibility,
                                                               ),
                                                               focusNode: FocusNode(
                                                                   skipTraversal:
                                                                       true),
                                                               child: Icon(
-                                                                txtPasswordReTypeVisibility
+                                                                _model.txtPasswordReTypeVisibility
                                                                     ? Icons
                                                                         .visibility_outlined
                                                                     : Icons
@@ -568,6 +577,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyText1,
+                                                          validator: _model
+                                                              .txtPasswordReTypeControllerValidator
+                                                              .asValidator(
+                                                                  context),
                                                         ),
                                                       ),
                                                     ),
@@ -605,14 +618,15 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                                       0, 0, 0, 1),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      if (formKey.currentState == null ||
-                                          !formKey.currentState!.validate()) {
+                                      if (_model.formKey.currentState == null ||
+                                          !_model.formKey.currentState!
+                                              .validate()) {
                                         return;
                                       }
-
                                       GoRouter.of(context).prepareAuthEvent();
-                                      if (txtPasswordController?.text !=
-                                          txtPasswordReTypeController?.text) {
+                                      if (_model.txtPasswordController.text !=
+                                          _model.txtPasswordReTypeController
+                                              .text) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
@@ -626,8 +640,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
 
                                       final user = await createAccountWithEmail(
                                         context,
-                                        txtEmailController!.text,
-                                        txtPasswordController!.text,
+                                        _model.txtEmailController.text,
+                                        _model.txtPasswordController.text,
                                       );
                                       if (user == null) {
                                         return;

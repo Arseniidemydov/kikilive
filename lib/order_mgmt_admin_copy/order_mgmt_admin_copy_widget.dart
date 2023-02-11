@@ -8,6 +8,8 @@ import '../custom_code/widgets/index.dart' as custom_widgets;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'order_mgmt_admin_copy_model.dart';
+export 'order_mgmt_admin_copy_model.dart';
 
 class OrderMgmtAdminCopyWidget extends StatefulWidget {
   const OrderMgmtAdminCopyWidget({Key? key}) : super(key: key);
@@ -18,11 +20,21 @@ class OrderMgmtAdminCopyWidget extends StatefulWidget {
 }
 
 class _OrderMgmtAdminCopyWidgetState extends State<OrderMgmtAdminCopyWidget> {
-  final _unfocusNode = FocusNode();
+  late OrderMgmtAdminCopyModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => OrderMgmtAdminCopyModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }

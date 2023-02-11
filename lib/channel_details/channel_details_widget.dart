@@ -1,6 +1,7 @@
 import '../auth/auth_util.dart';
 import '../backend/api_requests/api_calls.dart';
 import '../backend/backend.dart';
+import '../backend/stripe/payment_manager.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -12,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'channel_details_model.dart';
+export 'channel_details_model.dart';
 
 class ChannelDetailsWidget extends StatefulWidget {
   const ChannelDetailsWidget({
@@ -26,14 +29,21 @@ class ChannelDetailsWidget extends StatefulWidget {
 }
 
 class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
-  ApiCallResponse? apiResulto0b;
-  ApiCallResponse? apiResultvaf;
-  Completer<List<StreamsRecord>>? _firestoreRequestCompleter;
-  final _unfocusNode = FocusNode();
+  late ChannelDetailsModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => ChannelDetailsModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -42,8 +52,8 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return FutureBuilder<ChannelsRecord>(
-      future: ChannelsRecord.getDocumentOnce(widget.channelRef!),
+    return StreamBuilder<ChannelsRecord>(
+      stream: ChannelsRecord.getDocument(widget.channelRef!),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -61,6 +71,58 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
         return Scaffold(
           key: scaffoldKey,
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          floatingActionButton: StreamBuilder<List<ChatsRecord>>(
+            stream: queryChatsRecord(
+              queryBuilder: (chatsRecord) => chatsRecord
+                  .where('ChannelRef', isEqualTo: widget.channelRef)
+                  .where('users', arrayContains: currentUserReference),
+              singleRecord: true,
+            ),
+            builder: (context, snapshot) {
+              // Customize what your widget looks like when it's loading.
+              if (!snapshot.hasData) {
+                return Center(
+                  child: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: CircularProgressIndicator(
+                      color: FlutterFlowTheme.of(context).primaryColor,
+                    ),
+                  ),
+                );
+              }
+              List<ChatsRecord> floatingActionButtonChatsRecordList =
+                  snapshot.data!;
+              // Return an empty Container when the item does not exist.
+              if (snapshot.data!.isEmpty) {
+                return Container();
+              }
+              final floatingActionButtonChatsRecord =
+                  floatingActionButtonChatsRecordList.isNotEmpty
+                      ? floatingActionButtonChatsRecordList.first
+                      : null;
+              return FloatingActionButton(
+                onPressed: () async {
+                  context.pushNamed(
+                    'chatPage',
+                    queryParams: {
+                      'chatRef': serializeParam(
+                        floatingActionButtonChatsRecord!.reference,
+                        ParamType.DocumentReference,
+                      ),
+                    }.withoutNulls,
+                  );
+                },
+                backgroundColor: FlutterFlowTheme.of(context).primaryColor,
+                elevation: 8,
+                child: Icon(
+                  Icons.chat,
+                  color: FlutterFlowTheme.of(context).secondaryColor,
+                  size: 24,
+                ),
+              );
+            },
+          ),
           appBar: responsiveVisibility(
             context: context,
             tablet: false,
@@ -344,49 +406,264 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                                                       ),
                                             ),
                                           ),
-                                          FFButtonWidget(
-                                            onPressed: () async {
-                                              if (channelDetailsChannelsRecord
-                                                  .channelMembers!
-                                                  .toList()
-                                                  .contains(
-                                                      currentUserReference)) {
-                                                final channelsUpdateData = {
-                                                  'channel_members':
-                                                      FieldValue.arrayRemove([
-                                                    currentUserReference
-                                                  ]),
-                                                };
-                                                await channelDetailsChannelsRecord
-                                                    .reference
-                                                    .update(channelsUpdateData);
-                                              } else {
-                                                final channelsUpdateData = {
-                                                  'channel_members':
-                                                      FieldValue.arrayUnion([
-                                                    currentUserReference
-                                                  ]),
-                                                };
-                                                await channelDetailsChannelsRecord
-                                                    .reference
-                                                    .update(channelsUpdateData);
+                                          StreamBuilder<List<ChatsRecord>>(
+                                            stream: queryChatsRecord(
+                                              queryBuilder: (chatsRecord) =>
+                                                  chatsRecord.where(
+                                                      'ChannelRef',
+                                                      isEqualTo:
+                                                          widget.channelRef),
+                                              singleRecord: true,
+                                            ),
+                                            builder: (context, snapshot) {
+                                              // Customize what your widget looks like when it's loading.
+                                              if (!snapshot.hasData) {
+                                                return Center(
+                                                  child: SizedBox(
+                                                    width: 50,
+                                                    height: 50,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primaryColor,
+                                                    ),
+                                                  ),
+                                                );
                                               }
-                                            },
-                                            text: channelDetailsChannelsRecord
-                                                    .channelMembers!
-                                                    .toList()
-                                                    .contains(
-                                                        currentUserReference)
-                                                ? 'Leave'
-                                                : 'Join',
-                                            options: FFButtonOptions(
-                                              width: 60,
-                                              height: 40,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
+                                              List<ChatsRecord>
+                                                  buttonChatsRecordList =
+                                                  snapshot.data!;
+                                              final buttonChatsRecord =
+                                                  buttonChatsRecordList
+                                                          .isNotEmpty
+                                                      ? buttonChatsRecordList
+                                                          .first
+                                                      : null;
+                                              return FFButtonWidget(
+                                                onPressed: () async {
+                                                  if (channelDetailsChannelsRecord
+                                                          .channelPrice! >
+                                                      0.0) {
+                                                    if (channelDetailsChannelsRecord
+                                                        .channelMembers!
+                                                        .toList()
+                                                        .contains(
+                                                            currentUserReference)) {
+                                                      final channelsUpdateData1 =
+                                                          {
+                                                        'channel_members':
+                                                            FieldValue
+                                                                .arrayRemove([
+                                                          currentUserReference
+                                                        ]),
+                                                      };
+                                                      await widget.channelRef!
+                                                          .update(
+                                                              channelsUpdateData1);
+
+                                                      final chatsUpdateData1 = {
+                                                        'users': FieldValue
+                                                            .arrayRemove([
+                                                          currentUserReference
+                                                        ]),
+                                                      };
+                                                      await buttonChatsRecord!
+                                                          .reference
+                                                          .update(
+                                                              chatsUpdateData1);
+                                                    } else {
+                                                      final paymentResponse =
+                                                          await processStripePayment(
+                                                        context,
+                                                        amount: functions
+                                                            .stripeAmountPayNewCart(
+                                                                0.0,
+                                                                channelDetailsChannelsRecord
+                                                                    .channelPrice!)!
+                                                            .round(),
+                                                        currency: 'THB',
+                                                        customerEmail:
+                                                            currentUserEmail,
+                                                        customerName:
+                                                            currentUserDisplayName,
+                                                        description:
+                                                            'Channel Join',
+                                                        allowGooglePay: false,
+                                                        allowApplePay: false,
+                                                      );
+                                                      if (paymentResponse
+                                                              .paymentId ==
+                                                          null) {
+                                                        if (paymentResponse
+                                                                .errorMessage !=
+                                                            null) {
+                                                          showSnackbar(
+                                                            context,
+                                                            'Error: ${paymentResponse.errorMessage}',
+                                                          );
+                                                        }
+                                                        return;
+                                                      }
+                                                      _model.paymentIdChannel =
+                                                          paymentResponse
+                                                              .paymentId!;
+
+                                                      if (_model
+                                                              .paymentIdChannel !=
+                                                          '') {
+                                                        final channelsUpdateData2 =
+                                                            {
+                                                          'channel_members':
+                                                              FieldValue
+                                                                  .arrayUnion([
+                                                            currentUserReference
+                                                          ]),
+                                                        };
+                                                        await widget.channelRef!
+                                                            .update(
+                                                                channelsUpdateData2);
+
+                                                        final chatsUpdateData2 =
+                                                            {
+                                                          'users': FieldValue
+                                                              .arrayUnion([
+                                                            currentUserReference
+                                                          ]),
+                                                        };
+                                                        await buttonChatsRecord!
+                                                            .reference
+                                                            .update(
+                                                                chatsUpdateData2);
+
+                                                        final channelJoinPaymentCreateData =
+                                                            createChannelJoinPaymentRecordData(
+                                                          joinAt:
+                                                              getCurrentTimestamp,
+                                                          userRef:
+                                                              channelDetailsChannelsRecord
+                                                                  .channelOwner,
+                                                          channelRef:
+                                                              widget.channelRef,
+                                                          paymentID: _model
+                                                              .paymentIdChannel,
+                                                          pricePaid:
+                                                              channelDetailsChannelsRecord
+                                                                  .channelPrice,
+                                                        );
+                                                        await ChannelJoinPaymentRecord
+                                                            .collection
+                                                            .doc()
+                                                            .set(
+                                                                channelJoinPaymentCreateData);
+                                                      } else {
+                                                        await showDialog(
+                                                          context: context,
+                                                          builder:
+                                                              (alertDialogContext) {
+                                                            return AlertDialog(
+                                                              title: Text(
+                                                                  'Payment Error'),
+                                                              content: Text(
+                                                                  'We could not process your payment. Try Again!'),
+                                                              actions: [
+                                                                TextButton(
+                                                                  onPressed: () =>
+                                                                      Navigator.pop(
+                                                                          alertDialogContext),
+                                                                  child: Text(
+                                                                      'Ok'),
+                                                                ),
+                                                              ],
+                                                            );
+                                                          },
+                                                        );
+                                                      }
+                                                    }
+                                                  } else {
+                                                    if (channelDetailsChannelsRecord
+                                                        .channelMembers!
+                                                        .toList()
+                                                        .contains(
+                                                            currentUserReference)) {
+                                                      final channelsUpdateData3 =
+                                                          {
+                                                        'channel_members':
+                                                            FieldValue
+                                                                .arrayRemove([
+                                                          currentUserReference
+                                                        ]),
+                                                      };
+                                                      await widget.channelRef!
+                                                          .update(
+                                                              channelsUpdateData3);
+
+                                                      final chatsUpdateData3 = {
+                                                        'users': FieldValue
+                                                            .arrayRemove([
+                                                          currentUserReference
+                                                        ]),
+                                                      };
+                                                      await buttonChatsRecord!
+                                                          .reference
+                                                          .update(
+                                                              chatsUpdateData3);
+                                                    } else {
+                                                      final channelsUpdateData4 =
+                                                          {
+                                                        'channel_members':
+                                                            FieldValue
+                                                                .arrayUnion([
+                                                          currentUserReference
+                                                        ]),
+                                                      };
+                                                      await widget.channelRef!
+                                                          .update(
+                                                              channelsUpdateData4);
+
+                                                      final chatsUpdateData4 = {
+                                                        'users': FieldValue
+                                                            .arrayUnion([
+                                                          currentUserReference
+                                                        ]),
+                                                      };
+                                                      await buttonChatsRecord!
+                                                          .reference
+                                                          .update(
+                                                              chatsUpdateData4);
+                                                    }
+                                                  }
+
+                                                  context.pushNamed(
+                                                    'channelDetails',
+                                                    queryParams: {
+                                                      'channelRef':
+                                                          serializeParam(
+                                                        widget.channelRef,
+                                                        ParamType
+                                                            .DocumentReference,
+                                                      ),
+                                                    }.withoutNulls,
+                                                  );
+
+                                                  setState(() {});
+                                                },
+                                                text: channelDetailsChannelsRecord
+                                                        .channelMembers!
+                                                        .toList()
+                                                        .contains(
+                                                            currentUserReference)
+                                                    ? 'Leave'
+                                                    : 'Join',
+                                                options: FFButtonOptions(
+                                                  width: 60,
+                                                  height: 40,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
                                                       .primaryColor,
-                                              textStyle:
-                                                  FlutterFlowTheme.of(context)
+                                                  textStyle: FlutterFlowTheme
+                                                          .of(context)
                                                       .subtitle2
                                                       .override(
                                                         fontFamily: 'Roboto',
@@ -396,13 +673,15 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                                                                 .secondaryColor,
                                                         fontSize: 12,
                                                       ),
-                                              borderSide: BorderSide(
-                                                color: Colors.transparent,
-                                                width: 1,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                            ),
+                                                  borderSide: BorderSide(
+                                                    color: Colors.transparent,
+                                                    width: 1,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(30),
+                                                ),
+                                              );
+                                            },
                                           ),
                                         ],
                                       ),
@@ -445,7 +724,7 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                         child: Align(
                           alignment: AlignmentDirectional(0, 0),
                           child: FutureBuilder<List<StreamsRecord>>(
-                            future: (_firestoreRequestCompleter ??=
+                            future: (_model.firestoreRequestCompleter ??=
                                     Completer<List<StreamsRecord>>()
                                       ..complete(queryStreamsRecordOnce(
                                         queryBuilder: (streamsRecord) =>
@@ -475,9 +754,10 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                                   snapshot.data!;
                               return RefreshIndicator(
                                 onRefresh: () async {
-                                  setState(
-                                      () => _firestoreRequestCompleter = null);
-                                  await waitForFirestoreRequestCompleter();
+                                  setState(() =>
+                                      _model.firestoreRequestCompleter = null);
+                                  await _model
+                                      .waitForFirestoreRequestCompleter();
                                 },
                                 child: ListView.builder(
                                   padding: EdgeInsets.zero,
@@ -533,7 +813,7 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                                                     }.withoutNulls,
                                                   );
                                                 } else {
-                                                  apiResultvaf =
+                                                  _model.apiResultvaf =
                                                       await GetLiveStreamIdCall
                                                           .call(
                                                     playbackId: functions
@@ -541,13 +821,14 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                                                             listViewStreamsRecord
                                                                 .playbackUrl),
                                                   );
-                                                  apiResulto0b =
+                                                  _model.apiResulto0b =
                                                       await GetPastLiveStreamCall
                                                           .call(
                                                     streamId:
                                                         GetLiveStreamIdCall
                                                             .playBackID(
-                                                      (apiResultvaf?.jsonBody ??
+                                                      (_model.apiResultvaf
+                                                              ?.jsonBody ??
                                                           ''),
                                                     ).toString(),
                                                   );
@@ -560,7 +841,7 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
                                                             .createUrlFromPlayId(
                                                                 GetPastLiveStreamCall
                                                                     .playbackID(
-                                                          (apiResulto0b
+                                                          (_model.apiResulto0b
                                                                   ?.jsonBody ??
                                                               ''),
                                                         ).toString()),
@@ -957,20 +1238,5 @@ class _ChannelDetailsWidgetState extends State<ChannelDetailsWidget> {
         );
       },
     );
-  }
-
-  Future waitForFirestoreRequestCompleter({
-    double minWait = 0,
-    double maxWait = double.infinity,
-  }) async {
-    final stopwatch = Stopwatch()..start();
-    while (true) {
-      await Future.delayed(Duration(milliseconds: 50));
-      final timeElapsed = stopwatch.elapsedMilliseconds;
-      final requestComplete = _firestoreRequestCompleter?.isCompleted ?? false;
-      if (timeElapsed > maxWait || (requestComplete && timeElapsed > minWait)) {
-        break;
-      }
-    }
   }
 }

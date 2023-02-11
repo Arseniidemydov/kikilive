@@ -4,6 +4,8 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'privacy_pol_model.dart';
+export 'privacy_pol_model.dart';
 
 class PrivacyPolWidget extends StatefulWidget {
   const PrivacyPolWidget({Key? key}) : super(key: key);
@@ -13,11 +15,21 @@ class PrivacyPolWidget extends StatefulWidget {
 }
 
 class _PrivacyPolWidgetState extends State<PrivacyPolWidget> {
-  final _unfocusNode = FocusNode();
+  late PrivacyPolModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => PrivacyPolModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }

@@ -1,5 +1,7 @@
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
+import '../chat_page/chat_page_widget.dart';
+import '../flutter_flow/chat/index.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
@@ -8,6 +10,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'invite_users_model.dart';
+export 'invite_users_model.dart';
 
 class InviteUsersWidget extends StatefulWidget {
   const InviteUsersWidget({
@@ -22,26 +26,22 @@ class InviteUsersWidget extends StatefulWidget {
 }
 
 class _InviteUsersWidgetState extends State<InviteUsersWidget> {
-  Map<UsersRecord, bool> checkboxListTileValueMap = {};
-  List<UsersRecord> get checkboxListTileCheckedItems =>
-      checkboxListTileValueMap.entries
-          .where((e) => e.value)
-          .map((e) => e.key)
-          .toList();
+  late InviteUsersModel _model;
 
-  TextEditingController? textController;
-  ChatsRecord? individualChatCreated;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
+    _model = createModel(context, () => InviteUsersModel());
+
+    _model.textController = TextEditingController();
   }
 
   @override
   void dispose() {
-    textController?.dispose();
+    _model.dispose();
+
     super.dispose();
   }
 
@@ -102,7 +102,7 @@ class _InviteUsersWidgetState extends State<InviteUsersWidget> {
               ),
               alignment: AlignmentDirectional(0, 0),
               child: TextFormField(
-                controller: textController,
+                controller: _model.textController,
                 obscureText: false,
                 decoration: InputDecoration(
                   hintText: 'Search',
@@ -166,6 +166,7 @@ class _InviteUsersWidgetState extends State<InviteUsersWidget> {
                       fontWeight: FontWeight.normal,
                     ),
                 maxLines: null,
+                validator: _model.textControllerValidator.asValidator(context),
               ),
             ),
           ),
@@ -174,6 +175,10 @@ class _InviteUsersWidgetState extends State<InviteUsersWidget> {
               padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
               child: FutureBuilder<List<UsersRecord>>(
                 future: queryUsersRecordOnce(
+                  queryBuilder: (usersRecord) => usersRecord.where('email',
+                      isEqualTo: _model.textController.text != ''
+                          ? _model.textController.text
+                          : null),
                   limit: 50,
                 ),
                 builder: (context, snapshot) {
@@ -260,13 +265,12 @@ class _InviteUsersWidgetState extends State<InviteUsersWidget> {
                                                 .primaryText,
                                       ),
                                       child: CheckboxListTile(
-                                        value: checkboxListTileValueMap[
+                                        value: _model.checkboxListTileValueMap[
                                             listViewUsersRecord] ??= false,
                                         onChanged: (newValue) async {
-                                          setState(() =>
-                                              checkboxListTileValueMap[
-                                                      listViewUsersRecord] =
-                                                  newValue!);
+                                          setState(() => _model
+                                                  .checkboxListTileValueMap[
+                                              listViewUsersRecord] = newValue!);
                                         },
                                         title: Text(
                                           listViewUsersRecord.displayName!,
@@ -326,21 +330,26 @@ class _InviteUsersWidgetState extends State<InviteUsersWidget> {
                 padding: EdgeInsetsDirectional.fromSTEB(16, 5, 16, 40),
                 child: FFButtonWidget(
                   onPressed: () async {
-                    final chatsCreateData = {
-                      'users': checkboxListTileCheckedItems
+                    _model.groupChat = await FFChatManager.instance.createChat(
+                      _model.checkboxListTileCheckedItems
                           .map((e) => e.reference)
                           .toList(),
-                    };
-                    var chatsRecordReference = ChatsRecord.collection.doc();
-                    await chatsRecordReference.set(chatsCreateData);
-                    individualChatCreated = ChatsRecord.getDocumentFromData(
-                        chatsCreateData, chatsRecordReference);
+                    );
+                    context.pushNamed(
+                      'chatPage',
+                      queryParams: {
+                        'chatRef': serializeParam(
+                          _model.groupChat?.reference,
+                          ParamType.DocumentReference,
+                        ),
+                      }.withoutNulls,
+                    );
 
                     context.pushNamed(
                       'chatPage',
                       queryParams: {
                         'chatRef': serializeParam(
-                          individualChatCreated!.reference,
+                          _model.groupChat!.reference,
                           ParamType.DocumentReference,
                         ),
                       }.withoutNulls,

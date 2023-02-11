@@ -29,6 +29,9 @@ abstract class ChatsRecord implements Built<ChatsRecord, ChatsRecordBuilder> {
   @BuiltValueField(wireName: 'last_message_seen_by')
   BuiltList<DocumentReference>? get lastMessageSeenBy;
 
+  @BuiltValueField(wireName: 'ChannelRef')
+  DocumentReference? get channelRef;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -65,6 +68,7 @@ Map<String, dynamic> createChatsRecordData({
   String? lastMessage,
   DateTime? lastMessageTime,
   DocumentReference? lastMessageSentBy,
+  DocumentReference? channelRef,
 }) {
   final firestoreData = serializers.toFirestore(
     ChatsRecord.serializer,
@@ -76,7 +80,8 @@ Map<String, dynamic> createChatsRecordData({
         ..lastMessage = lastMessage
         ..lastMessageTime = lastMessageTime
         ..lastMessageSentBy = lastMessageSentBy
-        ..lastMessageSeenBy = null,
+        ..lastMessageSeenBy = null
+        ..channelRef = channelRef,
     ),
   );
 

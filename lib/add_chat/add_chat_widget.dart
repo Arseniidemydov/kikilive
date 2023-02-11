@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'add_chat_model.dart';
+export 'add_chat_model.dart';
 
 class AddChatWidget extends StatefulWidget {
   const AddChatWidget({Key? key}) : super(key: key);
@@ -16,19 +18,22 @@ class AddChatWidget extends StatefulWidget {
 }
 
 class _AddChatWidgetState extends State<AddChatWidget> {
-  ChatsRecord? individualChatCreated;
-  TextEditingController? textController;
+  late AddChatModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
+    _model = createModel(context, () => AddChatModel());
+
+    _model.textController = TextEditingController();
   }
 
   @override
   void dispose() {
-    textController?.dispose();
+    _model.dispose();
+
     super.dispose();
   }
 
@@ -89,7 +94,7 @@ class _AddChatWidgetState extends State<AddChatWidget> {
               ),
               alignment: AlignmentDirectional(0, 0),
               child: TextFormField(
-                controller: textController,
+                controller: _model.textController,
                 obscureText: false,
                 decoration: InputDecoration(
                   hintText: 'Search',
@@ -153,6 +158,7 @@ class _AddChatWidgetState extends State<AddChatWidget> {
                       fontWeight: FontWeight.normal,
                     ),
                 maxLines: null,
+                validator: _model.textControllerValidator.asValidator(context),
               ),
             ),
           ),
@@ -161,6 +167,10 @@ class _AddChatWidgetState extends State<AddChatWidget> {
               padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
               child: FutureBuilder<List<UsersRecord>>(
                 future: queryUsersRecordOnce(
+                  queryBuilder: (usersRecord) => usersRecord.where('email',
+                      isEqualTo: _model.textController.text != ''
+                          ? _model.textController.text
+                          : null),
                   limit: 50,
                 ),
                 builder: (context, snapshot) {
@@ -224,7 +234,7 @@ class _AddChatWidgetState extends State<AddChatWidget> {
                                 var chatsRecordReference =
                                     ChatsRecord.collection.doc();
                                 await chatsRecordReference.set(chatsCreateData);
-                                individualChatCreated =
+                                _model.individualChatCreated =
                                     ChatsRecord.getDocumentFromData(
                                         chatsCreateData, chatsRecordReference);
 
@@ -236,7 +246,7 @@ class _AddChatWidgetState extends State<AddChatWidget> {
                                       ParamType.Document,
                                     ),
                                     'chatRef': serializeParam(
-                                      individualChatCreated!.reference,
+                                      _model.individualChatCreated!.reference,
                                       ParamType.DocumentReference,
                                     ),
                                   }.withoutNulls,

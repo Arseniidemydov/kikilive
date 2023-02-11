@@ -4,6 +4,8 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'admin_settings_model.dart';
+export 'admin_settings_model.dart';
 
 class AdminSettingsWidget extends StatefulWidget {
   const AdminSettingsWidget({Key? key}) : super(key: key);
@@ -13,11 +15,21 @@ class AdminSettingsWidget extends StatefulWidget {
 }
 
 class _AdminSettingsWidgetState extends State<AdminSettingsWidget> {
-  final _unfocusNode = FocusNode();
+  late AdminSettingsModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => AdminSettingsModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -422,7 +434,7 @@ class _AdminSettingsWidgetState extends State<AdminSettingsWidget> {
                                   EdgeInsetsDirectional.fromSTEB(15, 0, 0, 0),
                               child: InkWell(
                                 onTap: () async {
-                                  context.pushNamed('AdminShopEarnings');
+                                  context.pushNamed('AdminShopEarningsList');
                                 },
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,

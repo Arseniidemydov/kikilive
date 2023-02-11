@@ -7,6 +7,8 @@ import '../flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'admin_shop_earnings_list_model.dart';
+export 'admin_shop_earnings_list_model.dart';
 
 class AdminShopEarningsListWidget extends StatefulWidget {
   const AdminShopEarningsListWidget({Key? key}) : super(key: key);
@@ -18,11 +20,21 @@ class AdminShopEarningsListWidget extends StatefulWidget {
 
 class _AdminShopEarningsListWidgetState
     extends State<AdminShopEarningsListWidget> {
-  final _unfocusNode = FocusNode();
+  late AdminShopEarningsListModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => AdminShopEarningsListModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -152,10 +164,10 @@ class _AdminShopEarningsListWidgetState
                             decoration: BoxDecoration(
                               color: FlutterFlowTheme.of(context).customColor4,
                             ),
-                            child: StreamBuilder<List<OrdersRecord>>(
-                              stream: queryOrdersRecord(
-                                queryBuilder: (ordersRecord) => ordersRecord
-                                    .orderBy('order_date', descending: true),
+                            child: StreamBuilder<List<UsersRecord>>(
+                              stream: queryUsersRecord(
+                                queryBuilder: (usersRecord) => usersRecord
+                                    .where('is_Seller', isEqualTo: true),
                               ),
                               builder: (context, snapshot) {
                                 // Customize what your widget looks like when it's loading.
@@ -171,22 +183,31 @@ class _AdminShopEarningsListWidgetState
                                     ),
                                   );
                                 }
-                                List<OrdersRecord> listViewOrdersRecordList =
-                                    snapshot.data!;
+                                List<UsersRecord> listViewUsersRecordList =
+                                    snapshot.data!
+                                        .where((u) => u.uid != currentUserUid)
+                                        .toList();
                                 return ListView.builder(
                                   padding: EdgeInsets.zero,
                                   scrollDirection: Axis.vertical,
-                                  itemCount: listViewOrdersRecordList.length,
+                                  itemCount: listViewUsersRecordList.length,
                                   itemBuilder: (context, listViewIndex) {
-                                    final listViewOrdersRecord =
-                                        listViewOrdersRecordList[listViewIndex];
+                                    final listViewUsersRecord =
+                                        listViewUsersRecordList[listViewIndex];
                                     return Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0, 0, 0, 5),
                                       child: InkWell(
                                         onTap: () async {
-                                          context
-                                              .pushNamed('AdminShopEarnings');
+                                          context.pushNamed(
+                                            'AdminShopEarnings',
+                                            queryParams: {
+                                              'userRef': serializeParam(
+                                                listViewUsersRecord.reference,
+                                                ParamType.DocumentReference,
+                                              ),
+                                            }.withoutNulls,
+                                          );
                                         },
                                         child: Container(
                                           width: 100,
@@ -238,8 +259,8 @@ class _AdminShopEarningsListWidgetState
                                                               ),
                                                         ),
                                                         Text(
-                                                          listViewOrdersRecord
-                                                              .shopName!,
+                                                          listViewUsersRecord
+                                                              .displayName!,
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyText1,
@@ -271,61 +292,65 @@ class _AdminShopEarningsListWidgetState
                                                                       .primaryText,
                                                                 ),
                                                           ),
-                                                          Text(
-                                                            functions
-                                                                .calcEarning(
-                                                                    listViewOrdersRecord
-                                                                        .orderDate,
-                                                                    containerOrdersRecordList
-                                                                        .map((e) => e
-                                                                            .productSubtotal)
-                                                                        .withoutNulls
-                                                                        .toList(),
-                                                                    containerOrdersRecordList
-                                                                        .map((e) =>
-                                                                            e.orderDate)
-                                                                        .withoutNulls
-                                                                        .toList())
-                                                                .toString(),
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyText1,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0, 5, 0, 0),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          Text(
-                                                            'Deposits',
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyText1
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Roboto',
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primaryText,
+                                                          StreamBuilder<
+                                                              List<
+                                                                  OrdersRecord>>(
+                                                            stream:
+                                                                queryOrdersRecord(
+                                                              queryBuilder: (ordersRecord) => ordersRecord
+                                                                  .where(
+                                                                      'shop_ref',
+                                                                      isEqualTo:
+                                                                          listViewUsersRecord
+                                                                              .reference)
+                                                                  .where(
+                                                                      'order_status',
+                                                                      isEqualTo:
+                                                                          'Complete'),
+                                                            ),
+                                                            builder: (context,
+                                                                snapshot) {
+                                                              // Customize what your widget looks like when it's loading.
+                                                              if (!snapshot
+                                                                  .hasData) {
+                                                                return Center(
+                                                                  child:
+                                                                      SizedBox(
+                                                                    width: 50,
+                                                                    height: 50,
+                                                                    child:
+                                                                        CircularProgressIndicator(
+                                                                      color: FlutterFlowTheme.of(
+                                                                              context)
+                                                                          .primaryColor,
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              }
+                                                              List<OrdersRecord>
+                                                                  textOrdersRecordList =
+                                                                  snapshot
+                                                                      .data!;
+                                                              return Text(
+                                                                formatNumber(
+                                                                  functions.sumEarnings(
+                                                                      textOrdersRecordList
+                                                                          .toList(),
+                                                                      -1),
+                                                                  formatType:
+                                                                      FormatType
+                                                                          .decimal,
+                                                                  decimalType:
+                                                                      DecimalType
+                                                                          .automatic,
+                                                                  currency:
+                                                                      'THB ',
                                                                 ),
-                                                          ),
-                                                          Text(
-                                                            listViewOrdersRecord
-                                                                .deposit!
-                                                                .toString(),
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyText1,
+                                                                style: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .bodyText1,
+                                                              );
+                                                            },
                                                           ),
                                                         ],
                                                       ),

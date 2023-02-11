@@ -8,6 +8,8 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'user_profile_copy_model.dart';
+export 'user_profile_copy_model.dart';
 
 class UserProfileCopyWidget extends StatefulWidget {
   const UserProfileCopyWidget({Key? key}) : super(key: key);
@@ -17,11 +19,21 @@ class UserProfileCopyWidget extends StatefulWidget {
 }
 
 class _UserProfileCopyWidgetState extends State<UserProfileCopyWidget> {
-  final _unfocusNode = FocusNode();
+  late UserProfileCopyModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => UserProfileCopyModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }

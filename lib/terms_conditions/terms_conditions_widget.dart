@@ -4,6 +4,8 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'terms_conditions_model.dart';
+export 'terms_conditions_model.dart';
 
 class TermsConditionsWidget extends StatefulWidget {
   const TermsConditionsWidget({Key? key}) : super(key: key);
@@ -13,11 +15,21 @@ class TermsConditionsWidget extends StatefulWidget {
 }
 
 class _TermsConditionsWidgetState extends State<TermsConditionsWidget> {
-  final _unfocusNode = FocusNode();
+  late TermsConditionsModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => TermsConditionsModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }

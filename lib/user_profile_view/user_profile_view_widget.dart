@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'user_profile_view_model.dart';
+export 'user_profile_view_model.dart';
 
 class UserProfileViewWidget extends StatefulWidget {
   const UserProfileViewWidget({
@@ -22,11 +24,21 @@ class UserProfileViewWidget extends StatefulWidget {
 }
 
 class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
-  final _unfocusNode = FocusNode();
+  late UserProfileViewModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => UserProfileViewModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -697,8 +709,8 @@ class _UserProfileViewWidgetState extends State<UserProfileViewWidget> {
                                                               children: [
                                                                 SelectionArea(
                                                                     child: Text(
-                                                                  gridViewProductsRecord
-                                                                      .productName!,
+                                                                  userProfileViewUsersRecord
+                                                                      .displayName!,
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyText1

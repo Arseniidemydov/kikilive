@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'cart_address_model.dart';
+export 'cart_address_model.dart';
 
 class CartAddressWidget extends StatefulWidget {
   const CartAddressWidget({
@@ -22,34 +24,25 @@ class CartAddressWidget extends StatefulWidget {
 }
 
 class _CartAddressWidgetState extends State<CartAddressWidget> {
-  TextEditingController? txtAddress2Controller;
-  TextEditingController? txtAddressController;
-  TextEditingController? txtAddressLabelController;
-  TextEditingController? txtCityController;
-  TextEditingController? txtZipController;
-  TextEditingController? txtPhoneController;
-  TextEditingController? txtUserController;
-  final _unfocusNode = FocusNode();
+  late CartAddressModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    txtPhoneController = TextEditingController();
-    txtUserController = TextEditingController();
+    _model = createModel(context, () => CartAddressModel());
+
+    _model.txtUserController = TextEditingController();
+    _model.txtPhoneController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    txtAddress2Controller?.dispose();
-    txtAddressController?.dispose();
-    txtAddressLabelController?.dispose();
-    txtCityController?.dispose();
-    txtZipController?.dispose();
-    txtPhoneController?.dispose();
-    txtUserController?.dispose();
     super.dispose();
   }
 
@@ -105,7 +98,7 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
             color: FlutterFlowTheme.of(context).primaryBackground,
           ),
           child: Form(
-            key: formKey,
+            key: _model.formKey,
             autovalidateMode: AutovalidateMode.disabled,
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -158,7 +151,7 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                 children: [
                                   Expanded(
                                     child: TextFormField(
-                                      controller: txtUserController,
+                                      controller: _model.txtUserController,
                                       autofocus: true,
                                       obscureText: false,
                                       decoration: InputDecoration(
@@ -207,17 +200,9 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
                                       keyboardType: TextInputType.name,
-                                      validator: (val) {
-                                        if (val == null || val.isEmpty) {
-                                          return 'Field is required';
-                                        }
-
-                                        if (val.length < 3) {
-                                          return 'Requires at least 3 characters.';
-                                        }
-
-                                        return null;
-                                      },
+                                      validator: _model
+                                          .txtUserControllerValidator
+                                          .asValidator(context),
                                     ),
                                   ),
                                 ],
@@ -231,7 +216,7 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                 children: [
                                   Expanded(
                                     child: TextFormField(
-                                      controller: txtPhoneController,
+                                      controller: _model.txtPhoneController,
                                       autofocus: true,
                                       obscureText: false,
                                       decoration: InputDecoration(
@@ -280,20 +265,9 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
                                       keyboardType: TextInputType.phone,
-                                      validator: (val) {
-                                        if (val == null || val.isEmpty) {
-                                          return 'Field is required';
-                                        }
-
-                                        if (val.length < 12) {
-                                          return 'Requires at least 12 characters.';
-                                        }
-                                        if (val.length > 13) {
-                                          return 'Maximum 13 characters allowed, currently ${val.length}.';
-                                        }
-
-                                        return null;
-                                      },
+                                      validator: _model
+                                          .txtPhoneControllerValidator
+                                          .asValidator(context),
                                     ),
                                   ),
                                 ],
@@ -349,18 +323,18 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                 children: [
                                   Expanded(
                                     child: TextFormField(
-                                      controller: txtAddressLabelController ??=
-                                          TextEditingController(
+                                      controller:
+                                          _model.txtAddressLabelController ??=
+                                              TextEditingController(
                                         text: columnAddressRecord!.addressLabel,
                                       ),
                                       onFieldSubmitted: (_) async {
                                         final addressUpdateData =
                                             createAddressRecordData(
-                                          addressLabel:
-                                              txtAddressLabelController?.text ??
-                                                  '',
+                                          addressLabel: _model
+                                              .txtAddressLabelController.text,
                                           address:
-                                              txtAddressController?.text ?? '',
+                                              _model.txtAddressController.text,
                                         );
                                         await widget.addressReference!
                                             .update(addressUpdateData);
@@ -409,17 +383,9 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
-                                      validator: (val) {
-                                        if (val == null || val.isEmpty) {
-                                          return 'Field is required';
-                                        }
-
-                                        if (val.length < 3) {
-                                          return 'Requires at least 3 characters.';
-                                        }
-
-                                        return null;
-                                      },
+                                      validator: _model
+                                          .txtAddressLabelControllerValidator
+                                          .asValidator(context),
                                     ),
                                   ),
                                 ],
@@ -433,8 +399,9 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                 children: [
                                   Expanded(
                                     child: TextFormField(
-                                      controller: txtAddressController ??=
-                                          TextEditingController(
+                                      controller:
+                                          _model.txtAddressController ??=
+                                              TextEditingController(
                                         text: columnAddressRecord!.address,
                                       ),
                                       autofocus: true,
@@ -481,17 +448,9 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
-                                      validator: (val) {
-                                        if (val == null || val.isEmpty) {
-                                          return 'Field is required';
-                                        }
-
-                                        if (val.length < 3) {
-                                          return 'Requires at least 3 characters.';
-                                        }
-
-                                        return null;
-                                      },
+                                      validator: _model
+                                          .txtAddressControllerValidator
+                                          .asValidator(context),
                                     ),
                                   ),
                                 ],
@@ -505,8 +464,9 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                 children: [
                                   Expanded(
                                     child: TextFormField(
-                                      controller: txtAddress2Controller ??=
-                                          TextEditingController(
+                                      controller:
+                                          _model.txtAddress2Controller ??=
+                                              TextEditingController(
                                         text: columnAddressRecord!.address2,
                                       ),
                                       autofocus: true,
@@ -553,17 +513,9 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
-                                      validator: (val) {
-                                        if (val == null || val.isEmpty) {
-                                          return 'Field is required';
-                                        }
-
-                                        if (val.length < 3) {
-                                          return 'Requires at least 3 characters.';
-                                        }
-
-                                        return null;
-                                      },
+                                      validator: _model
+                                          .txtAddress2ControllerValidator
+                                          .asValidator(context),
                                     ),
                                   ),
                                 ],
@@ -577,7 +529,7 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                 children: [
                                   Expanded(
                                     child: TextFormField(
-                                      controller: txtCityController ??=
+                                      controller: _model.txtCityController ??=
                                           TextEditingController(
                                         text: columnAddressRecord!.city,
                                       ),
@@ -625,17 +577,9 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
-                                      validator: (val) {
-                                        if (val == null || val.isEmpty) {
-                                          return 'Field is required';
-                                        }
-
-                                        if (val.length < 3) {
-                                          return 'Requires at least 3 characters.';
-                                        }
-
-                                        return null;
-                                      },
+                                      validator: _model
+                                          .txtCityControllerValidator
+                                          .asValidator(context),
                                     ),
                                   ),
                                 ],
@@ -649,7 +593,7 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                 children: [
                                   Expanded(
                                     child: TextFormField(
-                                      controller: txtZipController ??=
+                                      controller: _model.txtZipController ??=
                                           TextEditingController(
                                         text: columnAddressRecord!.zipcode
                                             ?.toString(),
@@ -699,20 +643,9 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                       style: FlutterFlowTheme.of(context)
                                           .bodyText1,
                                       keyboardType: TextInputType.number,
-                                      validator: (val) {
-                                        if (val == null || val.isEmpty) {
-                                          return 'Field is required';
-                                        }
-
-                                        if (val.length < 5) {
-                                          return 'Requires at least 5 characters.';
-                                        }
-                                        if (val.length > 5) {
-                                          return 'Maximum 5 characters allowed, currently ${val.length}.';
-                                        }
-
-                                        return null;
-                                      },
+                                      validator: _model
+                                          .txtZipControllerValidator
+                                          .asValidator(context),
                                     ),
                                   ),
                                 ],
@@ -736,30 +669,28 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                       ),
                                       child: FFButtonWidget(
                                         onPressed: () async {
-                                          if (formKey.currentState == null ||
-                                              !formKey.currentState!
+                                          if (_model.formKey.currentState ==
+                                                  null ||
+                                              !_model.formKey.currentState!
                                                   .validate()) {
                                             return;
                                           }
 
                                           final userCartAddressCreateData =
                                               createUserCartAddressRecordData(
-                                            userName: txtUserController!.text,
+                                            userName:
+                                                _model.txtUserController.text,
                                             phone: int.tryParse(
-                                                txtPhoneController!.text),
-                                            addressLabel:
-                                                txtAddressLabelController
-                                                        ?.text ??
-                                                    '',
-                                            address1:
-                                                txtAddressController?.text ??
-                                                    '',
-                                            address2:
-                                                txtAddress2Controller?.text ??
-                                                    '',
-                                            city: txtCityController?.text ?? '',
+                                                _model.txtPhoneController.text),
+                                            addressLabel: _model
+                                                .txtAddressLabelController.text,
+                                            address1: _model
+                                                .txtAddressController.text,
+                                            address2: _model
+                                                .txtAddress2Controller.text,
+                                            city: _model.txtCityController.text,
                                             zip: int.tryParse(
-                                                txtZipController?.text ?? ''),
+                                                _model.txtZipController.text),
                                           );
                                           await UserCartAddressRecord.createDoc(
                                                   currentUserReference!)
@@ -767,11 +698,11 @@ class _CartAddressWidgetState extends State<CartAddressWidget> {
                                           FFAppState().update(() {
                                             FFAppState().isCartAddress = true;
                                             FFAppState().cartName =
-                                                txtUserController!.text;
+                                                _model.txtUserController.text;
                                           });
                                           FFAppState().update(() {
                                             FFAppState().cartPhone =
-                                                txtPhoneController!.text;
+                                                _model.txtPhoneController.text;
                                           });
 
                                           context.pushNamed('shoppingCart');

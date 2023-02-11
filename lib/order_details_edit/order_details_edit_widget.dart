@@ -9,6 +9,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'order_details_edit_model.dart';
+export 'order_details_edit_model.dart';
 
 class OrderDetailsEditWidget extends StatefulWidget {
   const OrderDetailsEditWidget({
@@ -23,18 +25,22 @@ class OrderDetailsEditWidget extends StatefulWidget {
 }
 
 class _OrderDetailsEditWidgetState extends State<OrderDetailsEditWidget> {
-  String? dropDownValue;
-  TextEditingController? txtShipCompController;
-  TextEditingController? txtShipNoController;
-  final _unfocusNode = FocusNode();
+  late OrderDetailsEditModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => OrderDetailsEditModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    txtShipCompController?.dispose();
-    txtShipNoController?.dispose();
     super.dispose();
   }
 
@@ -520,7 +526,7 @@ class _OrderDetailsEditWidgetState extends State<OrderDetailsEditWidget> {
                           children: [
                             Expanded(
                               child: Form(
-                                key: formKey,
+                                key: _model.formKey,
                                 autovalidateMode: AutovalidateMode.disabled,
                                 child: Container(
                                   width: 100,
@@ -1045,10 +1051,10 @@ class _OrderDetailsEditWidgetState extends State<OrderDetailsEditWidget> {
                                                               snapshot.data!;
                                                           return FlutterFlowDropDown<
                                                               String>(
-                                                            initialOption:
-                                                                dropDownValue ??=
-                                                                    orderDetailsEditOrdersRecord
-                                                                        .orderStatus,
+                                                            initialOption: _model
+                                                                    .dropDownValue ??=
+                                                                orderDetailsEditOrdersRecord
+                                                                    .orderStatus,
                                                             options: dropDownShippingStatusRecordList
                                                                 .map((e) => e
                                                                     .statusName)
@@ -1058,9 +1064,10 @@ class _OrderDetailsEditWidgetState extends State<OrderDetailsEditWidget> {
                                                             onChanged:
                                                                 (val) async {
                                                               setState(() =>
-                                                                  dropDownValue =
+                                                                  _model.dropDownValue =
                                                                       val);
-                                                              if (dropDownValue ==
+                                                              if (_model
+                                                                      .dropDownValue ==
                                                                   'Shipping') {
                                                                 await showDialog(
                                                                   context:
@@ -1170,9 +1177,9 @@ class _OrderDetailsEditWidgetState extends State<OrderDetailsEditWidget> {
                                                           .primaryBackground,
                                                     ),
                                                     child: TextFormField(
-                                                      controller:
-                                                          txtShipCompController ??=
-                                                              TextEditingController(
+                                                      controller: _model
+                                                              .txtShipCompController ??=
+                                                          TextEditingController(
                                                         text:
                                                             orderDetailsEditOrdersRecord
                                                                 .shippingCompany,
@@ -1243,6 +1250,9 @@ class _OrderDetailsEditWidgetState extends State<OrderDetailsEditWidget> {
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .bodyText1,
+                                                      validator: _model
+                                                          .txtShipCompControllerValidator
+                                                          .asValidator(context),
                                                     ),
                                                   ),
                                                 ),
@@ -1272,9 +1282,9 @@ class _OrderDetailsEditWidgetState extends State<OrderDetailsEditWidget> {
                                                           .primaryBackground,
                                                     ),
                                                     child: TextFormField(
-                                                      controller:
-                                                          txtShipNoController ??=
-                                                              TextEditingController(
+                                                      controller: _model
+                                                              .txtShipNoController ??=
+                                                          TextEditingController(
                                                         text:
                                                             orderDetailsEditOrdersRecord
                                                                 .shippingNo,
@@ -1345,6 +1355,9 @@ class _OrderDetailsEditWidgetState extends State<OrderDetailsEditWidget> {
                                                           FlutterFlowTheme.of(
                                                                   context)
                                                               .bodyText1,
+                                                      validator: _model
+                                                          .txtShipNoControllerValidator
+                                                          .asValidator(context),
                                                     ),
                                                   ),
                                                 ),
@@ -1362,9 +1375,11 @@ class _OrderDetailsEditWidgetState extends State<OrderDetailsEditWidget> {
                                               children: [
                                                 FFButtonWidget(
                                                   onPressed: () async {
-                                                    if (formKey.currentState ==
+                                                    if (_model.formKey
+                                                                .currentState ==
                                                             null ||
-                                                        !formKey.currentState!
+                                                        !_model.formKey
+                                                            .currentState!
                                                             .validate()) {
                                                       return;
                                                     }
@@ -1372,21 +1387,21 @@ class _OrderDetailsEditWidgetState extends State<OrderDetailsEditWidget> {
                                                     final ordersUpdateData =
                                                         createOrdersRecordData(
                                                       orderStatus:
-                                                          dropDownValue,
+                                                          _model.dropDownValue,
                                                       shippingCompany: orderDetailsEditOrdersRecord
                                                                   .shippingCompany ==
                                                               ''
-                                                          ? (txtShipCompController
-                                                                  ?.text ??
-                                                              '')
+                                                          ? _model
+                                                              .txtShipCompController
+                                                              .text
                                                           : orderDetailsEditOrdersRecord
                                                               .shippingCompany,
                                                       shippingNo: orderDetailsEditOrdersRecord
                                                                   .shippingNo ==
                                                               ''
-                                                          ? (txtShipNoController
-                                                                  ?.text ??
-                                                              '')
+                                                          ? _model
+                                                              .txtShipNoController
+                                                              .text
                                                           : orderDetailsEditOrdersRecord
                                                               .shippingNo,
                                                     );
@@ -1414,6 +1429,7 @@ class _OrderDetailsEditWidgetState extends State<OrderDetailsEditWidget> {
                                                                 .primaryColor,
                                                       ),
                                                     );
+                                                    context.pop();
                                                   },
                                                   text: 'Update  Order',
                                                   options: FFButtonOptions(

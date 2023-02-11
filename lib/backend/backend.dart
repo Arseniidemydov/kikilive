@@ -30,6 +30,8 @@ import 'schema/channels_record.dart';
 import 'schema/country_code_record.dart';
 import 'schema/user_skills_record.dart';
 import 'schema/streaming_comments_record.dart';
+import 'schema/channel_join_payment_record.dart';
+import 'schema/deposit_record.dart';
 import 'schema/serializers.dart';
 
 export 'dart:async' show StreamSubscription;
@@ -62,6 +64,8 @@ export 'schema/channels_record.dart';
 export 'schema/country_code_record.dart';
 export 'schema/user_skills_record.dart';
 export 'schema/streaming_comments_record.dart';
+export 'schema/channel_join_payment_record.dart';
+export 'schema/deposit_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Future<int> queryUsersRecordCount({
@@ -1381,6 +1385,111 @@ Future<FFFirestorePage<StreamingCommentsRecord>>
           pageSize: pageSize,
           isStream: isStream,
         );
+
+/// Functions to query ChannelJoinPaymentRecords (as a Stream and as a Future).
+Future<int> queryChannelJoinPaymentRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      ChannelJoinPaymentRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<ChannelJoinPaymentRecord>> queryChannelJoinPaymentRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      ChannelJoinPaymentRecord.collection,
+      ChannelJoinPaymentRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<ChannelJoinPaymentRecord>> queryChannelJoinPaymentRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      ChannelJoinPaymentRecord.collection,
+      ChannelJoinPaymentRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<ChannelJoinPaymentRecord>>
+    queryChannelJoinPaymentRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+        queryCollectionPage(
+          ChannelJoinPaymentRecord.collection,
+          ChannelJoinPaymentRecord.serializer,
+          queryBuilder: queryBuilder,
+          nextPageMarker: nextPageMarker,
+          pageSize: pageSize,
+          isStream: isStream,
+        );
+
+/// Functions to query DepositRecords (as a Stream and as a Future).
+Future<int> queryDepositRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      DepositRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<DepositRecord>> queryDepositRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      DepositRecord.collection,
+      DepositRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<DepositRecord>> queryDepositRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      DepositRecord.collection,
+      DepositRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<DepositRecord>> queryDepositRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+    queryCollectionPage(
+      DepositRecord.collection,
+      DepositRecord.serializer,
+      queryBuilder: queryBuilder,
+      nextPageMarker: nextPageMarker,
+      pageSize: pageSize,
+      isStream: isStream,
+    );
 
 Future<int> queryCollectionCount(
   Query collection, {

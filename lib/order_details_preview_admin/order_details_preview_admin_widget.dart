@@ -6,6 +6,8 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'order_details_preview_admin_model.dart';
+export 'order_details_preview_admin_model.dart';
 
 class OrderDetailsPreviewAdminWidget extends StatefulWidget {
   const OrderDetailsPreviewAdminWidget({
@@ -22,11 +24,21 @@ class OrderDetailsPreviewAdminWidget extends StatefulWidget {
 
 class _OrderDetailsPreviewAdminWidgetState
     extends State<OrderDetailsPreviewAdminWidget> {
-  final _unfocusNode = FocusNode();
+  late OrderDetailsPreviewAdminModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => OrderDetailsPreviewAdminModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }

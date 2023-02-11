@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'channel_rejection_model.dart';
+export 'channel_rejection_model.dart';
 
 class ChannelRejectionWidget extends StatefulWidget {
   const ChannelRejectionWidget({
@@ -21,17 +23,26 @@ class ChannelRejectionWidget extends StatefulWidget {
 }
 
 class _ChannelRejectionWidgetState extends State<ChannelRejectionWidget> {
-  TextEditingController? txtReasonController;
+  late ChannelRejectionModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
 
   @override
   void initState() {
     super.initState();
-    txtReasonController = TextEditingController();
+    _model = createModel(context, () => ChannelRejectionModel());
+
+    _model.txtReasonController = TextEditingController();
   }
 
   @override
   void dispose() {
-    txtReasonController?.dispose();
+    _model.dispose();
+
     super.dispose();
   }
 
@@ -110,7 +121,7 @@ class _ChannelRejectionWidgetState extends State<ChannelRejectionWidget> {
                       child: Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
                         child: TextFormField(
-                          controller: txtReasonController,
+                          controller: _model.txtReasonController,
                           autofocus: true,
                           obscureText: false,
                           decoration: InputDecoration(
@@ -158,6 +169,8 @@ class _ChannelRejectionWidgetState extends State<ChannelRejectionWidget> {
                             ),
                           ),
                           style: FlutterFlowTheme.of(context).bodyText1,
+                          validator: _model.txtReasonControllerValidator
+                              .asValidator(context),
                         ),
                       ),
                     ),
@@ -174,7 +187,7 @@ class _ChannelRejectionWidgetState extends State<ChannelRejectionWidget> {
                   FFButtonWidget(
                     onPressed: () async {
                       final channelsUpdateData = createChannelsRecordData(
-                        messageReason: txtReasonController!.text,
+                        messageReason: _model.txtReasonController.text,
                       );
                       await widget.channelRef!.update(channelsUpdateData);
                     },

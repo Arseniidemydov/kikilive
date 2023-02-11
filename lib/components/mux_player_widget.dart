@@ -13,6 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'mux_player_model.dart';
+export 'mux_player_model.dart';
 
 class MuxPlayerWidget extends StatefulWidget {
   const MuxPlayerWidget({Key? key}) : super(key: key);
@@ -22,6 +24,8 @@ class MuxPlayerWidget extends StatefulWidget {
 }
 
 class _MuxPlayerWidgetState extends State<MuxPlayerWidget> {
+  late MuxPlayerModel _model;
+
   String? muxBroadcastPlaybackUrl;
   bool muxBroadcastIsLive = false;
   LiveStreamController? muxBroadcastController;
@@ -40,8 +44,16 @@ class _MuxPlayerWidgetState extends State<MuxPlayerWidget> {
   Timer? _timer;
 
   @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => MuxPlayerModel());
+
     if (Platform.isAndroid || Platform.isIOS) {
       _isSupportedPlatform = true;
       _initCamera();
@@ -50,6 +62,8 @@ class _MuxPlayerWidgetState extends State<MuxPlayerWidget> {
 
   @override
   void dispose() {
+    _model.dispose();
+
     _stopwatch.stop();
     _timer?.cancel();
     Wakelock.disable();

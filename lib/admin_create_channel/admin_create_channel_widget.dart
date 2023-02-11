@@ -12,6 +12,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'admin_create_channel_model.dart';
+export 'admin_create_channel_model.dart';
 
 class AdminCreateChannelWidget extends StatefulWidget {
   const AdminCreateChannelWidget({Key? key}) : super(key: key);
@@ -22,34 +24,26 @@ class AdminCreateChannelWidget extends StatefulWidget {
 }
 
 class _AdminCreateChannelWidgetState extends State<AdminCreateChannelWidget> {
-  bool isMediaUploading1 = false;
-  FFLocalFile uploadedLocalFile1 = FFLocalFile(bytes: Uint8List.fromList([]));
+  late AdminCreateChannelModel _model;
 
-  bool isMediaUploading2 = false;
-  String uploadedFileUrl2 = '';
-
-  TextEditingController? txtChannelNameController;
-  TextEditingController? txtChannelDescController;
-  String? ddChannelTypeValue;
-  TextEditingController? txtChannelFeeController;
-  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    txtChannelDescController = TextEditingController();
-    txtChannelNameController = TextEditingController();
-    txtChannelFeeController = TextEditingController();
+    _model = createModel(context, () => AdminCreateChannelModel());
+
+    _model.txtChannelNameController = TextEditingController();
+    _model.txtChannelDescController = TextEditingController();
+    _model.txtChannelFeeController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    txtChannelDescController?.dispose();
-    txtChannelNameController?.dispose();
-    txtChannelFeeController?.dispose();
     super.dispose();
   }
 
@@ -106,7 +100,7 @@ class _AdminCreateChannelWidgetState extends State<AdminCreateChannelWidget> {
               color: FlutterFlowTheme.of(context).primaryBackground,
             ),
             child: Form(
-              key: formKey,
+              key: _model.formKey,
               autovalidateMode: AutovalidateMode.disabled,
               child: Column(
                 mainAxisSize: MainAxisSize.max,
@@ -161,7 +155,7 @@ class _AdminCreateChannelWidgetState extends State<AdminCreateChannelWidget> {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(8),
                                         child: CachedNetworkImage(
-                                          imageUrl: uploadedFileUrl2,
+                                          imageUrl: _model.uploadedFileUrl2,
                                           width:
                                               MediaQuery.of(context).size.width,
                                           height: MediaQuery.of(context)
@@ -195,30 +189,41 @@ class _AdminCreateChannelWidgetState extends State<AdminCreateChannelWidget> {
                                                     validateFileFormat(
                                                         m.storagePath,
                                                         context))) {
-                                              setState(() =>
-                                                  isMediaUploading1 = true);
-                                              var selectedLocalFiles =
-                                                  <FFLocalFile>[];
+                                              setState(() => _model
+                                                  .isMediaUploading1 = true);
+                                              var selectedUploadedFiles =
+                                                  <FFUploadedFile>[];
+
                                               try {
-                                                selectedLocalFiles =
+                                                selectedUploadedFiles =
                                                     selectedMedia
-                                                        .map((m) => FFLocalFile(
+                                                        .map((m) =>
+                                                            FFUploadedFile(
                                                               name: m
                                                                   .storagePath
                                                                   .split('/')
                                                                   .last,
                                                               bytes: m.bytes,
+                                                              height: m
+                                                                  .dimensions
+                                                                  ?.height,
+                                                              width: m
+                                                                  .dimensions
+                                                                  ?.width,
                                                             ))
                                                         .toList();
                                               } finally {
-                                                isMediaUploading1 = false;
+                                                _model.isMediaUploading1 =
+                                                    false;
                                               }
-                                              if (selectedLocalFiles.length ==
+                                              if (selectedUploadedFiles
+                                                      .length ==
                                                   selectedMedia.length) {
-                                                setState(() =>
-                                                    uploadedLocalFile1 =
-                                                        selectedLocalFiles
-                                                            .first);
+                                                setState(() {
+                                                  _model.uploadedLocalFile1 =
+                                                      selectedUploadedFiles
+                                                          .first;
+                                                });
                                               } else {
                                                 setState(() {});
                                                 return;
@@ -265,9 +270,11 @@ class _AdminCreateChannelWidgetState extends State<AdminCreateChannelWidget> {
                                                               validateFileFormat(
                                                                   m.storagePath,
                                                                   context))) {
-                                                        setState(() =>
-                                                            isMediaUploading2 =
-                                                                true);
+                                                        setState(() => _model
+                                                                .isMediaUploading2 =
+                                                            true);
+                                                        var selectedUploadedFiles =
+                                                            <FFUploadedFile>[];
                                                         var downloadUrls =
                                                             <String>[];
                                                         try {
@@ -276,6 +283,25 @@ class _AdminCreateChannelWidgetState extends State<AdminCreateChannelWidget> {
                                                             'Uploading file...',
                                                             showLoading: true,
                                                           );
+                                                          selectedUploadedFiles =
+                                                              selectedMedia
+                                                                  .map((m) =>
+                                                                      FFUploadedFile(
+                                                                        name: m
+                                                                            .storagePath
+                                                                            .split('/')
+                                                                            .last,
+                                                                        bytes: m
+                                                                            .bytes,
+                                                                        height: m
+                                                                            .dimensions
+                                                                            ?.height,
+                                                                        width: m
+                                                                            .dimensions
+                                                                            ?.width,
+                                                                      ))
+                                                                  .toList();
+
                                                           downloadUrls =
                                                               (await Future
                                                                       .wait(
@@ -295,17 +321,25 @@ class _AdminCreateChannelWidgetState extends State<AdminCreateChannelWidget> {
                                                           ScaffoldMessenger.of(
                                                                   context)
                                                               .hideCurrentSnackBar();
-                                                          isMediaUploading2 =
+                                                          _model.isMediaUploading2 =
                                                               false;
                                                         }
-                                                        if (downloadUrls
-                                                                .length ==
-                                                            selectedMedia
-                                                                .length) {
-                                                          setState(() =>
-                                                              uploadedFileUrl2 =
-                                                                  downloadUrls
-                                                                      .first);
+                                                        if (selectedUploadedFiles
+                                                                    .length ==
+                                                                selectedMedia
+                                                                    .length &&
+                                                            downloadUrls
+                                                                    .length ==
+                                                                selectedMedia
+                                                                    .length) {
+                                                          setState(() {
+                                                            _model.uploadedLocalFile2 =
+                                                                selectedUploadedFiles
+                                                                    .first;
+                                                            _model.uploadedFileUrl2 =
+                                                                downloadUrls
+                                                                    .first;
+                                                          });
                                                           showUploadMessage(
                                                               context,
                                                               'Success!');
@@ -384,7 +418,7 @@ class _AdminCreateChannelWidgetState extends State<AdminCreateChannelWidget> {
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(10, 0, 10, 0),
                               child: TextFormField(
-                                controller: txtChannelNameController,
+                                controller: _model.txtChannelNameController,
                                 autofocus: true,
                                 obscureText: false,
                                 decoration: InputDecoration(
@@ -433,17 +467,9 @@ class _AdminCreateChannelWidgetState extends State<AdminCreateChannelWidget> {
                                   ),
                                 ),
                                 style: FlutterFlowTheme.of(context).bodyText1,
-                                validator: (val) {
-                                  if (val == null || val.isEmpty) {
-                                    return 'Field is required';
-                                  }
-
-                                  if (val.length < 3) {
-                                    return 'Requires at least 3 characters.';
-                                  }
-
-                                  return null;
-                                },
+                                validator: _model
+                                    .txtChannelNameControllerValidator
+                                    .asValidator(context),
                               ),
                             ),
                           ),
@@ -477,7 +503,7 @@ class _AdminCreateChannelWidgetState extends State<AdminCreateChannelWidget> {
                                   .secondaryBackground,
                             ),
                             child: TextFormField(
-                              controller: txtChannelDescController,
+                              controller: _model.txtChannelDescController,
                               obscureText: false,
                               decoration: InputDecoration(
                                 hintText: 'Product price in THB',
@@ -525,20 +551,9 @@ class _AdminCreateChannelWidgetState extends State<AdminCreateChannelWidget> {
                               style: FlutterFlowTheme.of(context).bodyText1,
                               maxLines: 4,
                               keyboardType: TextInputType.number,
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return 'Field is required';
-                                }
-
-                                if (val.length < 20) {
-                                  return 'Requires at least 20 characters.';
-                                }
-                                if (val.length > 250) {
-                                  return 'Maximum 250 characters allowed, currently ${val.length}.';
-                                }
-
-                                return null;
-                              },
+                              validator: _model
+                                  .txtChannelDescControllerValidator
+                                  .asValidator(context),
                             ),
                           ),
                         ),
@@ -583,8 +598,8 @@ class _AdminCreateChannelWidgetState extends State<AdminCreateChannelWidget> {
                                   EdgeInsetsDirectional.fromSTEB(3, 3, 3, 3),
                               child: FlutterFlowDropDown<String>(
                                 options: ['Free', 'Paid'],
-                                onChanged: (val) =>
-                                    setState(() => ddChannelTypeValue = val),
+                                onChanged: (val) => setState(
+                                    () => _model.ddChannelTypeValue = val),
                                 width: 180,
                                 height: 50,
                                 textStyle: FlutterFlowTheme.of(context)
@@ -647,7 +662,7 @@ class _AdminCreateChannelWidgetState extends State<AdminCreateChannelWidget> {
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                               child: TextFormField(
-                                controller: txtChannelFeeController,
+                                controller: _model.txtChannelFeeController,
                                 autofocus: true,
                                 obscureText: false,
                                 decoration: InputDecoration(
@@ -699,22 +714,9 @@ class _AdminCreateChannelWidgetState extends State<AdminCreateChannelWidget> {
                                 keyboardType:
                                     const TextInputType.numberWithOptions(
                                         signed: true, decimal: true),
-                                validator: (val) {
-                                  if (val == null || val.isEmpty) {
-                                    return 'Field is required';
-                                  }
-
-                                  if (val.length < 1) {
-                                    return 'Requires at least 1 characters.';
-                                  }
-                                  if (val.length > 3) {
-                                    return 'Maximum 3 characters allowed, currently ${val.length}.';
-                                  }
-                                  if (!RegExp('').hasMatch(val)) {
-                                    return 'Invalid text';
-                                  }
-                                  return null;
-                                },
+                                validator: _model
+                                    .txtChannelFeeControllerValidator
+                                    .asValidator(context),
                               ),
                             ),
                           ),
@@ -740,16 +742,19 @@ class _AdminCreateChannelWidgetState extends State<AdminCreateChannelWidget> {
                             onPressed: () async {
                               final channelsCreateData =
                                   createChannelsRecordData(
-                                channelName: txtChannelNameController!.text,
-                                channelDesc: txtChannelDescController!.text,
-                                channelType: ddChannelTypeValue,
+                                channelName:
+                                    _model.txtChannelNameController.text,
+                                channelDesc:
+                                    _model.txtChannelDescController.text,
+                                channelType: _model.ddChannelTypeValue,
                                 channelOwner: currentUserReference,
                                 channelPrice: double.tryParse(
-                                    txtChannelFeeController!.text),
-                                channelVideoUrl: isMediaUploading2.toString(),
+                                    _model.txtChannelFeeController.text),
+                                channelVideoUrl:
+                                    _model.isMediaUploading2.toString(),
                                 channelCreatedOn: getCurrentTimestamp,
                                 channelStatus: true,
-                                channelImage: uploadedFileUrl2,
+                                channelImage: _model.uploadedFileUrl2,
                               );
                               await ChannelsRecord.collection
                                   .doc()

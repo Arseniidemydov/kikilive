@@ -13,6 +13,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'add_product_model.dart';
+export 'add_product_model.dart';
 
 class AddProductWidget extends StatefulWidget {
   const AddProductWidget({Key? key}) : super(key: key);
@@ -22,35 +24,27 @@ class AddProductWidget extends StatefulWidget {
 }
 
 class _AddProductWidgetState extends State<AddProductWidget> {
-  bool isMediaUploading = false;
-  String uploadedFileUrl = '';
+  late AddProductModel _model;
 
-  String? ddCategoryValue;
-  String? ddSubCategoryValue;
-  TextEditingController? txtProductNameController;
-  TextEditingController? txtProductPriceController;
-  TextEditingController? txtInventoryController;
-  TextEditingController? txtProDescController;
-  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    txtInventoryController = TextEditingController();
-    txtProductNameController = TextEditingController();
-    txtProductPriceController = TextEditingController();
-    txtProDescController = TextEditingController();
+    _model = createModel(context, () => AddProductModel());
+
+    _model.txtProductNameController = TextEditingController();
+    _model.txtProductPriceController = TextEditingController();
+    _model.txtInventoryController = TextEditingController();
+    _model.txtProDescController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    txtInventoryController?.dispose();
-    txtProductNameController?.dispose();
-    txtProductPriceController?.dispose();
-    txtProDescController?.dispose();
     super.dispose();
   }
 
@@ -135,7 +129,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                   color: FlutterFlowTheme.of(context).primaryBackground,
                 ),
                 child: Form(
-                  key: formKey,
+                  key: _model.formKey,
                   autovalidateMode: AutovalidateMode.disabled,
                   child: Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
@@ -196,7 +190,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                                               child: CachedNetworkImage(
                                                 imageUrl:
                                                     valueOrDefault<String>(
-                                                  uploadedFileUrl,
+                                                  _model.uploadedFileUrl,
                                                   'https://i.seadn.io/gae/OGpebYaykwlc8Tbk-oGxtxuv8HysLYKqw-FurtYql2UBd_q_-ENAwDY82PkbNB68aTkCINn6tOhpA8pF5SAewC2auZ_44Q77PcOo870?auto=format&w=1920',
                                                 ),
                                                 width: MediaQuery.of(context)
@@ -225,10 +219,32 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                                                         validateFileFormat(
                                                             m.storagePath,
                                                             context))) {
-                                                  setState(() =>
-                                                      isMediaUploading = true);
+                                                  setState(() => _model
+                                                      .isMediaUploading = true);
+                                                  var selectedUploadedFiles =
+                                                      <FFUploadedFile>[];
                                                   var downloadUrls = <String>[];
                                                   try {
+                                                    selectedUploadedFiles =
+                                                        selectedMedia
+                                                            .map((m) =>
+                                                                FFUploadedFile(
+                                                                  name: m
+                                                                      .storagePath
+                                                                      .split(
+                                                                          '/')
+                                                                      .last,
+                                                                  bytes:
+                                                                      m.bytes,
+                                                                  height: m
+                                                                      .dimensions
+                                                                      ?.height,
+                                                                  width: m
+                                                                      .dimensions
+                                                                      ?.width,
+                                                                ))
+                                                            .toList();
+
                                                     downloadUrls = (await Future
                                                             .wait(
                                                       selectedMedia.map(
@@ -242,13 +258,23 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                                                         .map((u) => u!)
                                                         .toList();
                                                   } finally {
-                                                    isMediaUploading = false;
+                                                    _model.isMediaUploading =
+                                                        false;
                                                   }
-                                                  if (downloadUrls.length ==
-                                                      selectedMedia.length) {
-                                                    setState(() =>
-                                                        uploadedFileUrl =
-                                                            downloadUrls.first);
+                                                  if (selectedUploadedFiles
+                                                              .length ==
+                                                          selectedMedia
+                                                              .length &&
+                                                      downloadUrls.length ==
+                                                          selectedMedia
+                                                              .length) {
+                                                    setState(() {
+                                                      _model.uploadedLocalFile =
+                                                          selectedUploadedFiles
+                                                              .first;
+                                                      _model.uploadedFileUrl =
+                                                          downloadUrls.first;
+                                                    });
                                                   } else {
                                                     setState(() {});
                                                     return;
@@ -360,8 +386,8 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                                       .withoutNulls
                                       .toList()
                                       .toList(),
-                                  onChanged: (val) =>
-                                      setState(() => ddCategoryValue = val),
+                                  onChanged: (val) => setState(
+                                      () => _model.ddCategoryValue = val),
                                   width: MediaQuery.of(context).size.width,
                                   height: 50,
                                   textStyle: FlutterFlowTheme.of(context)
@@ -416,8 +442,8 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                                       .withoutNulls
                                       .toList()
                                       .toList(),
-                                  onChanged: (val) =>
-                                      setState(() => ddSubCategoryValue = val),
+                                  onChanged: (val) => setState(
+                                      () => _model.ddSubCategoryValue = val),
                                   width: MediaQuery.of(context).size.width,
                                   height: 50,
                                   textStyle: FlutterFlowTheme.of(context)
@@ -450,7 +476,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                             child: TextFormField(
-                              controller: txtProductNameController,
+                              controller: _model.txtProductNameController,
                               autofocus: true,
                               obscureText: false,
                               decoration: InputDecoration(
@@ -492,27 +518,16 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                                 ),
                               ),
                               style: FlutterFlowTheme.of(context).bodyText1,
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return 'Field is required';
-                                }
-
-                                if (val.length < 3) {
-                                  return 'Requires at least 3 characters.';
-                                }
-                                if (val.length > 60) {
-                                  return 'Maximum 60 characters allowed, currently ${val.length}.';
-                                }
-
-                                return null;
-                              },
+                              validator: _model
+                                  .txtProductNameControllerValidator
+                                  .asValidator(context),
                             ),
                           ),
                           Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                             child: TextFormField(
-                              controller: txtProductPriceController,
+                              controller: _model.txtProductPriceController,
                               autofocus: true,
                               obscureText: false,
                               decoration: InputDecoration(
@@ -560,24 +575,16 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                               ),
                               style: FlutterFlowTheme.of(context).bodyText1,
                               keyboardType: TextInputType.number,
-                              validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return 'Field is required';
-                                }
-
-                                if (val.length < 1) {
-                                  return 'Requires at least 1 characters.';
-                                }
-
-                                return null;
-                              },
+                              validator: _model
+                                  .txtProductPriceControllerValidator
+                                  .asValidator(context),
                             ),
                           ),
                           Padding(
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(0, 0, 0, 10),
                             child: TextFormField(
-                              controller: txtInventoryController,
+                              controller: _model.txtInventoryController,
                               autofocus: true,
                               obscureText: false,
                               decoration: InputDecoration(
@@ -620,10 +627,12 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                               ),
                               style: FlutterFlowTheme.of(context).bodyText1,
                               keyboardType: TextInputType.number,
+                              validator: _model.txtInventoryControllerValidator
+                                  .asValidator(context),
                             ),
                           ),
                           TextFormField(
-                            controller: txtProDescController,
+                            controller: _model.txtProDescController,
                             autofocus: true,
                             obscureText: false,
                             decoration: InputDecoration(
@@ -675,20 +684,8 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                                   color: FlutterFlowTheme.of(context).grayIcon,
                                 ),
                             maxLines: 10,
-                            validator: (val) {
-                              if (val == null || val.isEmpty) {
-                                return 'Field is required';
-                              }
-
-                              if (val.length < 5) {
-                                return 'Requires at least 5 characters.';
-                              }
-                              if (val.length > 50) {
-                                return 'Maximum 50 characters allowed, currently ${val.length}.';
-                              }
-
-                              return null;
-                            },
+                            validator: _model.txtProDescControllerValidator
+                                .asValidator(context),
                           ),
                           Padding(
                             padding:
@@ -700,60 +697,83 @@ class _AddProductWidgetState extends State<AddProductWidget> {
                                 Expanded(
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      if (formKey.currentState == null ||
-                                          !formKey.currentState!.validate()) {
-                                        return;
-                                      }
+                                      if (_model.uploadedFileUrl != null &&
+                                          _model.uploadedFileUrl != '') {
+                                        if (_model.formKey.currentState ==
+                                                null ||
+                                            !_model.formKey.currentState!
+                                                .validate()) {
+                                          return;
+                                        }
+                                        if (_model.ddCategoryValue == null) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'Required field',
+                                                style: TextStyle(),
+                                              ),
+                                              duration:
+                                                  Duration(milliseconds: 3000),
+                                              backgroundColor:
+                                                  Color(0x00000000),
+                                            ),
+                                          );
+                                          return;
+                                        }
 
-                                      if (ddCategoryValue == null) {
+                                        final productsCreateData =
+                                            createProductsRecordData(
+                                          productName: _model
+                                              .txtProductNameController.text,
+                                          productPrice: double.tryParse(_model
+                                              .txtProductPriceController.text),
+                                          productDesc:
+                                              _model.txtProDescController.text,
+                                          productPhoto: _model.uploadedFileUrl,
+                                          createdAt: getCurrentTimestamp,
+                                          shopName: currentUserDisplayName,
+                                          sku: addProductGenerateSKURecord!.sku
+                                              .toString(),
+                                          status: 'active',
+                                          shopRef: currentUserReference,
+                                          category: _model.ddCategoryValue,
+                                          subCat: _model.ddSubCategoryValue,
+                                          userRef: currentUserReference,
+                                          inventory: int.tryParse(_model
+                                              .txtInventoryController.text),
+                                        );
+                                        await ProductsRecord.collection
+                                            .doc()
+                                            .set(productsCreateData);
+
+                                        final generateSKUUpdateData =
+                                            createGenerateSKURecordData(
+                                          sku: functions.updateSKU(
+                                              addProductGenerateSKURecord!.sku),
+                                        );
+                                        await addProductGenerateSKURecord!
+                                            .reference
+                                            .update(generateSKUUpdateData);
+                                        context.pop();
+                                      } else {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
                                             content: Text(
-                                              'Required field',
-                                              style: TextStyle(),
+                                              'Image Required!',
+                                              style: TextStyle(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                              ),
                                             ),
                                             duration:
-                                                Duration(milliseconds: 3000),
+                                                Duration(milliseconds: 4000),
                                             backgroundColor: Color(0x00000000),
                                           ),
                                         );
-                                        return;
                                       }
-
-                                      final productsCreateData =
-                                          createProductsRecordData(
-                                        productName:
-                                            txtProductNameController!.text,
-                                        productPrice: double.tryParse(
-                                            txtProductPriceController!.text),
-                                        productDesc: txtProDescController!.text,
-                                        productPhoto: uploadedFileUrl,
-                                        createdAt: getCurrentTimestamp,
-                                        shopName: currentUserDisplayName,
-                                        sku: addProductGenerateSKURecord!.sku
-                                            .toString(),
-                                        status: 'active',
-                                        shopRef: currentUserReference,
-                                        category: ddCategoryValue,
-                                        subCat: ddSubCategoryValue,
-                                        userRef: currentUserReference,
-                                        inventory: int.tryParse(
-                                            txtInventoryController!.text),
-                                      );
-                                      await ProductsRecord.collection
-                                          .doc()
-                                          .set(productsCreateData);
-
-                                      final generateSKUUpdateData =
-                                          createGenerateSKURecordData(
-                                        sku: functions.updateSKU(
-                                            addProductGenerateSKURecord!.sku),
-                                      );
-                                      await addProductGenerateSKURecord!
-                                          .reference
-                                          .update(generateSKUUpdateData);
-                                      context.pop();
                                     },
                                     text: 'Save',
                                     options: FFButtonOptions(

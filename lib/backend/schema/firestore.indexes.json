@@ -1,34 +1,6 @@
 {
   "indexes": [
     {
-      "collectionGroup": "orders",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "OrderListRef",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "order_date",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "newSellerRequest",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "created_at",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
       "collectionGroup": "products",
       "queryScope": "COLLECTION",
       "fields": [
@@ -159,24 +131,6 @@
       ]
     },
     {
-      "collectionGroup": "orders",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "shop_ref",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "order_number",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "order_date",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
       "collectionGroup": "shippingStatus",
       "queryScope": "COLLECTION",
       "fields": [
@@ -227,15 +181,43 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "order_number",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "order_status",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "sub_order",
+          "fieldPath": "product_price",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "deposit",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "userRef",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "order_date",
+          "fieldPath": "depositDate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "orderList",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "isPaid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "order_no",
           "order": "DESCENDING"
         }
       ]
@@ -268,6 +250,20 @@
         },
         {
           "fieldPath": "channel_members",
+          "arrayConfig": "CONTAINS"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "chats",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "ChannelRef",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "users",
           "arrayConfig": "CONTAINS"
         }
       ]

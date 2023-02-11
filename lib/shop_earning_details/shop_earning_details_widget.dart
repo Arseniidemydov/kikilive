@@ -7,6 +7,8 @@ import '../flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'shop_earning_details_model.dart';
+export 'shop_earning_details_model.dart';
 
 class ShopEarningDetailsWidget extends StatefulWidget {
   const ShopEarningDetailsWidget({
@@ -22,11 +24,21 @@ class ShopEarningDetailsWidget extends StatefulWidget {
 }
 
 class _ShopEarningDetailsWidgetState extends State<ShopEarningDetailsWidget> {
-  final _unfocusNode = FocusNode();
+  late ShopEarningDetailsModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => ShopEarningDetailsModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }

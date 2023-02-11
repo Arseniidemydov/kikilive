@@ -7,6 +7,8 @@ import '../flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'shop_earnings_model.dart';
+export 'shop_earnings_model.dart';
 
 class ShopEarningsWidget extends StatefulWidget {
   const ShopEarningsWidget({Key? key}) : super(key: key);
@@ -16,11 +18,21 @@ class ShopEarningsWidget extends StatefulWidget {
 }
 
 class _ShopEarningsWidgetState extends State<ShopEarningsWidget> {
-  final _unfocusNode = FocusNode();
+  late ShopEarningsModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => ShopEarningsModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -190,10 +202,15 @@ class _ShopEarningsWidgetState extends State<ShopEarningsWidget> {
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
-                                        Text(
-                                          '0',
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
+                                        AuthUserStreamWidget(
+                                          builder: (context) => Text(
+                                            valueOrDefault(
+                                                    currentUserDocument?.payout,
+                                                    0.0)
+                                                .toString(),
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyText1,
+                                          ),
                                         ),
                                         Text(
                                           ' THB',
@@ -217,17 +234,22 @@ class _ShopEarningsWidgetState extends State<ShopEarningsWidget> {
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
-                                        Text(
-                                          formatNumber(
-                                            functions.sumEarnings(
-                                                shopEarningsOrdersRecordList
-                                                    .toList(),
-                                                -1),
-                                            formatType: FormatType.decimal,
-                                            decimalType: DecimalType.automatic,
+                                        AuthUserStreamWidget(
+                                          builder: (context) => Text(
+                                            functions
+                                                .calculateNetProfit(
+                                                    functions.sumEarnings(
+                                                        shopEarningsOrdersRecordList
+                                                            .toList(),
+                                                        -1)!,
+                                                    valueOrDefault(
+                                                        currentUserDocument
+                                                            ?.payout,
+                                                        0.0))
+                                                .toString(),
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyText1,
                                           ),
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyText1,
                                         ),
                                         Text(
                                           ' THB',
@@ -533,24 +555,44 @@ class _ShopEarningsWidgetState extends State<ShopEarningsWidget> {
                                           color: FlutterFlowTheme.of(context)
                                               .primaryBackground,
                                         ),
-                                        child: Builder(
-                                          builder: (context) {
-                                            final depositDates = functions
-                                                .getEarningDate(
-                                                    containerOrderListRecordList
-                                                        .map((e) => e.orderDate)
-                                                        .withoutNulls
-                                                        .toList())
-                                                .toList();
+                                        child:
+                                            StreamBuilder<List<DepositRecord>>(
+                                          stream: queryDepositRecord(
+                                            queryBuilder: (depositRecord) =>
+                                                depositRecord.where('userRef',
+                                                    isEqualTo:
+                                                        currentUserReference),
+                                          ),
+                                          builder: (context, snapshot) {
+                                            // Customize what your widget looks like when it's loading.
+                                            if (!snapshot.hasData) {
+                                              return Center(
+                                                child: SizedBox(
+                                                  width: 50,
+                                                  height: 50,
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryColor,
+                                                  ),
+                                                ),
+                                              );
+                                            }
+                                            List<DepositRecord>
+                                                listViewDepositRecordList =
+                                                snapshot.data!;
                                             return ListView.builder(
                                               padding: EdgeInsets.zero,
                                               scrollDirection: Axis.vertical,
-                                              itemCount: depositDates.length,
+                                              itemCount:
+                                                  listViewDepositRecordList
+                                                      .length,
                                               itemBuilder:
-                                                  (context, depositDatesIndex) {
-                                                final depositDatesItem =
-                                                    depositDates[
-                                                        depositDatesIndex];
+                                                  (context, listViewIndex) {
+                                                final listViewDepositRecord =
+                                                    listViewDepositRecordList[
+                                                        listViewIndex];
                                                 return Padding(
                                                   padding: EdgeInsetsDirectional
                                                       .fromSTEB(0, 0, 0, 10),
@@ -658,9 +700,10 @@ class _ShopEarningsWidgetState extends State<ShopEarningsWidget> {
                                                                                         ),
                                                                                   ),
                                                                                   Text(
-                                                                                    valueOrDefault<String>(
-                                                                                      depositDatesItem,
-                                                                                      'DateTime.now()',
+                                                                                    dateTimeFormat(
+                                                                                      'yMMMd',
+                                                                                      listViewDepositRecord.depositDate!,
+                                                                                      locale: FFLocalizations.of(context).languageCode,
                                                                                     ),
                                                                                     style: FlutterFlowTheme.of(context).bodyText1,
                                                                                   ),
@@ -682,9 +725,11 @@ class _ShopEarningsWidgetState extends State<ShopEarningsWidget> {
                                                                                         ),
                                                                                   ),
                                                                                   Text(
-                                                                                    valueOrDefault<String>(
-                                                                                      functions.calcDeposit(getCurrentTimestamp, containerOrdersRecordList.map((e) => e.deposit).withoutNulls.toList(), containerOrdersRecordList.map((e) => e.depostDate).withoutNulls.toList()).toString(),
-                                                                                      '0',
+                                                                                    formatNumber(
+                                                                                      listViewDepositRecord.depositAmout!,
+                                                                                      formatType: FormatType.decimal,
+                                                                                      decimalType: DecimalType.automatic,
+                                                                                      currency: 'THB ',
                                                                                     ),
                                                                                     style: FlutterFlowTheme.of(context).bodyText1,
                                                                                   ),

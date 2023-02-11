@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'products_model.dart';
+export 'products_model.dart';
 
 class ProductsWidget extends StatefulWidget {
   const ProductsWidget({Key? key}) : super(key: key);
@@ -18,13 +20,16 @@ class ProductsWidget extends StatefulWidget {
 }
 
 class _ProductsWidgetState extends State<ProductsWidget> {
-  OrderListRecord? orderListOutPut;
-  final _unfocusNode = FocusNode();
+  late ProductsModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => ProductsModel());
+
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       FFAppState().update(() {
@@ -35,6 +40,8 @@ class _ProductsWidgetState extends State<ProductsWidget> {
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -633,7 +640,7 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                                                                                                                     };
                                                                                                                     await iconAddProductOrderListRecord!.reference.update(orderListUpdateData);
 
-                                                                                                                    final ordersCreateData = createOrdersRecordData(
+                                                                                                                    final ordersCreateData1 = createOrdersRecordData(
                                                                                                                       orderDate: getCurrentTimestamp,
                                                                                                                       shopRef: gridViewProductsRecord.shopRef,
                                                                                                                       productName: gridViewProductsRecord.productName,
@@ -645,7 +652,7 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                                                                                                                       orderListRef: iconAddProductOrderListRecord!.reference,
                                                                                                                       productRef: gridViewProductsRecord.reference,
                                                                                                                     );
-                                                                                                                    await OrdersRecord.collection.doc().set(ordersCreateData);
+                                                                                                                    await OrdersRecord.collection.doc().set(ordersCreateData1);
                                                                                                                   } else {
                                                                                                                     final orderListCreateData = {
                                                                                                                       ...createOrderListRecordData(
@@ -661,22 +668,42 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                                                                                                                     };
                                                                                                                     var orderListRecordReference = OrderListRecord.collection.doc();
                                                                                                                     await orderListRecordReference.set(orderListCreateData);
-                                                                                                                    orderListOutPut = OrderListRecord.getDocumentFromData(orderListCreateData, orderListRecordReference);
+                                                                                                                    _model.orderListOutPut = OrderListRecord.getDocumentFromData(orderListCreateData, orderListRecordReference);
 
-                                                                                                                    final ordersCreateData = createOrdersRecordData(
+                                                                                                                    final ordersCreateData2 = createOrdersRecordData(
                                                                                                                       orderDate: getCurrentTimestamp,
                                                                                                                       shopRef: gridViewProductsRecord.shopRef,
                                                                                                                       productName: gridViewProductsRecord.productName,
                                                                                                                       productPrice: gridViewProductsRecord.productPrice,
                                                                                                                       orderStatus: 'Processing',
                                                                                                                       userRef: currentUserReference,
-                                                                                                                      orderNumber: orderListOutPut!.orderNo,
+                                                                                                                      orderNumber: _model.orderListOutPut!.orderNo,
                                                                                                                       productImage: gridViewProductsRecord.productPhoto,
-                                                                                                                      orderListRef: orderListOutPut!.reference,
+                                                                                                                      orderListRef: _model.orderListOutPut!.reference,
                                                                                                                       productRef: gridViewProductsRecord.reference,
                                                                                                                     );
-                                                                                                                    await OrdersRecord.collection.doc().set(ordersCreateData);
+                                                                                                                    await OrdersRecord.collection.doc().set(ordersCreateData2);
                                                                                                                   }
+
+                                                                                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                                                                                    SnackBar(
+                                                                                                                      content: Text(
+                                                                                                                        'Product added to car',
+                                                                                                                        style: TextStyle(
+                                                                                                                          color: FlutterFlowTheme.of(context).primaryText,
+                                                                                                                        ),
+                                                                                                                      ),
+                                                                                                                      duration: Duration(milliseconds: 4000),
+                                                                                                                      backgroundColor: Color(0x00000000),
+                                                                                                                      action: SnackBarAction(
+                                                                                                                        label: 'Cart',
+                                                                                                                        textColor: Color(0x00000000),
+                                                                                                                        onPressed: () async {
+                                                                                                                          context.pushNamed('shoppingCart');
+                                                                                                                        },
+                                                                                                                      ),
+                                                                                                                    ),
+                                                                                                                  );
 
                                                                                                                   setState(() {});
                                                                                                                 },

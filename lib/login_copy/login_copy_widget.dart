@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'login_copy_model.dart';
+export 'login_copy_model.dart';
 
 class LoginCopyWidget extends StatefulWidget {
   const LoginCopyWidget({Key? key}) : super(key: key);
@@ -17,38 +19,28 @@ class LoginCopyWidget extends StatefulWidget {
 }
 
 class _LoginCopyWidgetState extends State<LoginCopyWidget> {
-  TextEditingController? emailAddressController;
-  TextEditingController? passwordController;
-  late bool passwordVisibility;
-  TextEditingController? emailAddressCreateController;
-  TextEditingController? passwordCreateController;
-  late bool passwordCreateVisibility;
-  TextEditingController? passwordCreate2Controller;
-  late bool passwordCreate2Visibility;
-  final _unfocusNode = FocusNode();
+  late LoginCopyModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    emailAddressController = TextEditingController();
-    passwordController = TextEditingController();
-    passwordVisibility = false;
-    emailAddressCreateController = TextEditingController();
-    passwordCreateController = TextEditingController();
-    passwordCreateVisibility = false;
-    passwordCreate2Controller = TextEditingController();
-    passwordCreate2Visibility = false;
+    _model = createModel(context, () => LoginCopyModel());
+
+    _model.emailAddressController = TextEditingController();
+    _model.passwordController = TextEditingController();
+    _model.emailAddressCreateController = TextEditingController();
+    _model.passwordCreateController = TextEditingController();
+    _model.passwordCreate2Controller = TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    emailAddressController?.dispose();
-    passwordController?.dispose();
-    emailAddressCreateController?.dispose();
-    passwordCreateController?.dispose();
-    passwordCreate2Controller?.dispose();
     super.dispose();
   }
 
@@ -102,7 +94,7 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         20, 20, 20, 0),
                                     child: TextFormField(
-                                      controller: emailAddressController,
+                                      controller: _model.emailAddressController,
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         labelText: 'Email Address',
@@ -155,14 +147,17 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                             fontFamily: 'Roboto',
                                             color: Color(0xFF0F1113),
                                           ),
+                                      validator: _model
+                                          .emailAddressControllerValidator
+                                          .asValidator(context),
                                     ),
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         20, 12, 20, 0),
                                     child: TextFormField(
-                                      controller: passwordController,
-                                      obscureText: !passwordVisibility,
+                                      controller: _model.passwordController,
+                                      obscureText: !_model.passwordVisibility,
                                       decoration: InputDecoration(
                                         labelText: 'Password',
                                         labelStyle: FlutterFlowTheme.of(context)
@@ -209,13 +204,13 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                                 20, 24, 20, 24),
                                         suffixIcon: InkWell(
                                           onTap: () => setState(
-                                            () => passwordVisibility =
-                                                !passwordVisibility,
+                                            () => _model.passwordVisibility =
+                                                !_model.passwordVisibility,
                                           ),
                                           focusNode:
                                               FocusNode(skipTraversal: true),
                                           child: Icon(
-                                            passwordVisibility
+                                            _model.passwordVisibility
                                                 ? Icons.visibility_outlined
                                                 : Icons.visibility_off_outlined,
                                             color: FlutterFlowTheme.of(context)
@@ -230,6 +225,9 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                             fontFamily: 'Roboto',
                                             color: Color(0xFF0F1113),
                                           ),
+                                      validator: _model
+                                          .passwordControllerValidator
+                                          .asValidator(context),
                                     ),
                                   ),
                                   Padding(
@@ -241,8 +239,8 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
 
                                         final user = await signInWithEmail(
                                           context,
-                                          emailAddressController!.text,
-                                          passwordController!.text,
+                                          _model.emailAddressController.text,
+                                          _model.passwordController.text,
                                         );
                                         if (user == null) {
                                           return;
@@ -435,7 +433,8 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         20, 20, 20, 0),
                                     child: TextFormField(
-                                      controller: emailAddressCreateController,
+                                      controller:
+                                          _model.emailAddressCreateController,
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         labelText: 'Email Address',
@@ -489,14 +488,19 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                             color: Color(0xFF0F1113),
                                           ),
                                       keyboardType: TextInputType.emailAddress,
+                                      validator: _model
+                                          .emailAddressCreateControllerValidator
+                                          .asValidator(context),
                                     ),
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         20, 12, 20, 0),
                                     child: TextFormField(
-                                      controller: passwordCreateController,
-                                      obscureText: !passwordCreateVisibility,
+                                      controller:
+                                          _model.passwordCreateController,
+                                      obscureText:
+                                          !_model.passwordCreateVisibility,
                                       decoration: InputDecoration(
                                         labelText: 'Password',
                                         labelStyle: FlutterFlowTheme.of(context)
@@ -543,13 +547,15 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                                 20, 24, 20, 24),
                                         suffixIcon: InkWell(
                                           onTap: () => setState(
-                                            () => passwordCreateVisibility =
-                                                !passwordCreateVisibility,
+                                            () => _model
+                                                    .passwordCreateVisibility =
+                                                !_model
+                                                    .passwordCreateVisibility,
                                           ),
                                           focusNode:
                                               FocusNode(skipTraversal: true),
                                           child: Icon(
-                                            passwordCreateVisibility
+                                            _model.passwordCreateVisibility
                                                 ? Icons.visibility_outlined
                                                 : Icons.visibility_off_outlined,
                                             color: FlutterFlowTheme.of(context)
@@ -564,14 +570,19 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                             fontFamily: 'Roboto',
                                             color: Color(0xFF0F1113),
                                           ),
+                                      validator: _model
+                                          .passwordCreateControllerValidator
+                                          .asValidator(context),
                                     ),
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         20, 12, 20, 0),
                                     child: TextFormField(
-                                      controller: passwordCreate2Controller,
-                                      obscureText: !passwordCreate2Visibility,
+                                      controller:
+                                          _model.passwordCreate2Controller,
+                                      obscureText:
+                                          !_model.passwordCreate2Visibility,
                                       decoration: InputDecoration(
                                         labelText: 'Password',
                                         labelStyle: FlutterFlowTheme.of(context)
@@ -618,13 +629,15 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                                 20, 24, 20, 24),
                                         suffixIcon: InkWell(
                                           onTap: () => setState(
-                                            () => passwordCreate2Visibility =
-                                                !passwordCreate2Visibility,
+                                            () => _model
+                                                    .passwordCreate2Visibility =
+                                                !_model
+                                                    .passwordCreate2Visibility,
                                           ),
                                           focusNode:
                                               FocusNode(skipTraversal: true),
                                           child: Icon(
-                                            passwordCreate2Visibility
+                                            _model.passwordCreate2Visibility
                                                 ? Icons.visibility_outlined
                                                 : Icons.visibility_off_outlined,
                                             color: FlutterFlowTheme.of(context)
@@ -639,6 +652,9 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                             fontFamily: 'Roboto',
                                             color: Color(0xFF0F1113),
                                           ),
+                                      validator: _model
+                                          .passwordCreate2ControllerValidator
+                                          .asValidator(context),
                                     ),
                                   ),
                                   Padding(
@@ -647,8 +663,10 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                     child: FFButtonWidget(
                                       onPressed: () async {
                                         GoRouter.of(context).prepareAuthEvent();
-                                        if (passwordCreateController?.text !=
-                                            passwordCreate2Controller?.text) {
+                                        if (_model.passwordCreateController
+                                                .text !=
+                                            _model.passwordCreate2Controller
+                                                .text) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             SnackBar(
@@ -663,8 +681,9 @@ class _LoginCopyWidgetState extends State<LoginCopyWidget> {
                                         final user =
                                             await createAccountWithEmail(
                                           context,
-                                          emailAddressCreateController!.text,
-                                          passwordCreateController!.text,
+                                          _model.emailAddressCreateController
+                                              .text,
+                                          _model.passwordCreateController.text,
                                         );
                                         if (user == null) {
                                           return;

@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'chat_page_model.dart';
+export 'chat_page_model.dart';
 
 class ChatPageWidget extends StatefulWidget {
   const ChatPageWidget({
@@ -23,6 +25,9 @@ class ChatPageWidget extends StatefulWidget {
 }
 
 class _ChatPageWidgetState extends State<ChatPageWidget> {
+  late ChatPageModel _model;
+
+  final scaffoldKey = GlobalKey<ScaffoldState>();
   FFChatInfo? _chatInfo;
   bool isGroupChat() {
     if (widget.chatUser == null) {
@@ -34,11 +39,11 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
     return _chatInfo?.isGroupChat ?? false;
   }
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => ChatPageModel());
+
     FFChatManager.instance
         .getChatInfo(
       otherUserRecord: widget.chatUser,
@@ -49,6 +54,13 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
         setState(() => _chatInfo = info);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -125,9 +137,9 @@ class _ChatPageWidgetState extends State<ChatPageWidget> {
                           InkWell(
                             onTap: () async {
                               context.pushNamed(
-                                'inviteUsers',
+                                'AddUser',
                                 queryParams: {
-                                  'chatRef': serializeParam(
+                                  'chat': serializeParam(
                                     widget.chatRef,
                                     ParamType.DocumentReference,
                                   ),

@@ -10,6 +10,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'verify_channel_model.dart';
+export 'verify_channel_model.dart';
 
 class VerifyChannelWidget extends StatefulWidget {
   const VerifyChannelWidget({
@@ -24,25 +26,24 @@ class VerifyChannelWidget extends StatefulWidget {
 }
 
 class _VerifyChannelWidgetState extends State<VerifyChannelWidget> {
-  TextEditingController? txtChannelDescController;
-  TextEditingController? txtChannelNameController;
-  TextEditingController? txtChannelFeeController;
-  final _unfocusNode = FocusNode();
+  late VerifyChannelModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    txtChannelFeeController = TextEditingController();
+    _model = createModel(context, () => VerifyChannelModel());
+
+    _model.txtChannelFeeController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    txtChannelDescController?.dispose();
-    txtChannelNameController?.dispose();
-    txtChannelFeeController?.dispose();
     super.dispose();
   }
 
@@ -116,7 +117,7 @@ class _VerifyChannelWidgetState extends State<VerifyChannelWidget> {
                   color: FlutterFlowTheme.of(context).primaryBackground,
                 ),
                 child: Form(
-                  key: formKey,
+                  key: _model.formKey,
                   autovalidateMode: AutovalidateMode.disabled,
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
@@ -237,8 +238,9 @@ class _VerifyChannelWidgetState extends State<VerifyChannelWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       10, 0, 10, 0),
                                   child: TextFormField(
-                                    controller: txtChannelNameController ??=
-                                        TextEditingController(
+                                    controller:
+                                        _model.txtChannelNameController ??=
+                                            TextEditingController(
                                       text: verifyChannelChannelsRecord
                                           .channelName,
                                     ),
@@ -292,6 +294,9 @@ class _VerifyChannelWidgetState extends State<VerifyChannelWidget> {
                                     ),
                                     style:
                                         FlutterFlowTheme.of(context).bodyText1,
+                                    validator: _model
+                                        .txtChannelNameControllerValidator
+                                        .asValidator(context),
                                   ),
                                 ),
                               ),
@@ -326,8 +331,9 @@ class _VerifyChannelWidgetState extends State<VerifyChannelWidget> {
                                       .secondaryBackground,
                                 ),
                                 child: TextFormField(
-                                  controller: txtChannelDescController ??=
-                                      TextEditingController(
+                                  controller:
+                                      _model.txtChannelDescController ??=
+                                          TextEditingController(
                                     text:
                                         verifyChannelChannelsRecord.channelDesc,
                                   ),
@@ -378,6 +384,9 @@ class _VerifyChannelWidgetState extends State<VerifyChannelWidget> {
                                   ),
                                   style: FlutterFlowTheme.of(context).bodyText1,
                                   maxLines: 4,
+                                  validator: _model
+                                      .txtChannelDescControllerValidator
+                                      .asValidator(context),
                                 ),
                               ),
                             ),
@@ -470,7 +479,7 @@ class _VerifyChannelWidgetState extends State<VerifyChannelWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       10, 0, 0, 0),
                                   child: TextFormField(
-                                    controller: txtChannelFeeController,
+                                    controller: _model.txtChannelFeeController,
                                     autofocus: true,
                                     readOnly: true,
                                     obscureText: false,
@@ -527,6 +536,9 @@ class _VerifyChannelWidgetState extends State<VerifyChannelWidget> {
                                     keyboardType:
                                         const TextInputType.numberWithOptions(
                                             signed: true, decimal: true),
+                                    validator: _model
+                                        .txtChannelFeeControllerValidator
+                                        .asValidator(context),
                                   ),
                                 ),
                               ),

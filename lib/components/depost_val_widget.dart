@@ -3,6 +3,8 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'depost_val_model.dart';
+export 'depost_val_model.dart';
 
 class DepostValWidget extends StatefulWidget {
   const DepostValWidget({Key? key}) : super(key: key);
@@ -12,17 +14,26 @@ class DepostValWidget extends StatefulWidget {
 }
 
 class _DepostValWidgetState extends State<DepostValWidget> {
-  TextEditingController? txtDepositController;
+  late DepostValModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
 
   @override
   void initState() {
     super.initState();
-    txtDepositController = TextEditingController();
+    _model = createModel(context, () => DepostValModel());
+
+    _model.txtDepositController = TextEditingController();
   }
 
   @override
   void dispose() {
-    txtDepositController?.dispose();
+    _model.dispose();
+
     super.dispose();
   }
 
@@ -31,7 +42,7 @@ class _DepostValWidgetState extends State<DepostValWidget> {
     context.watch<FFAppState>();
 
     return TextFormField(
-      controller: txtDepositController,
+      controller: _model.txtDepositController,
       autofocus: true,
       obscureText: false,
       decoration: InputDecoration(
@@ -84,6 +95,7 @@ class _DepostValWidgetState extends State<DepostValWidget> {
             fontWeight: FontWeight.w500,
           ),
       textAlign: TextAlign.center,
+      validator: _model.txtDepositControllerValidator.asValidator(context),
     );
   }
 }

@@ -6,6 +6,8 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'verify_o_t_p_model.dart';
+export 'verify_o_t_p_model.dart';
 
 class VerifyOTPWidget extends StatefulWidget {
   const VerifyOTPWidget({Key? key}) : super(key: key);
@@ -15,20 +17,22 @@ class VerifyOTPWidget extends StatefulWidget {
 }
 
 class _VerifyOTPWidgetState extends State<VerifyOTPWidget> {
-  TextEditingController? pinCodeController;
-  final _unfocusNode = FocusNode();
+  late VerifyOTPModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    pinCodeController = TextEditingController();
+    _model = createModel(context, () => VerifyOTPModel());
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    pinCodeController?.dispose();
     super.dispose();
   }
 
@@ -104,7 +108,7 @@ class _VerifyOTPWidgetState extends State<VerifyOTPWidget> {
                         selectedFillColor:
                             FlutterFlowTheme.of(context).secondaryText,
                       ),
-                      controller: pinCodeController,
+                      controller: _model.pinCodeController,
                       onChanged: (_) => {},
                     ),
                   ),
@@ -147,7 +151,7 @@ class _VerifyOTPWidgetState extends State<VerifyOTPWidget> {
               child: FFButtonWidget(
                 onPressed: () async {
                   GoRouter.of(context).prepareAuthEvent();
-                  final smsCodeVal = pinCodeController!.text;
+                  final smsCodeVal = _model.pinCodeController!.text;
                   if (smsCodeVal == null || smsCodeVal.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

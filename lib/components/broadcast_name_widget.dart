@@ -6,6 +6,8 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'broadcast_name_model.dart';
+export 'broadcast_name_model.dart';
 
 class BroadcastNameWidget extends StatefulWidget {
   const BroadcastNameWidget({Key? key}) : super(key: key);
@@ -15,21 +17,26 @@ class BroadcastNameWidget extends StatefulWidget {
 }
 
 class _BroadcastNameWidgetState extends State<BroadcastNameWidget> {
-  Map<ChannelsRecord, bool> checkboxValueMap = {};
-  List<ChannelsRecord> get checkboxCheckedItems =>
-      checkboxValueMap.entries.where((e) => e.value).map((e) => e.key).toList();
+  late BroadcastNameModel _model;
 
-  TextEditingController? txtEmailController;
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
 
   @override
   void initState() {
     super.initState();
-    txtEmailController = TextEditingController();
+    _model = createModel(context, () => BroadcastNameModel());
+
+    _model.txtEmailController = TextEditingController();
   }
 
   @override
   void dispose() {
-    txtEmailController?.dispose();
+    _model.dispose();
+
     super.dispose();
   }
 
@@ -83,7 +90,7 @@ class _BroadcastNameWidgetState extends State<BroadcastNameWidget> {
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(5, 0, 10, 0),
                             child: TextFormField(
-                              controller: txtEmailController,
+                              controller: _model.txtEmailController,
                               autofocus: true,
                               obscureText: false,
                               decoration: InputDecoration(
@@ -136,6 +143,8 @@ class _BroadcastNameWidgetState extends State<BroadcastNameWidget> {
                                     EdgeInsetsDirectional.fromSTEB(10, 0, 0, 0),
                               ),
                               style: FlutterFlowTheme.of(context).bodyText1,
+                              validator: _model.txtEmailControllerValidator
+                                  .asValidator(context),
                             ),
                           ),
                         ),
@@ -246,11 +255,12 @@ class _BroadcastNameWidgetState extends State<BroadcastNameWidget> {
                                                   Color(0xFFF5F5F5),
                                             ),
                                             child: Checkbox(
-                                              value: checkboxValueMap[
+                                              value: _model.checkboxValueMap[
                                                       columnChannelsRecord] ??=
                                                   true,
                                               onChanged: (newValue) async {
-                                                setState(() => checkboxValueMap[
+                                                setState(() => _model
+                                                            .checkboxValueMap[
                                                         columnChannelsRecord] =
                                                     newValue!);
                                               },
@@ -283,11 +293,13 @@ class _BroadcastNameWidgetState extends State<BroadcastNameWidget> {
                   'liveBroadcast',
                   queryParams: {
                     'videoName': serializeParam(
-                      txtEmailController!.text,
+                      _model.txtEmailController.text,
                       ParamType.String,
                     ),
                     'channelRef': serializeParam(
-                      checkboxCheckedItems.map((e) => e.reference).toList(),
+                      _model.checkboxCheckedItems
+                          .map((e) => e.reference)
+                          .toList(),
                       ParamType.DocumentReference,
                       true,
                     ),

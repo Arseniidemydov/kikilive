@@ -6,6 +6,8 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'order_mgmt_admin_list_model.dart';
+export 'order_mgmt_admin_list_model.dart';
 
 class OrderMgmtAdminListWidget extends StatefulWidget {
   const OrderMgmtAdminListWidget({Key? key}) : super(key: key);
@@ -16,11 +18,21 @@ class OrderMgmtAdminListWidget extends StatefulWidget {
 }
 
 class _OrderMgmtAdminListWidgetState extends State<OrderMgmtAdminListWidget> {
-  final _unfocusNode = FocusNode();
+  late OrderMgmtAdminListModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => OrderMgmtAdminListModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }

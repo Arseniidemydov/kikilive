@@ -5,6 +5,8 @@ import '../flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'seller_approval_list_model.dart';
+export 'seller_approval_list_model.dart';
 
 class SellerApprovalListWidget extends StatefulWidget {
   const SellerApprovalListWidget({Key? key}) : super(key: key);
@@ -15,11 +17,21 @@ class SellerApprovalListWidget extends StatefulWidget {
 }
 
 class _SellerApprovalListWidgetState extends State<SellerApprovalListWidget> {
-  final _unfocusNode = FocusNode();
+  late SellerApprovalListModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => SellerApprovalListModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -85,9 +97,8 @@ class _SellerApprovalListWidgetState extends State<SellerApprovalListWidget> {
                   child: StreamBuilder<List<NewSellerRequestRecord>>(
                     stream: queryNewSellerRequestRecord(
                       queryBuilder: (newSellerRequestRecord) =>
-                          newSellerRequestRecord
-                              .where('status', isEqualTo: 'Pending')
-                              .orderBy('created_at', descending: true),
+                          newSellerRequestRecord.orderBy('created_at',
+                              descending: true),
                     ),
                     builder: (context, snapshot) {
                       // Customize what your widget looks like when it's loading.
@@ -196,6 +207,20 @@ class _SellerApprovalListWidgetState extends State<SellerApprovalListWidget> {
                                               ),
                                             ],
                                           ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0, 0, 5, 0),
+                                        child: Text(
+                                          listViewNewSellerRequestRecord
+                                              .status!,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyText1
+                                              .override(
+                                                fontFamily: 'Roboto',
+                                                fontSize: 12,
+                                              ),
                                         ),
                                       ),
                                       Icon(

@@ -10,6 +10,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'account_settings_model.dart';
+export 'account_settings_model.dart';
 
 class AccountSettingsWidget extends StatefulWidget {
   const AccountSettingsWidget({Key? key}) : super(key: key);
@@ -19,31 +21,25 @@ class AccountSettingsWidget extends StatefulWidget {
 }
 
 class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
-  bool isMediaUploading1 = false;
-  String uploadedFileUrl1 = '';
+  late AccountSettingsModel _model;
 
-  bool isMediaUploading2 = false;
-  String uploadedFileUrl2 = '';
-
-  TextEditingController? txtBioController;
-  TextEditingController? txtDisplyController;
-  TextEditingController? txtemailController;
-  TextEditingController? txtPhoneController;
-  final _unfocusNode = FocusNode();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    txtBioController = TextEditingController(
+    _model = createModel(context, () => AccountSettingsModel());
+
+    _model.txtDisplyController =
+        TextEditingController(text: currentUserDisplayName);
+    _model.txtemailController = TextEditingController(text: currentUserEmail);
+    _model.txtBioController = TextEditingController(
         text: valueOrDefault<String>(
       valueOrDefault(currentUserDocument?.userBio, ''),
       'add Bio',
     ));
-    txtDisplyController = TextEditingController(text: currentUserDisplayName);
-    txtemailController = TextEditingController(text: currentUserEmail);
-    txtPhoneController = TextEditingController(
+    _model.txtPhoneController = TextEditingController(
         text: valueOrDefault<String>(
       currentPhoneNumber,
       '987654321',
@@ -52,11 +48,9 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    txtBioController?.dispose();
-    txtDisplyController?.dispose();
-    txtemailController?.dispose();
-    txtPhoneController?.dispose();
     super.dispose();
   }
 
@@ -155,7 +149,7 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                     alignment: AlignmentDirectional(0, 0),
                                     child: Image.network(
                                       valueOrDefault<String>(
-                                        uploadedFileUrl1,
+                                        _model.uploadedFileUrl1,
                                         'https://cdn.neemo.com.br/uploads/settings_webdelivery/logo/1630/no-image.png',
                                       ),
                                       width: MediaQuery.of(context).size.width,
@@ -176,8 +170,10 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                             selectedMedia.every((m) =>
                                                 validateFileFormat(
                                                     m.storagePath, context))) {
-                                          setState(
-                                              () => isMediaUploading1 = true);
+                                          setState(() =>
+                                              _model.isMediaUploading1 = true);
+                                          var selectedUploadedFiles =
+                                              <FFUploadedFile>[];
                                           var downloadUrls = <String>[];
                                           try {
                                             showUploadMessage(
@@ -185,6 +181,20 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                               'Uploading file...',
                                               showLoading: true,
                                             );
+                                            selectedUploadedFiles =
+                                                selectedMedia
+                                                    .map((m) => FFUploadedFile(
+                                                          name: m.storagePath
+                                                              .split('/')
+                                                              .last,
+                                                          bytes: m.bytes,
+                                                          height: m.dimensions
+                                                              ?.height,
+                                                          width: m.dimensions
+                                                              ?.width,
+                                                        ))
+                                                    .toList();
+
                                             downloadUrls = (await Future.wait(
                                               selectedMedia.map(
                                                 (m) async => await uploadData(
@@ -197,12 +207,18 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                           } finally {
                                             ScaffoldMessenger.of(context)
                                                 .hideCurrentSnackBar();
-                                            isMediaUploading1 = false;
+                                            _model.isMediaUploading1 = false;
                                           }
-                                          if (downloadUrls.length ==
-                                              selectedMedia.length) {
-                                            setState(() => uploadedFileUrl1 =
-                                                downloadUrls.first);
+                                          if (selectedUploadedFiles.length ==
+                                                  selectedMedia.length &&
+                                              downloadUrls.length ==
+                                                  selectedMedia.length) {
+                                            setState(() {
+                                              _model.uploadedLocalFile1 =
+                                                  selectedUploadedFiles.first;
+                                              _model.uploadedFileUrl1 =
+                                                  downloadUrls.first;
+                                            });
                                             showUploadMessage(
                                                 context, 'Success!');
                                           } else {
@@ -244,7 +260,7 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                       borderRadius: BorderRadius.circular(50),
                                       child: Image.network(
                                         valueOrDefault<String>(
-                                          uploadedFileUrl2,
+                                          _model.uploadedFileUrl2,
                                           'https://firebasestorage.googleapis.com/v0/b/bryan-155ca.appspot.com/o/cms_uploads%2Fdefaul_img%2F1668581808033000%2Fprofile_img.png?alt=media&token=cb53cc8a-bc33-4863-a03f-83837b527c99',
                                         ),
                                         width: 100,
@@ -266,8 +282,10 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                             selectedMedia.every((m) =>
                                                 validateFileFormat(
                                                     m.storagePath, context))) {
-                                          setState(
-                                              () => isMediaUploading2 = true);
+                                          setState(() =>
+                                              _model.isMediaUploading2 = true);
+                                          var selectedUploadedFiles =
+                                              <FFUploadedFile>[];
                                           var downloadUrls = <String>[];
                                           try {
                                             showUploadMessage(
@@ -275,6 +293,20 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                               'Uploading file...',
                                               showLoading: true,
                                             );
+                                            selectedUploadedFiles =
+                                                selectedMedia
+                                                    .map((m) => FFUploadedFile(
+                                                          name: m.storagePath
+                                                              .split('/')
+                                                              .last,
+                                                          bytes: m.bytes,
+                                                          height: m.dimensions
+                                                              ?.height,
+                                                          width: m.dimensions
+                                                              ?.width,
+                                                        ))
+                                                    .toList();
+
                                             downloadUrls = (await Future.wait(
                                               selectedMedia.map(
                                                 (m) async => await uploadData(
@@ -287,12 +319,18 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                           } finally {
                                             ScaffoldMessenger.of(context)
                                                 .hideCurrentSnackBar();
-                                            isMediaUploading2 = false;
+                                            _model.isMediaUploading2 = false;
                                           }
-                                          if (downloadUrls.length ==
-                                              selectedMedia.length) {
-                                            setState(() => uploadedFileUrl2 =
-                                                downloadUrls.first);
+                                          if (selectedUploadedFiles.length ==
+                                                  selectedMedia.length &&
+                                              downloadUrls.length ==
+                                                  selectedMedia.length) {
+                                            setState(() {
+                                              _model.uploadedLocalFile2 =
+                                                  selectedUploadedFiles.first;
+                                              _model.uploadedFileUrl2 =
+                                                  downloadUrls.first;
+                                            });
                                             showUploadMessage(
                                                 context, 'Success!');
                                           } else {
@@ -324,7 +362,7 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                           color: FlutterFlowTheme.of(context).primaryBackground,
                         ),
                         child: Form(
-                          key: formKey,
+                          key: _model.formKey,
                           autovalidateMode: AutovalidateMode.disabled,
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
@@ -370,7 +408,8 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                                   10, 0, 0, 0),
                                           child: AuthUserStreamWidget(
                                             builder: (context) => TextFormField(
-                                              controller: txtDisplyController,
+                                              controller:
+                                                  _model.txtDisplyController,
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -438,6 +477,9 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText1,
+                                              validator: _model
+                                                  .txtDisplyControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
                                         ),
@@ -486,7 +528,8 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                               EdgeInsetsDirectional.fromSTEB(
                                                   10, 0, 0, 0),
                                           child: TextFormField(
-                                            controller: txtemailController,
+                                            controller:
+                                                _model.txtemailController,
                                             autofocus: true,
                                             obscureText: false,
                                             decoration: InputDecoration(
@@ -549,6 +592,9 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyText1,
                                             keyboardType: TextInputType.phone,
+                                            validator: _model
+                                                .txtemailControllerValidator
+                                                .asValidator(context),
                                           ),
                                         ),
                                       ),
@@ -597,7 +643,8 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                                   10, 0, 0, 0),
                                           child: AuthUserStreamWidget(
                                             builder: (context) => TextFormField(
-                                              controller: txtBioController,
+                                              controller:
+                                                  _model.txtBioController,
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -665,6 +712,9 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText1,
+                                              validator: _model
+                                                  .txtBioControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
                                         ),
@@ -714,7 +764,8 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                                   10, 0, 0, 0),
                                           child: AuthUserStreamWidget(
                                             builder: (context) => TextFormField(
-                                              controller: txtPhoneController,
+                                              controller:
+                                                  _model.txtPhoneController,
                                               autofocus: true,
                                               obscureText: false,
                                               decoration: InputDecoration(
@@ -784,6 +835,9 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText1,
                                               keyboardType: TextInputType.phone,
+                                              validator: _model
+                                                  .txtPhoneControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
                                         ),
@@ -812,61 +866,69 @@ class _AccountSettingsWidgetState extends State<AccountSettingsWidget> {
                               ),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  if (formKey.currentState == null ||
-                                      !formKey.currentState!.validate()) {
+                                  if (_model.formKey.currentState == null ||
+                                      !_model.formKey.currentState!
+                                          .validate()) {
                                     return;
                                   }
-
-                                  if (uploadedFileUrl2 != null &&
-                                      uploadedFileUrl2 != '') {
-                                    if (uploadedFileUrl1 != null &&
-                                        uploadedFileUrl1 != '') {
-                                      final usersUpdateData =
+                                  if (_model.uploadedFileUrl2 != null &&
+                                      _model.uploadedFileUrl2 != '') {
+                                    if (_model.uploadedFileUrl1 != null &&
+                                        _model.uploadedFileUrl1 != '') {
+                                      final usersUpdateData1 =
                                           createUsersRecordData(
-                                        email: txtemailController!.text,
-                                        displayName: txtDisplyController!.text,
-                                        userBio: txtBioController!.text,
-                                        phoneNumber: txtPhoneController!.text,
-                                        coverPhoto: uploadedFileUrl1,
-                                        photoUrl: uploadedFileUrl2,
+                                        email: _model.txtemailController.text,
+                                        displayName:
+                                            _model.txtDisplyController.text,
+                                        userBio: _model.txtBioController.text,
+                                        phoneNumber:
+                                            _model.txtPhoneController.text,
+                                        coverPhoto: _model.uploadedFileUrl1,
+                                        photoUrl: _model.uploadedFileUrl2,
                                       );
                                       await currentUserReference!
-                                          .update(usersUpdateData);
+                                          .update(usersUpdateData1);
                                     } else {
-                                      final usersUpdateData =
+                                      final usersUpdateData2 =
                                           createUsersRecordData(
-                                        email: txtemailController!.text,
-                                        displayName: txtDisplyController!.text,
-                                        userBio: txtBioController!.text,
-                                        phoneNumber: txtPhoneController!.text,
-                                        photoUrl: uploadedFileUrl2,
+                                        email: _model.txtemailController.text,
+                                        displayName:
+                                            _model.txtDisplyController.text,
+                                        userBio: _model.txtBioController.text,
+                                        phoneNumber:
+                                            _model.txtPhoneController.text,
+                                        photoUrl: _model.uploadedFileUrl2,
                                       );
                                       await currentUserReference!
-                                          .update(usersUpdateData);
+                                          .update(usersUpdateData2);
                                     }
                                   } else {
-                                    if (uploadedFileUrl1 != null &&
-                                        uploadedFileUrl1 != '') {
-                                      final usersUpdateData =
+                                    if (_model.uploadedFileUrl1 != null &&
+                                        _model.uploadedFileUrl1 != '') {
+                                      final usersUpdateData3 =
                                           createUsersRecordData(
-                                        email: txtemailController!.text,
-                                        displayName: txtDisplyController!.text,
-                                        userBio: txtBioController!.text,
-                                        phoneNumber: txtPhoneController!.text,
-                                        coverPhoto: uploadedFileUrl1,
+                                        email: _model.txtemailController.text,
+                                        displayName:
+                                            _model.txtDisplyController.text,
+                                        userBio: _model.txtBioController.text,
+                                        phoneNumber:
+                                            _model.txtPhoneController.text,
+                                        coverPhoto: _model.uploadedFileUrl1,
                                       );
                                       await currentUserReference!
-                                          .update(usersUpdateData);
+                                          .update(usersUpdateData3);
                                     } else {
-                                      final usersUpdateData =
+                                      final usersUpdateData4 =
                                           createUsersRecordData(
-                                        email: txtemailController!.text,
-                                        displayName: txtDisplyController!.text,
-                                        userBio: txtBioController!.text,
-                                        phoneNumber: txtPhoneController!.text,
+                                        email: _model.txtemailController.text,
+                                        displayName:
+                                            _model.txtDisplyController.text,
+                                        userBio: _model.txtBioController.text,
+                                        phoneNumber:
+                                            _model.txtPhoneController.text,
                                       );
                                       await currentUserReference!
-                                          .update(usersUpdateData);
+                                          .update(usersUpdateData4);
                                     }
                                   }
 

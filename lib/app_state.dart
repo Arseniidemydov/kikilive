@@ -264,6 +264,11 @@ class FFAppState extends ChangeNotifier {
     prefs.setStringList('ff_cartAddress', _cartAddress);
   }
 
+  void removeAtIndexFromCartAddress(int _index) {
+    _cartAddress.removeAt(_index);
+    prefs.setStringList('ff_cartAddress', _cartAddress);
+  }
+
   bool _isCartAddress = false;
   bool get isCartAddress => _isCartAddress;
   set isCartAddress(bool _value) {
@@ -301,6 +306,12 @@ class FFAppState extends ChangeNotifier {
 
   void removeFromListEarnings(DateTime _value) {
     _listEarnings.remove(_value);
+    prefs.setStringList('ff_listEarnings',
+        _listEarnings.map((x) => x.millisecondsSinceEpoch.toString()).toList());
+  }
+
+  void removeAtIndexFromListEarnings(int _index) {
+    _listEarnings.removeAt(_index);
     prefs.setStringList('ff_listEarnings',
         _listEarnings.map((x) => x.millisecondsSinceEpoch.toString()).toList());
   }
@@ -374,6 +385,10 @@ class FFAppState extends ChangeNotifier {
     _ChatUser.remove(_value);
   }
 
+  void removeAtIndexFromChatUser(int _index) {
+    _ChatUser.removeAt(_index);
+  }
+
   List<DocumentReference> _ProductListCart = [];
   List<DocumentReference> get ProductListCart => _ProductListCart;
   set ProductListCart(List<DocumentReference> _value) {
@@ -386,6 +401,10 @@ class FFAppState extends ChangeNotifier {
 
   void removeFromProductListCart(DocumentReference _value) {
     _ProductListCart.remove(_value);
+  }
+
+  void removeAtIndexFromProductListCart(int _index) {
+    _ProductListCart.removeAt(_index);
   }
 }
 

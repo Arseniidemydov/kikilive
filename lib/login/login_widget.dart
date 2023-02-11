@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'login_model.dart';
+export 'login_model.dart';
 
 class LoginWidget extends StatefulWidget {
   const LoginWidget({Key? key}) : super(key: key);
@@ -15,26 +17,25 @@ class LoginWidget extends StatefulWidget {
 }
 
 class _LoginWidgetState extends State<LoginWidget> {
-  TextEditingController? txtEmailController;
-  TextEditingController? txtPasswordController;
-  late bool txtPasswordVisibility;
-  final _unfocusNode = FocusNode();
+  late LoginModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    txtEmailController = TextEditingController();
-    txtPasswordController = TextEditingController();
-    txtPasswordVisibility = false;
+    _model = createModel(context, () => LoginModel());
+
+    _model.txtEmailController = TextEditingController();
+    _model.txtPasswordController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    txtEmailController?.dispose();
-    txtPasswordController?.dispose();
     super.dispose();
   }
 
@@ -102,7 +103,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Form(
-                                key: formKey,
+                                key: _model.formKey,
                                 autovalidateMode: AutovalidateMode.disabled,
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -139,8 +140,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                               .fromSTEB(
                                                                   5, 0, 10, 0),
                                                       child: TextFormField(
-                                                        controller:
-                                                            txtEmailController,
+                                                        controller: _model
+                                                            .txtEmailController,
                                                         autofocus: true,
                                                         obscureText: false,
                                                         decoration:
@@ -238,19 +239,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                             FlutterFlowTheme.of(
                                                                     context)
                                                                 .bodyText1,
-                                                        validator: (val) {
-                                                          if (val == null ||
-                                                              val.isEmpty) {
-                                                            return 'Field is required';
-                                                          }
-
-                                                          if (!RegExp(
-                                                                  kTextValidatorEmailRegex)
-                                                              .hasMatch(val)) {
-                                                            return 'Has to be a valid email address.';
-                                                          }
-                                                          return null;
-                                                        },
+                                                        validator: _model
+                                                            .txtEmailControllerValidator
+                                                            .asValidator(
+                                                                context),
                                                       ),
                                                     ),
                                                   ),
@@ -292,10 +284,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                                 .fromSTEB(
                                                                     5, 0, 0, 0),
                                                         child: TextFormField(
-                                                          controller:
-                                                              txtPasswordController,
-                                                          obscureText:
-                                                              !txtPasswordVisibility,
+                                                          controller: _model
+                                                              .txtPasswordController,
+                                                          obscureText: !_model
+                                                              .txtPasswordVisibility,
                                                           decoration:
                                                               InputDecoration(
                                                             hintText:
@@ -392,14 +384,16 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                             suffixIcon: InkWell(
                                                               onTap: () =>
                                                                   setState(
-                                                                () => txtPasswordVisibility =
-                                                                    !txtPasswordVisibility,
+                                                                () => _model
+                                                                        .txtPasswordVisibility =
+                                                                    !_model
+                                                                        .txtPasswordVisibility,
                                                               ),
                                                               focusNode: FocusNode(
                                                                   skipTraversal:
                                                                       true),
                                                               child: Icon(
-                                                                txtPasswordVisibility
+                                                                _model.txtPasswordVisibility
                                                                     ? Icons
                                                                         .visibility_outlined
                                                                     : Icons
@@ -413,14 +407,10 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyText1,
-                                                          validator: (val) {
-                                                            if (val == null ||
-                                                                val.isEmpty) {
-                                                              return 'Field is required';
-                                                            }
-
-                                                            return null;
-                                                          },
+                                                          validator: _model
+                                                              .txtPasswordControllerValidator
+                                                              .asValidator(
+                                                                  context),
                                                         ),
                                                       ),
                                                     ),
@@ -458,17 +448,17 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       0, 0, 0, 1),
                                   child: FFButtonWidget(
                                     onPressed: () async {
-                                      if (formKey.currentState == null ||
-                                          !formKey.currentState!.validate()) {
+                                      if (_model.formKey.currentState == null ||
+                                          !_model.formKey.currentState!
+                                              .validate()) {
                                         return;
                                       }
-
                                       GoRouter.of(context).prepareAuthEvent();
 
                                       final user = await signInWithEmail(
                                         context,
-                                        txtEmailController!.text,
-                                        txtPasswordController!.text,
+                                        _model.txtEmailController.text,
+                                        _model.txtPasswordController.text,
                                       );
                                       if (user == null) {
                                         return;

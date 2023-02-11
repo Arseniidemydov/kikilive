@@ -4,6 +4,8 @@ import '../flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'cart_phone_model.dart';
+export 'cart_phone_model.dart';
 
 class CartPhoneWidget extends StatefulWidget {
   const CartPhoneWidget({Key? key}) : super(key: key);
@@ -13,17 +15,26 @@ class CartPhoneWidget extends StatefulWidget {
 }
 
 class _CartPhoneWidgetState extends State<CartPhoneWidget> {
-  TextEditingController? txtPhoneController;
+  late CartPhoneModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
 
   @override
   void initState() {
     super.initState();
-    txtPhoneController = TextEditingController();
+    _model = createModel(context, () => CartPhoneModel());
+
+    _model.txtPhoneController = TextEditingController();
   }
 
   @override
   void dispose() {
-    txtPhoneController?.dispose();
+    _model.dispose();
+
     super.dispose();
   }
 
@@ -122,7 +133,7 @@ class _CartPhoneWidgetState extends State<CartPhoneWidget> {
                               padding:
                                   EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
                               child: TextFormField(
-                                controller: txtPhoneController,
+                                controller: _model.txtPhoneController,
                                 autofocus: true,
                                 obscureText: false,
                                 decoration: InputDecoration(
@@ -146,6 +157,8 @@ class _CartPhoneWidgetState extends State<CartPhoneWidget> {
                                       fontSize: 16,
                                     ),
                                 keyboardType: TextInputType.phone,
+                                validator: _model.txtPhoneControllerValidator
+                                    .asValidator(context),
                               ),
                             ),
                           ),

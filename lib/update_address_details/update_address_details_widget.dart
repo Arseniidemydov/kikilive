@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'update_address_details_model.dart';
+export 'update_address_details_model.dart';
 
 class UpdateAddressDetailsWidget extends StatefulWidget {
   const UpdateAddressDetailsWidget({
@@ -24,27 +26,22 @@ class UpdateAddressDetailsWidget extends StatefulWidget {
 
 class _UpdateAddressDetailsWidgetState
     extends State<UpdateAddressDetailsWidget> {
-  TextEditingController? txtAddress2Controller;
-  TextEditingController? txtAddressController;
-  TextEditingController? txtAddressLabelController;
-  TextEditingController? txtShipNameController;
-  TextEditingController? txtShipPhoneController;
-  TextEditingController? txtCityController;
-  TextEditingController? txtZipController;
-  final _unfocusNode = FocusNode();
+  late UpdateAddressDetailsModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final formKey = GlobalKey<FormState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => UpdateAddressDetailsModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    txtAddress2Controller?.dispose();
-    txtAddressController?.dispose();
-    txtAddressLabelController?.dispose();
-    txtShipNameController?.dispose();
-    txtShipPhoneController?.dispose();
-    txtCityController?.dispose();
-    txtZipController?.dispose();
     super.dispose();
   }
 
@@ -129,7 +126,7 @@ class _UpdateAddressDetailsWidgetState
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Form(
-                        key: formKey,
+                        key: _model.formKey,
                         autovalidateMode: AutovalidateMode.disabled,
                         child: Column(
                           mainAxisSize: MainAxisSize.max,
@@ -157,9 +154,9 @@ class _UpdateAddressDetailsWidgetState
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     10, 10, 10, 10),
                                             child: TextFormField(
-                                              controller:
-                                                  txtShipNameController ??=
-                                                      TextEditingController(
+                                              controller: _model
+                                                      .txtShipNameController ??=
+                                                  TextEditingController(
                                                 text:
                                                     updateAddressDetailsAddressRecord
                                                         .shipUser,
@@ -214,18 +211,9 @@ class _UpdateAddressDetailsWidgetState
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText1,
-                                              validator: (val) {
-                                                if (val == null ||
-                                                    val.isEmpty) {
-                                                  return 'Field is required';
-                                                }
-
-                                                if (val.length < 3) {
-                                                  return 'Requires at least 3 characters.';
-                                                }
-
-                                                return null;
-                                              },
+                                              validator: _model
+                                                  .txtShipNameControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
                                         ),
@@ -240,9 +228,9 @@ class _UpdateAddressDetailsWidgetState
                                                 EdgeInsetsDirectional.fromSTEB(
                                                     10, 10, 10, 10),
                                             child: TextFormField(
-                                              controller:
-                                                  txtShipPhoneController ??=
-                                                      TextEditingController(
+                                              controller: _model
+                                                      .txtShipPhoneController ??=
+                                                  TextEditingController(
                                                 text:
                                                     updateAddressDetailsAddressRecord
                                                         .shipPhone
@@ -299,21 +287,9 @@ class _UpdateAddressDetailsWidgetState
                                                   FlutterFlowTheme.of(context)
                                                       .bodyText1,
                                               keyboardType: TextInputType.phone,
-                                              validator: (val) {
-                                                if (val == null ||
-                                                    val.isEmpty) {
-                                                  return 'Field is required';
-                                                }
-
-                                                if (val.length < 12) {
-                                                  return 'Requires at least 12 characters.';
-                                                }
-                                                if (val.length > 13) {
-                                                  return 'Maximum 13 characters allowed, currently ${val.length}.';
-                                                }
-
-                                                return null;
-                                              },
+                                              validator: _model
+                                                  .txtShipPhoneControllerValidator
+                                                  .asValidator(context),
                                             ),
                                           ),
                                         ),
@@ -335,7 +311,7 @@ class _UpdateAddressDetailsWidgetState
                                           0, 15, 0, 10),
                                       child: TextFormField(
                                         controller:
-                                            txtAddressLabelController ??=
+                                            _model.txtAddressLabelController ??=
                                                 TextEditingController(
                                           text:
                                               updateAddressDetailsAddressRecord
@@ -390,17 +366,9 @@ class _UpdateAddressDetailsWidgetState
                                         ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1,
-                                        validator: (val) {
-                                          if (val == null || val.isEmpty) {
-                                            return 'Field is required';
-                                          }
-
-                                          if (val.length < 3) {
-                                            return 'Requires at least 3 characters.';
-                                          }
-
-                                          return null;
-                                        },
+                                        validator: _model
+                                            .txtAddressLabelControllerValidator
+                                            .asValidator(context),
                                       ),
                                     ),
                                   ),
@@ -418,8 +386,9 @@ class _UpdateAddressDetailsWidgetState
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0, 10, 0, 10),
                                       child: TextFormField(
-                                        controller: txtAddressController ??=
-                                            TextEditingController(
+                                        controller:
+                                            _model.txtAddressController ??=
+                                                TextEditingController(
                                           text:
                                               updateAddressDetailsAddressRecord
                                                   .address,
@@ -484,17 +453,9 @@ class _UpdateAddressDetailsWidgetState
                                         ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1,
-                                        validator: (val) {
-                                          if (val == null || val.isEmpty) {
-                                            return 'Field is required';
-                                          }
-
-                                          if (val.length < 3) {
-                                            return 'Requires at least 3 characters.';
-                                          }
-
-                                          return null;
-                                        },
+                                        validator: _model
+                                            .txtAddressControllerValidator
+                                            .asValidator(context),
                                       ),
                                     ),
                                   ),
@@ -512,8 +473,9 @@ class _UpdateAddressDetailsWidgetState
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0, 10, 0, 10),
                                       child: TextFormField(
-                                        controller: txtAddress2Controller ??=
-                                            TextEditingController(
+                                        controller:
+                                            _model.txtAddress2Controller ??=
+                                                TextEditingController(
                                           text: valueOrDefault<String>(
                                             updateAddressDetailsAddressRecord
                                                 .address2,
@@ -568,6 +530,9 @@ class _UpdateAddressDetailsWidgetState
                                         ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1,
+                                        validator: _model
+                                            .txtAddress2ControllerValidator
+                                            .asValidator(context),
                                       ),
                                     ),
                                   ),
@@ -585,7 +550,7 @@ class _UpdateAddressDetailsWidgetState
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0, 10, 0, 10),
                                       child: TextFormField(
-                                        controller: txtCityController ??=
+                                        controller: _model.txtCityController ??=
                                             TextEditingController(
                                           text: valueOrDefault<String>(
                                             updateAddressDetailsAddressRecord
@@ -641,17 +606,9 @@ class _UpdateAddressDetailsWidgetState
                                         ),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1,
-                                        validator: (val) {
-                                          if (val == null || val.isEmpty) {
-                                            return 'Field is required';
-                                          }
-
-                                          if (val.length < 3) {
-                                            return 'Requires at least 3 characters.';
-                                          }
-
-                                          return null;
-                                        },
+                                        validator: _model
+                                            .txtCityControllerValidator
+                                            .asValidator(context),
                                       ),
                                     ),
                                   ),
@@ -669,7 +626,7 @@ class _UpdateAddressDetailsWidgetState
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0, 5, 10, 5),
                                       child: TextFormField(
-                                        controller: txtZipController ??=
+                                        controller: _model.txtZipController ??=
                                             TextEditingController(
                                           text: valueOrDefault<String>(
                                             updateAddressDetailsAddressRecord
@@ -727,20 +684,9 @@ class _UpdateAddressDetailsWidgetState
                                         style: FlutterFlowTheme.of(context)
                                             .bodyText1,
                                         keyboardType: TextInputType.number,
-                                        validator: (val) {
-                                          if (val == null || val.isEmpty) {
-                                            return 'Field is required';
-                                          }
-
-                                          if (val.length < 5) {
-                                            return 'Requires at least 5 characters.';
-                                          }
-                                          if (val.length > 5) {
-                                            return 'Maximum 5 characters allowed, currently ${val.length}.';
-                                          }
-
-                                          return null;
-                                        },
+                                        validator: _model
+                                            .txtZipControllerValidator
+                                            .asValidator(context),
                                       ),
                                     ),
                                   ),
@@ -767,25 +713,19 @@ class _UpdateAddressDetailsWidgetState
                                         onPressed: () async {
                                           final addressUpdateData =
                                               createAddressRecordData(
-                                            addressLabel:
-                                                txtAddressLabelController
-                                                        ?.text ??
-                                                    '',
-                                            address:
-                                                txtAddressController?.text ??
-                                                    '',
-                                            address2:
-                                                txtAddress2Controller?.text ??
-                                                    '',
-                                            city: txtCityController?.text ?? '',
+                                            addressLabel: _model
+                                                .txtAddressLabelController.text,
+                                            address: _model
+                                                .txtAddressController.text,
+                                            address2: _model
+                                                .txtAddress2Controller.text,
+                                            city: _model.txtCityController.text,
                                             zipcode: int.tryParse(
-                                                txtZipController?.text ?? ''),
-                                            shipUser:
-                                                txtShipNameController?.text ??
-                                                    '',
-                                            shipPhone: int.tryParse(
-                                                txtShipPhoneController?.text ??
-                                                    ''),
+                                                _model.txtZipController.text),
+                                            shipUser: _model
+                                                .txtShipNameController.text,
+                                            shipPhone: int.tryParse(_model
+                                                .txtShipPhoneController.text),
                                           );
                                           await widget.addressReference!
                                               .update(addressUpdateData);

@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'order_details_preview_model.dart';
+export 'order_details_preview_model.dart';
 
 class OrderDetailsPreviewWidget extends StatefulWidget {
   const OrderDetailsPreviewWidget({
@@ -31,11 +33,21 @@ class OrderDetailsPreviewWidget extends StatefulWidget {
 }
 
 class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
-  final _unfocusNode = FocusNode();
+  late OrderDetailsPreviewModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => OrderDetailsPreviewModel());
+  }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
     super.dispose();
   }
@@ -120,125 +132,138 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                             color: FlutterFlowTheme.of(context)
                                 .secondaryBackground,
                           ),
-                          child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(16, 10, 16, 10),
-                            child: StreamBuilder<UsersRecord>(
-                              stream: UsersRecord.getDocument(widget.userRef!),
-                              builder: (context, snapshot) {
-                                // Customize what your widget looks like when it's loading.
-                                if (!snapshot.hasData) {
-                                  return Center(
-                                    child: SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: CircularProgressIndicator(
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryColor,
-                                      ),
-                                    ),
-                                  );
-                                }
-                                final columnUsersRecord = snapshot.data!;
-                                return Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 8, 0, 5),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Customer',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText1
-                                                .override(
-                                                  fontFamily: 'Roboto',
-                                                  color: Color(0xFF938F99),
-                                                ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16, 10, 16, 10),
+                                child: StreamBuilder<UsersRecord>(
+                                  stream:
+                                      UsersRecord.getDocument(widget.userRef!),
+                                  builder: (context, snapshot) {
+                                    // Customize what your widget looks like when it's loading.
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: SizedBox(
+                                          width: 50,
+                                          height: 50,
+                                          child: CircularProgressIndicator(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryColor,
                                           ),
-                                          Text(
-                                            columnUsersRecord.displayName!,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText1,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 5, 0, 5),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Phone',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText1
-                                                .override(
-                                                  fontFamily: 'Roboto',
-                                                  color: Color(0xFF938F99),
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                          ),
-                                          SelectionArea(
-                                              child: Text(
-                                            columnUsersRecord.phoneNumber!,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyText1,
-                                          )),
-                                        ],
-                                      ),
-                                    ),
-                                    Divider(
-                                      height: 10,
-                                      thickness: 1,
-                                      color: Color(0xFF938F99),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 8, 0, 5),
-                                      child: StreamBuilder<List<AddressRecord>>(
-                                        stream: queryAddressRecord(
-                                          queryBuilder: (addressRecord) =>
-                                              addressRecord
-                                                  .where('userInfo',
-                                                      isEqualTo: widget.userRef)
-                                                  .where('default_address',
-                                                      isEqualTo: true),
-                                          singleRecord: true,
                                         ),
-                                        builder: (context, snapshot) {
-                                          // Customize what your widget looks like when it's loading.
-                                          if (!snapshot.hasData) {
-                                            return Center(
-                                              child: SizedBox(
-                                                width: 50,
-                                                height: 50,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryColor,
-                                                ),
+                                      );
+                                    }
+                                    final columnUsersRecord = snapshot.data!;
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 8, 0, 5),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Customer',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText1
+                                                        .override(
+                                                          fontFamily: 'Roboto',
+                                                          color:
+                                                              Color(0xFF938F99),
+                                                        ),
                                               ),
-                                            );
-                                          }
-                                          List<AddressRecord>
-                                              rowAddressRecordList =
-                                              snapshot.data!;
-                                          final rowAddressRecord =
-                                              rowAddressRecordList.isNotEmpty
-                                                  ? rowAddressRecordList.first
-                                                  : null;
-                                          return Row(
+                                              Text(
+                                                columnUsersRecord.displayName!,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText1,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 5, 0, 5),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                'Phone',
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText1
+                                                        .override(
+                                                          fontFamily: 'Roboto',
+                                                          color:
+                                                              Color(0xFF938F99),
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                              ),
+                                              SelectionArea(
+                                                  child: Text(
+                                                columnUsersRecord.phoneNumber!,
+                                                style:
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyText1,
+                                              )),
+                                            ],
+                                          ),
+                                        ),
+                                        Divider(
+                                          height: 10,
+                                          thickness: 1,
+                                          color: Color(0xFF938F99),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    16, 0, 16, 10),
+                                child: StreamBuilder<AddressRecord>(
+                                  stream: AddressRecord.getDocument(
+                                      orderDetailsPreviewOrderListRecord
+                                          .addressRef!),
+                                  builder: (context, snapshot) {
+                                    // Customize what your widget looks like when it's loading.
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: SizedBox(
+                                          width: 50,
+                                          height: 50,
+                                          child: CircularProgressIndicator(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryColor,
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    final columnAddressRecord = snapshot.data!;
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 8, 0, 5),
+                                          child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
@@ -255,59 +280,26 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                rowAddressRecord!.addressLabel!,
+                                                columnAddressRecord
+                                                    .addressLabel!,
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyText1,
                                               ),
                                             ],
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 5, 0, 0),
-                                      child: StreamBuilder<List<AddressRecord>>(
-                                        stream: queryAddressRecord(
-                                          queryBuilder: (addressRecord) =>
-                                              addressRecord
-                                                  .where('userInfo',
-                                                      isEqualTo: widget.userRef)
-                                                  .where('default_address',
-                                                      isEqualTo: true),
-                                          singleRecord: true,
+                                          ),
                                         ),
-                                        builder: (context, snapshot) {
-                                          // Customize what your widget looks like when it's loading.
-                                          if (!snapshot.hasData) {
-                                            return Center(
-                                              child: SizedBox(
-                                                width: 50,
-                                                height: 50,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryColor,
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                          List<AddressRecord>
-                                              rowAddressRecordList =
-                                              snapshot.data!;
-                                          final rowAddressRecord =
-                                              rowAddressRecordList.isNotEmpty
-                                                  ? rowAddressRecordList.first
-                                                  : null;
-                                          return Row(
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 5, 0, 5),
+                                          child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: [
                                               Text(
-                                                rowAddressRecord!.address!,
+                                                columnAddressRecord.address!,
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyText1
@@ -320,7 +312,7 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                ' , ',
+                                                ', ',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyText1
@@ -333,7 +325,7 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                rowAddressRecord!.address2!,
+                                                columnAddressRecord.address2!,
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyText1
@@ -346,7 +338,7 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                ' , ',
+                                                ', ',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyText1
@@ -359,7 +351,7 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                                                         ),
                                               ),
                                               Text(
-                                                rowAddressRecord!.city!,
+                                                columnAddressRecord.city!,
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyText1
@@ -372,53 +364,19 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                                                         ),
                                               ),
                                             ],
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0, 5, 0, 0),
-                                      child: StreamBuilder<List<AddressRecord>>(
-                                        stream: queryAddressRecord(
-                                          queryBuilder: (addressRecord) =>
-                                              addressRecord
-                                                  .where('userInfo',
-                                                      isEqualTo: widget.userRef)
-                                                  .where('default_address',
-                                                      isEqualTo: true),
-                                          singleRecord: true,
+                                          ),
                                         ),
-                                        builder: (context, snapshot) {
-                                          // Customize what your widget looks like when it's loading.
-                                          if (!snapshot.hasData) {
-                                            return Center(
-                                              child: SizedBox(
-                                                width: 50,
-                                                height: 50,
-                                                child:
-                                                    CircularProgressIndicator(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryColor,
-                                                ),
-                                              ),
-                                            );
-                                          }
-                                          List<AddressRecord>
-                                              rowAddressRecordList =
-                                              snapshot.data!;
-                                          final rowAddressRecord =
-                                              rowAddressRecordList.isNotEmpty
-                                                  ? rowAddressRecordList.first
-                                                  : null;
-                                          return Row(
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0, 0, 0, 5),
+                                          child: Row(
                                             mainAxisSize: MainAxisSize.max,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: [
                                               Text(
-                                                rowAddressRecord!.zipcode!
+                                                columnAddressRecord.zipcode!
                                                     .toString(),
                                                 style:
                                                     FlutterFlowTheme.of(context)
@@ -432,14 +390,14 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                                                         ),
                                               ),
                                             ],
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -455,13 +413,12 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                               child: StreamBuilder<List<OrdersRecord>>(
                                 stream: queryOrdersRecord(
                                   queryBuilder: (ordersRecord) => ordersRecord
-                                      .where('shop_ref',
-                                          isEqualTo: currentUserReference)
                                       .where('order_number',
                                           isEqualTo:
                                               orderDetailsPreviewOrderListRecord
                                                   .orderNo)
-                                      .orderBy('order_date', descending: true),
+                                      .where('shop_ref',
+                                          isEqualTo: currentUserReference),
                                 ),
                                 builder: (context, snapshot) {
                                   // Customize what your widget looks like when it's loading.
@@ -548,12 +505,9 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                                                                           .spaceBetween,
                                                                   children: [
                                                                     Text(
-                                                                      dateTimeFormat(
-                                                                        'yMMMd',
-                                                                        getCurrentTimestamp,
-                                                                        locale:
-                                                                            FFLocalizations.of(context).languageCode,
-                                                                      ),
+                                                                      listViewOrdersRecord
+                                                                          .orderDate!
+                                                                          .toString(),
                                                                       style: FlutterFlowTheme.of(
                                                                               context)
                                                                           .bodyText1,
@@ -816,7 +770,7 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                                                                               children: [
                                                                                 SelectionArea(
                                                                                     child: Text(
-                                                                                  listViewOrdersRecord.productQty!.toString(),
+                                                                                  '1 x ',
                                                                                   style: FlutterFlowTheme.of(context).bodyText1.override(
                                                                                         fontFamily: 'Roboto',
                                                                                         color: Color(0xFF938F99),
@@ -825,7 +779,7 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                                                                                 Padding(
                                                                                   padding: EdgeInsetsDirectional.fromSTEB(4, 0, 0, 0),
                                                                                   child: Text(
-                                                                                    'Items',
+                                                                                    listViewOrdersRecord.productPrice!.toString(),
                                                                                     style: FlutterFlowTheme.of(context).bodyText1.override(
                                                                                           fontFamily: 'Roboto',
                                                                                           color: Color(0xFF938F99),
@@ -899,42 +853,6 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                                                                             0,
                                                                             8,
                                                                             0,
-                                                                            0),
-                                                                    child: Row(
-                                                                      mainAxisSize:
-                                                                          MainAxisSize
-                                                                              .max,
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceBetween,
-                                                                      children: [
-                                                                        Text(
-                                                                          'Sub Order No.',
-                                                                          style: FlutterFlowTheme.of(context)
-                                                                              .bodyText1
-                                                                              .override(
-                                                                                fontFamily: 'Roboto',
-                                                                                color: Color(0xFF938F99),
-                                                                                fontWeight: FontWeight.w500,
-                                                                              ),
-                                                                        ),
-                                                                        SelectionArea(
-                                                                            child:
-                                                                                Text(
-                                                                          listViewOrdersRecord
-                                                                              .subOrder!,
-                                                                          style:
-                                                                              FlutterFlowTheme.of(context).bodyText1,
-                                                                        )),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                  Padding(
-                                                                    padding: EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            0,
-                                                                            8,
-                                                                            0,
                                                                             5),
                                                                     child: Row(
                                                                       mainAxisSize:
@@ -964,7 +882,7 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                                                                               0),
                                                                           child:
                                                                               Text(
-                                                                            listViewOrdersRecord.transactionId!,
+                                                                            orderDetailsPreviewOrderListRecord.paymentID!,
                                                                             style:
                                                                                 FlutterFlowTheme.of(context).bodyText1,
                                                                           ),
@@ -983,7 +901,7 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                                                                     padding: EdgeInsetsDirectional
                                                                         .fromSTEB(
                                                                             0,
-                                                                            0,
+                                                                            5,
                                                                             0,
                                                                             8),
                                                                     child: Row(
@@ -1004,51 +922,33 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                                                                                 fontWeight: FontWeight.w500,
                                                                               ),
                                                                         ),
-                                                                        SelectionArea(
-                                                                            child:
-                                                                                Text(
-                                                                          listViewOrdersRecord
-                                                                              .shopName!,
-                                                                          style:
-                                                                              FlutterFlowTheme.of(context).bodyText1,
-                                                                        )),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                  Padding(
-                                                                    padding: EdgeInsetsDirectional
-                                                                        .fromSTEB(
-                                                                            0,
-                                                                            0,
-                                                                            0,
-                                                                            10),
-                                                                    child: Row(
-                                                                      mainAxisSize:
-                                                                          MainAxisSize
-                                                                              .max,
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .spaceBetween,
-                                                                      children: [
-                                                                        Text(
-                                                                          'Subtotal',
-                                                                          style: FlutterFlowTheme.of(context)
-                                                                              .bodyText1
-                                                                              .override(
-                                                                                fontFamily: 'Roboto',
-                                                                                color: Color(0xFF938F99),
-                                                                                fontWeight: FontWeight.w500,
-                                                                              ),
+                                                                        StreamBuilder<
+                                                                            UsersRecord>(
+                                                                          stream:
+                                                                              UsersRecord.getDocument(listViewOrdersRecord.shopRef!),
+                                                                          builder:
+                                                                              (context, snapshot) {
+                                                                            // Customize what your widget looks like when it's loading.
+                                                                            if (!snapshot.hasData) {
+                                                                              return Center(
+                                                                                child: SizedBox(
+                                                                                  width: 50,
+                                                                                  height: 50,
+                                                                                  child: CircularProgressIndicator(
+                                                                                    color: FlutterFlowTheme.of(context).primaryColor,
+                                                                                  ),
+                                                                                ),
+                                                                              );
+                                                                            }
+                                                                            final textUsersRecord =
+                                                                                snapshot.data!;
+                                                                            return SelectionArea(
+                                                                                child: Text(
+                                                                              textUsersRecord.displayName!,
+                                                                              style: FlutterFlowTheme.of(context).bodyText1,
+                                                                            ));
+                                                                          },
                                                                         ),
-                                                                        SelectionArea(
-                                                                            child:
-                                                                                Text(
-                                                                          listViewOrdersRecord
-                                                                              .productSubtotal!
-                                                                              .toString(),
-                                                                          style:
-                                                                              FlutterFlowTheme.of(context).bodyText1,
-                                                                        )),
                                                                       ],
                                                                     ),
                                                                   ),
@@ -1080,9 +980,15 @@ class _OrderDetailsPreviewWidgetState extends State<OrderDetailsPreviewWidget> {
                                                                         SelectionArea(
                                                                             child:
                                                                                 Text(
-                                                                          listViewOrdersRecord
-                                                                              .productPrice!
-                                                                              .toString(),
+                                                                          formatNumber(
+                                                                            listViewOrdersRecord.productPrice!,
+                                                                            formatType:
+                                                                                FormatType.decimal,
+                                                                            decimalType:
+                                                                                DecimalType.automatic,
+                                                                            currency:
+                                                                                'THB ',
+                                                                          ),
                                                                           style:
                                                                               FlutterFlowTheme.of(context).bodyText1,
                                                                         )),

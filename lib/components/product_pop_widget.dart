@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'product_pop_model.dart';
+export 'product_pop_model.dart';
 
 class ProductPopWidget extends StatefulWidget {
   const ProductPopWidget({
@@ -22,7 +24,26 @@ class ProductPopWidget extends StatefulWidget {
 }
 
 class _ProductPopWidgetState extends State<ProductPopWidget> {
-  OrderListRecord? orderListOutPut;
+  late ProductPopModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => ProductPopModel());
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -353,7 +374,7 @@ class _ProductPopWidgetState extends State<ProductPopWidget> {
                                                                     .update(
                                                                         orderListUpdateData);
 
-                                                                final ordersCreateData =
+                                                                final ordersCreateData1 =
                                                                     createOrdersRecordData(
                                                                   orderDate:
                                                                       getCurrentTimestamp,
@@ -387,7 +408,7 @@ class _ProductPopWidgetState extends State<ProductPopWidget> {
                                                                     .collection
                                                                     .doc()
                                                                     .set(
-                                                                        ordersCreateData);
+                                                                        ordersCreateData1);
                                                               } else {
                                                                 final orderListCreateData =
                                                                     {
@@ -427,12 +448,12 @@ class _ProductPopWidgetState extends State<ProductPopWidget> {
                                                                 await orderListRecordReference
                                                                     .set(
                                                                         orderListCreateData);
-                                                                orderListOutPut =
+                                                                _model.orderListOutPut =
                                                                     OrderListRecord.getDocumentFromData(
                                                                         orderListCreateData,
                                                                         orderListRecordReference);
 
-                                                                final ordersCreateData =
+                                                                final ordersCreateData2 =
                                                                     createOrdersRecordData(
                                                                   orderDate:
                                                                       getCurrentTimestamp,
@@ -448,15 +469,15 @@ class _ProductPopWidgetState extends State<ProductPopWidget> {
                                                                       'Processing',
                                                                   userRef:
                                                                       currentUserReference,
-                                                                  orderNumber:
-                                                                      orderListOutPut!
-                                                                          .orderNo,
+                                                                  orderNumber: _model
+                                                                      .orderListOutPut!
+                                                                      .orderNo,
                                                                   productImage:
                                                                       gridViewProductsRecord
                                                                           .productPhoto,
-                                                                  orderListRef:
-                                                                      orderListOutPut!
-                                                                          .reference,
+                                                                  orderListRef: _model
+                                                                      .orderListOutPut!
+                                                                      .reference,
                                                                   productRef:
                                                                       gridViewProductsRecord
                                                                           .reference,
@@ -465,7 +486,7 @@ class _ProductPopWidgetState extends State<ProductPopWidget> {
                                                                     .collection
                                                                     .doc()
                                                                     .set(
-                                                                        ordersCreateData);
+                                                                        ordersCreateData2);
                                                               }
 
                                                               ScaffoldMessenger

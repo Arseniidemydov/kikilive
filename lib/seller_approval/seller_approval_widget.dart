@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'seller_approval_model.dart';
+export 'seller_approval_model.dart';
 
 class SellerApprovalWidget extends StatefulWidget {
   const SellerApprovalWidget({
@@ -22,34 +24,24 @@ class SellerApprovalWidget extends StatefulWidget {
 }
 
 class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
-  TextEditingController? textController8;
-  TextEditingController? txtCityController;
-  TextEditingController? txtDisplayNameController;
-  TextEditingController? txtEmailController;
-  TextEditingController? txtPhoneController1;
-  TextEditingController? txtPhoneController2;
-  TextEditingController? txtPhoneController3;
-  TextEditingController? txtzipcodeController;
-  final _unfocusNode = FocusNode();
+  late SellerApprovalModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
-    textController8 = TextEditingController();
+    _model = createModel(context, () => SellerApprovalModel());
+
+    _model.textController8 = TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    textController8?.dispose();
-    txtCityController?.dispose();
-    txtDisplayNameController?.dispose();
-    txtEmailController?.dispose();
-    txtPhoneController1?.dispose();
-    txtPhoneController2?.dispose();
-    txtPhoneController3?.dispose();
-    txtzipcodeController?.dispose();
     super.dispose();
   }
 
@@ -232,23 +224,21 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(10, 0, 5, 0),
                                                 child: TextFormField(
-                                                  controller:
-                                                      txtDisplayNameController ??=
-                                                          TextEditingController(
+                                                  controller: _model
+                                                          .txtDisplayNameController ??=
+                                                      TextEditingController(
                                                     text: columnUsersRecord
                                                         .displayName,
                                                   ),
                                                   onFieldSubmitted: (_) async {
                                                     final addressUpdateData =
                                                         createAddressRecordData(
-                                                      addressLabel:
-                                                          txtDisplayNameController
-                                                                  ?.text ??
-                                                              '',
-                                                      address:
-                                                          txtEmailController
-                                                                  ?.text ??
-                                                              '',
+                                                      addressLabel: _model
+                                                          .txtDisplayNameController
+                                                          .text,
+                                                      address: _model
+                                                          .txtEmailController
+                                                          .text,
                                                     );
                                                     await containerAddressRecord!
                                                         .reference
@@ -339,6 +329,9 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyText1,
+                                                  validator: _model
+                                                      .txtDisplayNameControllerValidator
+                                                      .asValidator(context),
                                                 ),
                                               ),
                                             ),
@@ -394,9 +387,9 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(10, 0, 5, 0),
                                                 child: TextFormField(
-                                                  controller:
-                                                      txtEmailController ??=
-                                                          TextEditingController(
+                                                  controller: _model
+                                                          .txtEmailController ??=
+                                                      TextEditingController(
                                                     text:
                                                         columnUsersRecord.email,
                                                   ),
@@ -484,6 +477,9 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyText1,
+                                                  validator: _model
+                                                      .txtEmailControllerValidator
+                                                      .asValidator(context),
                                                 ),
                                               ),
                                             ),
@@ -533,9 +529,9 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(10, 0, 5, 0),
                                                 child: TextFormField(
-                                                  controller:
-                                                      txtPhoneController1 ??=
-                                                          TextEditingController(
+                                                  controller: _model
+                                                          .txtPhoneController1 ??=
+                                                      TextEditingController(
                                                     text: columnUsersRecord
                                                         .phoneNumber,
                                                   ),
@@ -625,6 +621,9 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                                       .bodyText1,
                                                   keyboardType:
                                                       TextInputType.phone,
+                                                  validator: _model
+                                                      .txtPhoneController1Validator
+                                                      .asValidator(context),
                                                 ),
                                               ),
                                             ),
@@ -698,9 +697,9 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(10, 0, 5, 0),
                                               child: TextFormField(
-                                                controller:
-                                                    txtPhoneController2 ??=
-                                                        TextEditingController(
+                                                controller: _model
+                                                        .txtPhoneController2 ??=
+                                                    TextEditingController(
                                                   text: containerAddressRecord!
                                                       .address,
                                                 ),
@@ -774,6 +773,9 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                                         .bodyText1,
                                                 keyboardType:
                                                     TextInputType.phone,
+                                                validator: _model
+                                                    .txtPhoneController2Validator
+                                                    .asValidator(context),
                                               ),
                                             ),
                                           ),
@@ -819,9 +821,9 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                               padding: EdgeInsetsDirectional
                                                   .fromSTEB(10, 0, 5, 0),
                                               child: TextFormField(
-                                                controller:
-                                                    txtPhoneController3 ??=
-                                                        TextEditingController(
+                                                controller: _model
+                                                        .txtPhoneController3 ??=
+                                                    TextEditingController(
                                                   text: containerAddressRecord!
                                                       .address2,
                                                 ),
@@ -895,6 +897,9 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                                         .bodyText1,
                                                 keyboardType:
                                                     TextInputType.phone,
+                                                validator: _model
+                                                    .txtPhoneController3Validator
+                                                    .asValidator(context),
                                               ),
                                             ),
                                           ),
@@ -943,9 +948,9 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(10, 0, 5, 0),
                                                 child: TextFormField(
-                                                  controller:
-                                                      txtCityController ??=
-                                                          TextEditingController(
+                                                  controller: _model
+                                                          .txtCityController ??=
+                                                      TextEditingController(
                                                     text:
                                                         containerAddressRecord!
                                                             .city,
@@ -1034,6 +1039,9 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyText1,
+                                                  validator: _model
+                                                      .txtCityControllerValidator
+                                                      .asValidator(context),
                                                 ),
                                               ),
                                             ),
@@ -1083,9 +1091,9 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(10, 0, 5, 0),
                                                 child: TextFormField(
-                                                  controller:
-                                                      txtzipcodeController ??=
-                                                          TextEditingController(
+                                                  controller: _model
+                                                          .txtzipcodeController ??=
+                                                      TextEditingController(
                                                     text:
                                                         containerAddressRecord!
                                                             .zipcode
@@ -1175,6 +1183,9 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyText1,
+                                                  validator: _model
+                                                      .txtzipcodeControllerValidator
+                                                      .asValidator(context),
                                                 ),
                                               ),
                                             ),
@@ -1202,7 +1213,7 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                               EdgeInsetsDirectional.fromSTEB(
                                                   5, 5, 5, 5),
                                           child: TextFormField(
-                                            controller: textController8,
+                                            controller: _model.textController8,
                                             autofocus: true,
                                             obscureText: false,
                                             decoration: InputDecoration(
@@ -1264,6 +1275,9 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                             ),
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyText1,
+                                            validator: _model
+                                                .textController8Validator
+                                                .asValidator(context),
                                           ),
                                         ),
                                       ),
@@ -1299,10 +1313,10 @@ class _SellerApprovalWidgetState extends State<SellerApprovalWidget> {
                                                       final newSellerRequestUpdateData =
                                                           createNewSellerRequestRecordData(
                                                         isApproved: false,
-                                                        message:
-                                                            textController8!
-                                                                .text,
-                                                        status: 'Pending',
+                                                        message: _model
+                                                            .textController8
+                                                            .text,
+                                                        status: 'Rejected',
                                                       );
                                                       await sellerApprovalNewSellerRequestRecord
                                                           .reference

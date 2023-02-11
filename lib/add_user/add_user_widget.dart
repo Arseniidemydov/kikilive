@@ -1,12 +1,16 @@
 import '../auth/auth_util.dart';
 import '../backend/backend.dart';
+import '../flutter_flow/chat/index.dart';
 import '../flutter_flow/flutter_flow_icon_button.dart';
 import '../flutter_flow/flutter_flow_theme.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import '../flutter_flow/flutter_flow_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'add_user_model.dart';
+export 'add_user_model.dart';
 
 class AddUserWidget extends StatefulWidget {
   const AddUserWidget({
@@ -14,32 +18,29 @@ class AddUserWidget extends StatefulWidget {
     this.chat,
   }) : super(key: key);
 
-  final ChatsRecord? chat;
+  final DocumentReference? chat;
 
   @override
   _AddUserWidgetState createState() => _AddUserWidgetState();
 }
 
 class _AddUserWidgetState extends State<AddUserWidget> {
-  Map<UsersRecord, bool> checkboxListTileValueMap = {};
-  List<UsersRecord> get checkboxListTileCheckedItems =>
-      checkboxListTileValueMap.entries
-          .where((e) => e.value)
-          .map((e) => e.key)
-          .toList();
+  late AddUserModel _model;
 
-  TextEditingController? textController;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
+    _model = createModel(context, () => AddUserModel());
+
+    _model.textController = TextEditingController();
   }
 
   @override
   void dispose() {
-    textController?.dispose();
+    _model.dispose();
+
     super.dispose();
   }
 
@@ -48,7 +49,7 @@ class _AddUserWidgetState extends State<AddUserWidget> {
     context.watch<FFAppState>();
 
     return StreamBuilder<ChatsRecord>(
-      stream: ChatsRecord.getDocument(widget.chat!.reference),
+      stream: ChatsRecord.getDocument(widget.chat!),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -117,7 +118,7 @@ class _AddUserWidgetState extends State<AddUserWidget> {
                   ),
                   alignment: AlignmentDirectional(0, 0),
                   child: TextFormField(
-                    controller: textController,
+                    controller: _model.textController,
                     obscureText: false,
                     decoration: InputDecoration(
                       hintText: 'Search',
@@ -183,6 +184,8 @@ class _AddUserWidgetState extends State<AddUserWidget> {
                           fontWeight: FontWeight.normal,
                         ),
                     maxLines: null,
+                    validator:
+                        _model.textControllerValidator.asValidator(context),
                   ),
                 ),
               ),
@@ -191,6 +194,10 @@ class _AddUserWidgetState extends State<AddUserWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
                   child: FutureBuilder<List<UsersRecord>>(
                     future: queryUsersRecordOnce(
+                      queryBuilder: (usersRecord) => usersRecord.where('email',
+                          isEqualTo: _model.textController.text != ''
+                              ? _model.textController.text
+                              : null),
                       limit: 50,
                     ),
                     builder: (context, snapshot) {
@@ -278,11 +285,12 @@ class _AddUserWidgetState extends State<AddUserWidget> {
                                                     .primaryText,
                                           ),
                                           child: CheckboxListTile(
-                                            value: checkboxListTileValueMap[
-                                                listViewUsersRecord] ??= true,
+                                            value: _model
+                                                    .checkboxListTileValueMap[
+                                                listViewUsersRecord] ??= false,
                                             onChanged: (newValue) async {
                                               setState(() =>
-                                                  checkboxListTileValueMap[
+                                                  _model.checkboxListTileValueMap[
                                                           listViewUsersRecord] =
                                                       newValue!);
                                             },
@@ -350,14 +358,23 @@ class _AddUserWidgetState extends State<AddUserWidget> {
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(16, 5, 16, 40),
                     child: FFButtonWidget(
-                      onPressed: () {
-                        print('Button pressed ...');
+                      onPressed: () async {
+                        _model.groupChat =
+                            await FFChatManager.instance.addGroupMembers(
+                          addUserChatsRecord,
+                          _model.checkboxListTileCheckedItems
+                              .map((e) => e.reference)
+                              .toList(),
+                        );
+                        context.pop();
+
+                        setState(() {});
                       },
                       text: 'Add To Chat',
                       options: FFButtonOptions(
                         width: 340,
                         height: 50,
-                        color: FlutterFlowTheme.of(context).button,
+                        color: FlutterFlowTheme.of(context).primaryColor,
                         textStyle: FlutterFlowTheme.of(context).title3.override(
                               fontFamily: 'Roboto',
                               color:

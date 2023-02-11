@@ -11,6 +11,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'livestream_viewer_model.dart';
+export 'livestream_viewer_model.dart';
 
 class LivestreamViewerWidget extends StatefulWidget {
   const LivestreamViewerWidget({
@@ -29,13 +31,16 @@ class LivestreamViewerWidget extends StatefulWidget {
 }
 
 class _LivestreamViewerWidgetState extends State<LivestreamViewerWidget> {
-  TextEditingController? textController;
-  final _unfocusNode = FocusNode();
+  late LivestreamViewerModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
+    _model = createModel(context, () => LivestreamViewerModel());
+
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       final streamsUpdateData = {
@@ -45,13 +50,14 @@ class _LivestreamViewerWidgetState extends State<LivestreamViewerWidget> {
       await widget.streamID!.update(streamsUpdateData);
     });
 
-    textController = TextEditingController();
+    _model.textController = TextEditingController();
   }
 
   @override
   void dispose() {
+    _model.dispose();
+
     _unfocusNode.dispose();
-    textController?.dispose();
     super.dispose();
   }
 
@@ -383,8 +389,8 @@ class _LivestreamViewerWidgetState extends State<LivestreamViewerWidget> {
                                                   children: [
                                                     Expanded(
                                                       child: TextFormField(
-                                                        controller:
-                                                            textController,
+                                                        controller: _model
+                                                            .textController,
                                                         onFieldSubmitted:
                                                             (_) async {
                                                           final streamingCommentsCreateData =
@@ -392,9 +398,9 @@ class _LivestreamViewerWidgetState extends State<LivestreamViewerWidget> {
                                                             streamID:
                                                                 containerStreamsRecord
                                                                     .reference,
-                                                            comment:
-                                                                textController!
-                                                                    .text,
+                                                            comment: _model
+                                                                .textController
+                                                                .text,
                                                             userID:
                                                                 currentUserReference,
                                                             createdAt:
@@ -406,7 +412,8 @@ class _LivestreamViewerWidgetState extends State<LivestreamViewerWidget> {
                                                               .set(
                                                                   streamingCommentsCreateData);
                                                           setState(() {
-                                                            textController
+                                                            _model
+                                                                .textController
                                                                 ?.clear();
                                                           });
                                                         },
@@ -498,6 +505,10 @@ class _LivestreamViewerWidgetState extends State<LivestreamViewerWidget> {
                                                                           context)
                                                                       .primaryText,
                                                                 ),
+                                                        validator: _model
+                                                            .textControllerValidator
+                                                            .asValidator(
+                                                                context),
                                                       ),
                                                     ),
                                                     FlutterFlowIconButton(

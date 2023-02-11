@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'approval_model.dart';
+export 'approval_model.dart';
 
 class ApprovalWidget extends StatefulWidget {
   const ApprovalWidget({
@@ -21,22 +23,27 @@ class ApprovalWidget extends StatefulWidget {
 }
 
 class _ApprovalWidgetState extends State<ApprovalWidget> {
-  TextEditingController? textController3;
-  TextEditingController? txtDisplayNameController;
-  TextEditingController? txtPhoneController;
+  late ApprovalModel _model;
+
+  @override
+  void setState(VoidCallback callback) {
+    super.setState(callback);
+    _model.onUpdate();
+  }
 
   @override
   void initState() {
     super.initState();
-    textController3 = TextEditingController();
-    txtPhoneController = TextEditingController(text: currentPhoneNumber);
+    _model = createModel(context, () => ApprovalModel());
+
+    _model.txtPhoneController = TextEditingController(text: currentPhoneNumber);
+    _model.textController3 = TextEditingController();
   }
 
   @override
   void dispose() {
-    textController3?.dispose();
-    txtDisplayNameController?.dispose();
-    txtPhoneController?.dispose();
+    _model.dispose();
+
     super.dispose();
   }
 
@@ -128,7 +135,7 @@ class _ApprovalWidgetState extends State<ApprovalWidget> {
                             padding:
                                 EdgeInsetsDirectional.fromSTEB(10, 0, 5, 0),
                             child: TextFormField(
-                              controller: txtDisplayNameController ??=
+                              controller: _model.txtDisplayNameController ??=
                                   TextEditingController(
                                 text: containerNewSellerRequestRecord.userName,
                               ),
@@ -186,6 +193,9 @@ class _ApprovalWidgetState extends State<ApprovalWidget> {
                                 ),
                               ),
                               style: FlutterFlowTheme.of(context).bodyText1,
+                              validator: _model
+                                  .txtDisplayNameControllerValidator
+                                  .asValidator(context),
                             ),
                           ),
                         ),
@@ -227,7 +237,7 @@ class _ApprovalWidgetState extends State<ApprovalWidget> {
                                 EdgeInsetsDirectional.fromSTEB(10, 0, 5, 0),
                             child: AuthUserStreamWidget(
                               builder: (context) => TextFormField(
-                                controller: txtPhoneController,
+                                controller: _model.txtPhoneController,
                                 autofocus: true,
                                 obscureText: false,
                                 decoration: InputDecoration(
@@ -277,6 +287,8 @@ class _ApprovalWidgetState extends State<ApprovalWidget> {
                                 ),
                                 style: FlutterFlowTheme.of(context).bodyText1,
                                 keyboardType: TextInputType.phone,
+                                validator: _model.txtPhoneControllerValidator
+                                    .asValidator(context),
                               ),
                             ),
                           ),
@@ -299,7 +311,7 @@ class _ApprovalWidgetState extends State<ApprovalWidget> {
                     child: Padding(
                       padding: EdgeInsetsDirectional.fromSTEB(5, 5, 5, 5),
                       child: TextFormField(
-                        controller: textController3,
+                        controller: _model.textController3,
                         autofocus: true,
                         obscureText: false,
                         decoration: InputDecoration(
@@ -347,6 +359,8 @@ class _ApprovalWidgetState extends State<ApprovalWidget> {
                           ),
                         ),
                         style: FlutterFlowTheme.of(context).bodyText1,
+                        validator: _model.textController3Validator
+                            .asValidator(context),
                       ),
                     ),
                   ),
@@ -372,7 +386,7 @@ class _ApprovalWidgetState extends State<ApprovalWidget> {
                                   final newSellerRequestUpdateData =
                                       createNewSellerRequestRecordData(
                                     isApproved: false,
-                                    message: textController3!.text,
+                                    message: _model.textController3.text,
                                     status: 'Pending',
                                   );
                                   await containerNewSellerRequestRecord
@@ -418,7 +432,7 @@ class _ApprovalWidgetState extends State<ApprovalWidget> {
                                       createNewSellerRequestRecordData(
                                     isApproved: true,
                                     status: 'Approved',
-                                    message: textController3!.text,
+                                    message: _model.textController3.text,
                                   );
                                   await containerNewSellerRequestRecord
                                       .reference

@@ -7,6 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'remove_user_model.dart';
+export 'remove_user_model.dart';
 
 class RemoveUserWidget extends StatefulWidget {
   const RemoveUserWidget({
@@ -21,18 +23,22 @@ class RemoveUserWidget extends StatefulWidget {
 }
 
 class _RemoveUserWidgetState extends State<RemoveUserWidget> {
-  TextEditingController? textController;
+  late RemoveUserModel _model;
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
+    _model = createModel(context, () => RemoveUserModel());
+
+    _model.textController = TextEditingController();
   }
 
   @override
   void dispose() {
-    textController?.dispose();
+    _model.dispose();
+
     super.dispose();
   }
 
@@ -110,7 +116,7 @@ class _RemoveUserWidgetState extends State<RemoveUserWidget> {
                   ),
                   alignment: AlignmentDirectional(0, 0),
                   child: TextFormField(
-                    controller: textController,
+                    controller: _model.textController,
                     obscureText: false,
                     decoration: InputDecoration(
                       hintText: 'Search',
@@ -176,6 +182,8 @@ class _RemoveUserWidgetState extends State<RemoveUserWidget> {
                           fontWeight: FontWeight.normal,
                         ),
                     maxLines: null,
+                    validator:
+                        _model.textControllerValidator.asValidator(context),
                   ),
                 ),
               ),

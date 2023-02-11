@@ -65,7 +65,7 @@ Future<StripePaymentResponse> processStripePayment(
     final success = response['success'] ?? false;
     if (!success || !response.containsKey('paymentId')) {
       return StripePaymentResponse(
-          errorMessage: response['error'] ?? 'Unkown error occured');
+          errorMessage: response['error'] ?? 'Unknown error occurred');
     }
 
     /// For web, display a payment sheet with a credit card form.
