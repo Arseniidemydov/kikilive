@@ -35,61 +35,20 @@ class _$ChannelsRecordSerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    value = object.channelOwner;
+    value = object.channelUserReference;
     if (value != null) {
       result
-        ..add('channel_owner')
+        ..add('channel_user_reference')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
     }
-    value = object.shopType;
+    value = object.channelDescription;
     if (value != null) {
       result
-        ..add('shop_type')
+        ..add('channel_description')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
-    }
-    value = object.channelDesc;
-    if (value != null) {
-      result
-        ..add('channel_desc')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.channelViews;
-    if (value != null) {
-      result
-        ..add('channel_views')
-        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
-    }
-    value = object.channelVideoUrl;
-    if (value != null) {
-      result
-        ..add('channel_video_url')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.channelCreatedOn;
-    if (value != null) {
-      result
-        ..add('channel_created_on')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(DateTime)));
-    }
-    value = object.channelPrice;
-    if (value != null) {
-      result
-        ..add('channel_price')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(double)));
-    }
-    value = object.channelStatus;
-    if (value != null) {
-      result
-        ..add('channel_status')
-        ..add(
-            serializers.serialize(value, specifiedType: const FullType(bool)));
     }
     value = object.channelImage;
     if (value != null) {
@@ -98,10 +57,24 @@ class _$ChannelsRecordSerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    value = object.messageReason;
+    value = object.channelStatus;
     if (value != null) {
       result
-        ..add('message_reason')
+        ..add('channel_status')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.channelPrice;
+    if (value != null) {
+      result
+        ..add('channel_price')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(double)));
+    }
+    value = object.channelApprovalMessage;
+    if (value != null) {
+      result
+        ..add('channel_approval_message')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
@@ -114,6 +87,20 @@ class _$ChannelsRecordSerializer
               const FullType(
                   DocumentReference, const [const FullType.nullable(Object)])
             ])));
+    }
+    value = object.channelIsMain;
+    if (value != null) {
+      result
+        ..add('channel_is_main')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.createdAt;
+    if (value != null) {
+      result
+        ..add('created_at')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(DateTime)));
     }
     value = object.ffRef;
     if (value != null) {
@@ -146,46 +133,30 @@ class _$ChannelsRecordSerializer
           result.channelType = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
-        case 'channel_owner':
-          result.channelOwner = serializers.deserialize(value,
+        case 'channel_user_reference':
+          result.channelUserReference = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
           break;
-        case 'shop_type':
-          result.shopType = serializers.deserialize(value,
+        case 'channel_description':
+          result.channelDescription = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
-          break;
-        case 'channel_desc':
-          result.channelDesc = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'channel_views':
-          result.channelViews = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int?;
-          break;
-        case 'channel_video_url':
-          result.channelVideoUrl = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'channel_created_on':
-          result.channelCreatedOn = serializers.deserialize(value,
-              specifiedType: const FullType(DateTime)) as DateTime?;
-          break;
-        case 'channel_price':
-          result.channelPrice = serializers.deserialize(value,
-              specifiedType: const FullType(double)) as double?;
-          break;
-        case 'channel_status':
-          result.channelStatus = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool?;
           break;
         case 'channel_image':
           result.channelImage = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
-        case 'message_reason':
-          result.messageReason = serializers.deserialize(value,
+        case 'channel_status':
+          result.channelStatus = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool?;
+          break;
+        case 'channel_price':
+          result.channelPrice = serializers.deserialize(value,
+              specifiedType: const FullType(double)) as double?;
+          break;
+        case 'channel_approval_message':
+          result.channelApprovalMessage = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
         case 'channel_members':
@@ -194,6 +165,14 @@ class _$ChannelsRecordSerializer
                 const FullType(
                     DocumentReference, const [const FullType.nullable(Object)])
               ]))! as BuiltList<Object?>);
+          break;
+        case 'channel_is_main':
+          result.channelIsMain = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool?;
+          break;
+        case 'created_at':
+          result.createdAt = serializers.deserialize(value,
+              specifiedType: const FullType(DateTime)) as DateTime?;
           break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
@@ -214,27 +193,23 @@ class _$ChannelsRecord extends ChannelsRecord {
   @override
   final String? channelType;
   @override
-  final DocumentReference<Object?>? channelOwner;
+  final DocumentReference<Object?>? channelUserReference;
   @override
-  final String? shopType;
-  @override
-  final String? channelDesc;
-  @override
-  final int? channelViews;
-  @override
-  final String? channelVideoUrl;
-  @override
-  final DateTime? channelCreatedOn;
-  @override
-  final double? channelPrice;
-  @override
-  final bool? channelStatus;
+  final String? channelDescription;
   @override
   final String? channelImage;
   @override
-  final String? messageReason;
+  final bool? channelStatus;
+  @override
+  final double? channelPrice;
+  @override
+  final String? channelApprovalMessage;
   @override
   final BuiltList<DocumentReference<Object?>>? channelMembers;
+  @override
+  final bool? channelIsMain;
+  @override
+  final DateTime? createdAt;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -244,17 +219,15 @@ class _$ChannelsRecord extends ChannelsRecord {
   _$ChannelsRecord._(
       {this.channelName,
       this.channelType,
-      this.channelOwner,
-      this.shopType,
-      this.channelDesc,
-      this.channelViews,
-      this.channelVideoUrl,
-      this.channelCreatedOn,
-      this.channelPrice,
-      this.channelStatus,
+      this.channelUserReference,
+      this.channelDescription,
       this.channelImage,
-      this.messageReason,
+      this.channelStatus,
+      this.channelPrice,
+      this.channelApprovalMessage,
       this.channelMembers,
+      this.channelIsMain,
+      this.createdAt,
       this.ffRef})
       : super._();
 
@@ -272,17 +245,15 @@ class _$ChannelsRecord extends ChannelsRecord {
     return other is ChannelsRecord &&
         channelName == other.channelName &&
         channelType == other.channelType &&
-        channelOwner == other.channelOwner &&
-        shopType == other.shopType &&
-        channelDesc == other.channelDesc &&
-        channelViews == other.channelViews &&
-        channelVideoUrl == other.channelVideoUrl &&
-        channelCreatedOn == other.channelCreatedOn &&
-        channelPrice == other.channelPrice &&
-        channelStatus == other.channelStatus &&
+        channelUserReference == other.channelUserReference &&
+        channelDescription == other.channelDescription &&
         channelImage == other.channelImage &&
-        messageReason == other.messageReason &&
+        channelStatus == other.channelStatus &&
+        channelPrice == other.channelPrice &&
+        channelApprovalMessage == other.channelApprovalMessage &&
         channelMembers == other.channelMembers &&
+        channelIsMain == other.channelIsMain &&
+        createdAt == other.createdAt &&
         ffRef == other.ffRef;
   }
 
@@ -298,25 +269,17 @@ class _$ChannelsRecord extends ChannelsRecord {
                                 $jc(
                                     $jc(
                                         $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            0,
-                                                            channelName
-                                                                .hashCode),
-                                                        channelType.hashCode),
-                                                    channelOwner.hashCode),
-                                                shopType.hashCode),
-                                            channelDesc.hashCode),
-                                        channelViews.hashCode),
-                                    channelVideoUrl.hashCode),
-                                channelCreatedOn.hashCode),
+                                            $jc($jc(0, channelName.hashCode),
+                                                channelType.hashCode),
+                                            channelUserReference.hashCode),
+                                        channelDescription.hashCode),
+                                    channelImage.hashCode),
+                                channelStatus.hashCode),
                             channelPrice.hashCode),
-                        channelStatus.hashCode),
-                    channelImage.hashCode),
-                messageReason.hashCode),
-            channelMembers.hashCode),
+                        channelApprovalMessage.hashCode),
+                    channelMembers.hashCode),
+                channelIsMain.hashCode),
+            createdAt.hashCode),
         ffRef.hashCode));
   }
 
@@ -325,17 +288,15 @@ class _$ChannelsRecord extends ChannelsRecord {
     return (newBuiltValueToStringHelper(r'ChannelsRecord')
           ..add('channelName', channelName)
           ..add('channelType', channelType)
-          ..add('channelOwner', channelOwner)
-          ..add('shopType', shopType)
-          ..add('channelDesc', channelDesc)
-          ..add('channelViews', channelViews)
-          ..add('channelVideoUrl', channelVideoUrl)
-          ..add('channelCreatedOn', channelCreatedOn)
-          ..add('channelPrice', channelPrice)
-          ..add('channelStatus', channelStatus)
+          ..add('channelUserReference', channelUserReference)
+          ..add('channelDescription', channelDescription)
           ..add('channelImage', channelImage)
-          ..add('messageReason', messageReason)
+          ..add('channelStatus', channelStatus)
+          ..add('channelPrice', channelPrice)
+          ..add('channelApprovalMessage', channelApprovalMessage)
           ..add('channelMembers', channelMembers)
+          ..add('channelIsMain', channelIsMain)
+          ..add('createdAt', createdAt)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -353,56 +314,49 @@ class ChannelsRecordBuilder
   String? get channelType => _$this._channelType;
   set channelType(String? channelType) => _$this._channelType = channelType;
 
-  DocumentReference<Object?>? _channelOwner;
-  DocumentReference<Object?>? get channelOwner => _$this._channelOwner;
-  set channelOwner(DocumentReference<Object?>? channelOwner) =>
-      _$this._channelOwner = channelOwner;
+  DocumentReference<Object?>? _channelUserReference;
+  DocumentReference<Object?>? get channelUserReference =>
+      _$this._channelUserReference;
+  set channelUserReference(DocumentReference<Object?>? channelUserReference) =>
+      _$this._channelUserReference = channelUserReference;
 
-  String? _shopType;
-  String? get shopType => _$this._shopType;
-  set shopType(String? shopType) => _$this._shopType = shopType;
+  String? _channelDescription;
+  String? get channelDescription => _$this._channelDescription;
+  set channelDescription(String? channelDescription) =>
+      _$this._channelDescription = channelDescription;
 
-  String? _channelDesc;
-  String? get channelDesc => _$this._channelDesc;
-  set channelDesc(String? channelDesc) => _$this._channelDesc = channelDesc;
-
-  int? _channelViews;
-  int? get channelViews => _$this._channelViews;
-  set channelViews(int? channelViews) => _$this._channelViews = channelViews;
-
-  String? _channelVideoUrl;
-  String? get channelVideoUrl => _$this._channelVideoUrl;
-  set channelVideoUrl(String? channelVideoUrl) =>
-      _$this._channelVideoUrl = channelVideoUrl;
-
-  DateTime? _channelCreatedOn;
-  DateTime? get channelCreatedOn => _$this._channelCreatedOn;
-  set channelCreatedOn(DateTime? channelCreatedOn) =>
-      _$this._channelCreatedOn = channelCreatedOn;
-
-  double? _channelPrice;
-  double? get channelPrice => _$this._channelPrice;
-  set channelPrice(double? channelPrice) => _$this._channelPrice = channelPrice;
+  String? _channelImage;
+  String? get channelImage => _$this._channelImage;
+  set channelImage(String? channelImage) => _$this._channelImage = channelImage;
 
   bool? _channelStatus;
   bool? get channelStatus => _$this._channelStatus;
   set channelStatus(bool? channelStatus) =>
       _$this._channelStatus = channelStatus;
 
-  String? _channelImage;
-  String? get channelImage => _$this._channelImage;
-  set channelImage(String? channelImage) => _$this._channelImage = channelImage;
+  double? _channelPrice;
+  double? get channelPrice => _$this._channelPrice;
+  set channelPrice(double? channelPrice) => _$this._channelPrice = channelPrice;
 
-  String? _messageReason;
-  String? get messageReason => _$this._messageReason;
-  set messageReason(String? messageReason) =>
-      _$this._messageReason = messageReason;
+  String? _channelApprovalMessage;
+  String? get channelApprovalMessage => _$this._channelApprovalMessage;
+  set channelApprovalMessage(String? channelApprovalMessage) =>
+      _$this._channelApprovalMessage = channelApprovalMessage;
 
   ListBuilder<DocumentReference<Object?>>? _channelMembers;
   ListBuilder<DocumentReference<Object?>> get channelMembers =>
       _$this._channelMembers ??= new ListBuilder<DocumentReference<Object?>>();
   set channelMembers(ListBuilder<DocumentReference<Object?>>? channelMembers) =>
       _$this._channelMembers = channelMembers;
+
+  bool? _channelIsMain;
+  bool? get channelIsMain => _$this._channelIsMain;
+  set channelIsMain(bool? channelIsMain) =>
+      _$this._channelIsMain = channelIsMain;
+
+  DateTime? _createdAt;
+  DateTime? get createdAt => _$this._createdAt;
+  set createdAt(DateTime? createdAt) => _$this._createdAt = createdAt;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -417,17 +371,15 @@ class ChannelsRecordBuilder
     if ($v != null) {
       _channelName = $v.channelName;
       _channelType = $v.channelType;
-      _channelOwner = $v.channelOwner;
-      _shopType = $v.shopType;
-      _channelDesc = $v.channelDesc;
-      _channelViews = $v.channelViews;
-      _channelVideoUrl = $v.channelVideoUrl;
-      _channelCreatedOn = $v.channelCreatedOn;
-      _channelPrice = $v.channelPrice;
-      _channelStatus = $v.channelStatus;
+      _channelUserReference = $v.channelUserReference;
+      _channelDescription = $v.channelDescription;
       _channelImage = $v.channelImage;
-      _messageReason = $v.messageReason;
+      _channelStatus = $v.channelStatus;
+      _channelPrice = $v.channelPrice;
+      _channelApprovalMessage = $v.channelApprovalMessage;
       _channelMembers = $v.channelMembers?.toBuilder();
+      _channelIsMain = $v.channelIsMain;
+      _createdAt = $v.createdAt;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -455,17 +407,15 @@ class ChannelsRecordBuilder
           new _$ChannelsRecord._(
               channelName: channelName,
               channelType: channelType,
-              channelOwner: channelOwner,
-              shopType: shopType,
-              channelDesc: channelDesc,
-              channelViews: channelViews,
-              channelVideoUrl: channelVideoUrl,
-              channelCreatedOn: channelCreatedOn,
-              channelPrice: channelPrice,
-              channelStatus: channelStatus,
+              channelUserReference: channelUserReference,
+              channelDescription: channelDescription,
               channelImage: channelImage,
-              messageReason: messageReason,
+              channelStatus: channelStatus,
+              channelPrice: channelPrice,
+              channelApprovalMessage: channelApprovalMessage,
               channelMembers: _channelMembers?.build(),
+              channelIsMain: channelIsMain,
+              createdAt: createdAt,
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;

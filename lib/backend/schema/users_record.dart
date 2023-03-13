@@ -33,35 +33,35 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
   @BuiltValueField(wireName: 'user_bio')
   String? get userBio;
 
-  bool? get userVerified;
+  @BuiltValueField(wireName: 'user_verify')
+  bool? get userVerify;
 
-  @BuiltValueField(wireName: 'is_Seller')
-  bool? get isSeller;
+  @BuiltValueField(wireName: 'user_role')
+  String? get userRole;
 
-  @BuiltValueField(wireName: 'shipping_cost')
-  double? get shippingCost;
+  @BuiltValueField(wireName: 'user_instagram')
+  String? get userInstagram;
 
-  @BuiltValueField(wireName: 'account_type')
-  String? get accountType;
+  @BuiltValueField(wireName: 'user_line')
+  String? get userLine;
 
-  String? get instagram;
+  @BuiltValueField(wireName: 'user_point')
+  double? get userPoint;
 
-  String? get line;
+  @BuiltValueField(wireName: 'seller_bank_name')
+  String? get sellerBankName;
 
-  @BuiltValueField(wireName: 'bank_name')
-  String? get bankName;
+  @BuiltValueField(wireName: 'seller_bank_account')
+  int? get sellerBankAccount;
 
-  @BuiltValueField(wireName: 'bank_account')
-  int? get bankAccount;
+  @BuiltValueField(wireName: 'seller_earnings')
+  double? get sellerEarnings;
 
-  @BuiltValueField(wireName: 'IsAdmin')
-  bool? get isAdmin;
+  @BuiltValueField(wireName: 'seller_payout')
+  double? get sellerPayout;
 
-  double? get userPoints;
-
-  double? get earnings;
-
-  double? get payout;
+  @BuiltValueField(wireName: 'seller_shipping_cost')
+  double? get sellerShippingCost;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
@@ -75,18 +75,16 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
     ..phoneNumber = ''
     ..coverPhoto = ''
     ..userBio = ''
-    ..userVerified = false
-    ..isSeller = false
-    ..shippingCost = 0.0
-    ..accountType = ''
-    ..instagram = ''
-    ..line = ''
-    ..bankName = ''
-    ..bankAccount = 0
-    ..isAdmin = false
-    ..userPoints = 0.0
-    ..earnings = 0.0
-    ..payout = 0.0;
+    ..userVerify = false
+    ..userRole = ''
+    ..userInstagram = ''
+    ..userLine = ''
+    ..userPoint = 0.0
+    ..sellerBankName = ''
+    ..sellerBankAccount = 0
+    ..sellerEarnings = 0.0
+    ..sellerPayout = 0.0
+    ..sellerShippingCost = 0.0;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('users');
@@ -110,18 +108,17 @@ abstract class UsersRecord implements Built<UsersRecord, UsersRecordBuilder> {
           ..phoneNumber = snapshot.data['phone_number']
           ..coverPhoto = snapshot.data['cover_photo']
           ..userBio = snapshot.data['user_bio']
-          ..userVerified = snapshot.data['userVerified']
-          ..isSeller = snapshot.data['is_Seller']
-          ..shippingCost = snapshot.data['shipping_cost']?.toDouble()
-          ..accountType = snapshot.data['account_type']
-          ..instagram = snapshot.data['instagram']
-          ..line = snapshot.data['line']
-          ..bankName = snapshot.data['bank_name']
-          ..bankAccount = snapshot.data['bank_account']?.round()
-          ..isAdmin = snapshot.data['IsAdmin']
-          ..userPoints = snapshot.data['userPoints']?.toDouble()
-          ..earnings = snapshot.data['earnings']?.toDouble()
-          ..payout = snapshot.data['payout']?.toDouble()
+          ..userVerify = snapshot.data['user_verify']
+          ..userRole = snapshot.data['user_role']
+          ..userInstagram = snapshot.data['user_instagram']
+          ..userLine = snapshot.data['user_line']
+          ..userPoint = snapshot.data['user_point']?.toDouble()
+          ..sellerBankName = snapshot.data['seller_bank_name']
+          ..sellerBankAccount = snapshot.data['seller_bank_account']?.round()
+          ..sellerEarnings = snapshot.data['seller_earnings']?.toDouble()
+          ..sellerPayout = snapshot.data['seller_payout']?.toDouble()
+          ..sellerShippingCost =
+              snapshot.data['seller_shipping_cost']?.toDouble()
           ..ffRef = UsersRecord.collection.doc(snapshot.objectID),
       );
 
@@ -159,18 +156,16 @@ Map<String, dynamic> createUsersRecordData({
   String? phoneNumber,
   String? coverPhoto,
   String? userBio,
-  bool? userVerified,
-  bool? isSeller,
-  double? shippingCost,
-  String? accountType,
-  String? instagram,
-  String? line,
-  String? bankName,
-  int? bankAccount,
-  bool? isAdmin,
-  double? userPoints,
-  double? earnings,
-  double? payout,
+  bool? userVerify,
+  String? userRole,
+  String? userInstagram,
+  String? userLine,
+  double? userPoint,
+  String? sellerBankName,
+  int? sellerBankAccount,
+  double? sellerEarnings,
+  double? sellerPayout,
+  double? sellerShippingCost,
 }) {
   final firestoreData = serializers.toFirestore(
     UsersRecord.serializer,
@@ -184,18 +179,16 @@ Map<String, dynamic> createUsersRecordData({
         ..phoneNumber = phoneNumber
         ..coverPhoto = coverPhoto
         ..userBio = userBio
-        ..userVerified = userVerified
-        ..isSeller = isSeller
-        ..shippingCost = shippingCost
-        ..accountType = accountType
-        ..instagram = instagram
-        ..line = line
-        ..bankName = bankName
-        ..bankAccount = bankAccount
-        ..isAdmin = isAdmin
-        ..userPoints = userPoints
-        ..earnings = earnings
-        ..payout = payout,
+        ..userVerify = userVerify
+        ..userRole = userRole
+        ..userInstagram = userInstagram
+        ..userLine = userLine
+        ..userPoint = userPoint
+        ..sellerBankName = sellerBankName
+        ..sellerBankAccount = sellerBankAccount
+        ..sellerEarnings = sellerEarnings
+        ..sellerPayout = sellerPayout
+        ..sellerShippingCost = sellerShippingCost,
     ),
   );
 

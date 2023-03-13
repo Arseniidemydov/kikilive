@@ -1,93 +1,101 @@
 // Export pages
-export 'get_started/get_started_widget.dart' show GetStartedWidget;
-export 'phone_sign_in/phone_sign_in_widget.dart' show PhoneSignInWidget;
-export 'login_copy/login_copy_widget.dart' show LoginCopyWidget;
-export 'user_profile_copy/user_profile_copy_widget.dart'
-    show UserProfileCopyWidget;
-export 'register/register_widget.dart' show RegisterWidget;
-export 'order_mgmt_admin_copy/order_mgmt_admin_copy_widget.dart'
-    show OrderMgmtAdminCopyWidget;
-export 'user_profile_view_copy/user_profile_view_copy_widget.dart'
-    show UserProfileViewCopyWidget;
-export 'verify_o_t_p/verify_o_t_p_widget.dart' show VerifyOTPWidget;
-export 'login/login_widget.dart' show LoginWidget;
-export 'search_results/search_results_widget.dart' show SearchResultsWidget;
-export 'shops/shops_widget.dart' show ShopsWidget;
-export 'products/products_widget.dart' show ProductsWidget;
-export 'forgot_password/forgot_password_widget.dart' show ForgotPasswordWidget;
-export 'product_details/product_details_widget.dart' show ProductDetailsWidget;
-export 'terms_conditions/terms_conditions_widget.dart'
-    show TermsConditionsWidget;
-export 'shopping_cart/shopping_cart_widget.dart' show ShoppingCartWidget;
-export 'payment_success/payment_success_widget.dart' show PaymentSuccessWidget;
-export 'seller_settings/seller_settings_widget.dart' show SellerSettingsWidget;
-export 'sellers_details/sellers_details_widget.dart' show SellersDetailsWidget;
-export 'sellers_details_preview/sellers_details_preview_widget.dart'
-    show SellersDetailsPreviewWidget;
-export 'order_details_edit/order_details_edit_widget.dart'
-    show OrderDetailsEditWidget;
-export 'sellers_details_edit/sellers_details_edit_widget.dart'
-    show SellersDetailsEditWidget;
-export 'admin_settings/admin_settings_widget.dart' show AdminSettingsWidget;
-export 'admin_shop_earnings/admin_shop_earnings_widget.dart'
-    show AdminShopEarningsWidget;
-export 'order_details_preview/order_details_preview_widget.dart'
-    show OrderDetailsPreviewWidget;
-export 'seller_approval/seller_approval_widget.dart' show SellerApprovalWidget;
-export 'admin_create_channel/admin_create_channel_widget.dart'
-    show AdminCreateChannelWidget;
-export 'seller_approval_list/seller_approval_list_widget.dart'
-    show SellerApprovalListWidget;
-export 'channel_approval_list/channel_approval_list_widget.dart'
-    show ChannelApprovalListWidget;
-export 'verify_channel/verify_channel_widget.dart' show VerifyChannelWidget;
-export 'admin_earnings_deposit/admin_earnings_deposit_widget.dart'
-    show AdminEarningsDepositWidget;
-export 'order_mgmt_admin_list/order_mgmt_admin_list_widget.dart'
-    show OrderMgmtAdminListWidget;
-export 'order_mgmt_admin/order_mgmt_admin_widget.dart'
-    show OrderMgmtAdminWidget;
-export 'admin_shop_earnings_list/admin_shop_earnings_list_widget.dart'
-    show AdminShopEarningsListWidget;
-export 'order_details_preview_admin/order_details_preview_admin_widget.dart'
-    show OrderDetailsPreviewAdminWidget;
-export 'livestream_viewer/livestream_viewer_widget.dart'
-    show LivestreamViewerWidget;
-export 'live_broadcast/live_broadcast_widget.dart' show LiveBroadcastWidget;
-export 'privacy_pol/privacy_pol_widget.dart' show PrivacyPolWidget;
-export 'user_profile/user_profile_widget.dart' show UserProfileWidget;
-export 'user_profile_view/user_profile_view_widget.dart'
+export '/pages/o_k_authentication/signin_phone_page/signin_phone_page_widget.dart'
+    show SigninPhonePageWidget;
+export '/pages/o_k_authentication/register_page/register_page_widget.dart'
+    show RegisterPageWidget;
+export '/pages/o_k_authentication/signin_otp_page/signin_otp_page_widget.dart'
+    show SigninOtpPageWidget;
+export '/pages/login_page/login_page_widget.dart' show LoginPageWidget;
+export '/pages/o_k_authentication/forgot_password_page/forgot_password_page_widget.dart'
+    show ForgotPasswordPageWidget;
+export '/pages/o_k_pages_done/terms_and_condition/terms_and_condition_widget.dart'
+    show TermsAndConditionWidget;
+export '/pages/o_k_queries/products_page/products_page_widget.dart'
+    show ProductsPageWidget;
+export '/pages/search/search_results_page/search_results_page_widget.dart'
+    show SearchResultsPageWidget;
+export '/pages/shopping/shopping_cart_page/shopping_cart_page_widget.dart'
+    show ShoppingCartPageWidget;
+export '/pages/shopping/product_details_page/product_details_page_widget.dart'
+    show ProductDetailsPageWidget;
+export '/pages/o_k_queries/payment_success_page/payment_success_page_widget.dart'
+    show PaymentSuccessPageWidget;
+export '/pages/profile/user_profile_page/user_profile_page_widget.dart'
+    show UserProfilePageWidget;
+export '/pages/seller/seller_get_verified/seller_get_verified_widget.dart'
+    show SellerGetVerifiedWidget;
+export '/pages/o_k_queries/admin_seller_earnings/admin_seller_earnings_widget.dart'
+    show AdminSellerEarningsWidget;
+export '/pages/o_k_pages_done/order_list_details/order_list_details_widget.dart'
+    show OrderListDetailsWidget;
+export '/pages/admin/admin_seller_approval/admin_seller_approval_widget.dart'
+    show AdminSellerApprovalWidget;
+export '/pages/admin/admin_seller_approval_list/admin_seller_approval_list_widget.dart'
+    show AdminSellerApprovalListWidget;
+export '/pages/admin/admin_channel_approval_list/admin_channel_approval_list_widget.dart'
+    show AdminChannelApprovalListWidget;
+export '/pages/admin/admin_verify_channel/admin_verify_channel_widget.dart'
+    show AdminVerifyChannelWidget;
+export '/pages/admin/order_admin_mgmt_list/order_admin_mgmt_list_widget.dart'
+    show OrderAdminMgmtListWidget;
+export '/pages/order_mgmt_list/order_mgmt_list_widget.dart'
+    show OrderMgmtListWidget;
+export '/pages/o_k_queries/admin_seller_earnings_list/admin_seller_earnings_list_widget.dart'
+    show AdminSellerEarningsListWidget;
+export '/pages/o_k_pages_done/order_update_page/order_update_page_widget.dart'
+    show OrderUpdatePageWidget;
+export '/pages/live/live_broadcaster_page/live_broadcaster_page_widget.dart'
+    show LiveBroadcasterPageWidget;
+export '/pages/live/live_watcher_page/live_watcher_page_widget.dart'
+    show LiveWatcherPageWidget;
+export '/pages/o_k_pages_done/privacy_policy/privacy_policy_widget.dart'
+    show PrivacyPolicyWidget;
+export '/pages/profile/user_profile/user_profile_widget.dart'
+    show UserProfileWidget;
+export '/pages/profile/user_profile_view/user_profile_view_widget.dart'
     show UserProfileViewWidget;
-export 'live/live_widget.dart' show LiveWidget;
-export 'add_product/add_product_widget.dart' show AddProductWidget;
-export 'edit_product/edit_product_widget.dart' show EditProductWidget;
-export 'create_channels/create_channels_widget.dart' show CreateChannelsWidget;
-export 'user_settings/user_settings_widget.dart' show UserSettingsWidget;
-export 'edit_seller_channels/edit_seller_channels_widget.dart'
-    show EditSellerChannelsWidget;
-export 'account_settings/account_settings_widget.dart'
-    show AccountSettingsWidget;
-export 'order_history_list/order_history_list_widget.dart'
+export '/pages/profile/product_add_page/product_add_page_widget.dart'
+    show ProductAddPageWidget;
+export '/pages/profile/product_edit_page/product_edit_page_widget.dart'
+    show ProductEditPageWidget;
+export '/pages/profile/user_create_channel/user_create_channel_widget.dart'
+    show UserCreateChannelWidget;
+export '/pages/live/live_home_page/live_home_page_widget.dart'
+    show LiveHomePageWidget;
+export '/pages/profile/user_channel_edit/user_channel_edit_widget.dart'
+    show UserChannelEditWidget;
+export '/pages/profile/user_account_settings/user_account_settings_widget.dart'
+    show UserAccountSettingsWidget;
+export '/pages/o_k_pages_done/order_history_list/order_history_list_widget.dart'
     show OrderHistoryListWidget;
-export 'order_history/order_history_widget.dart' show OrderHistoryWidget;
-export 'address_list/address_list_widget.dart' show AddressListWidget;
-export 'address_details/address_details_widget.dart' show AddressDetailsWidget;
-export 'update_address_details/update_address_details_widget.dart'
-    show UpdateAddressDetailsWidget;
-export 'cart_address/cart_address_widget.dart' show CartAddressWidget;
-export 'all_chats/all_chats_widget.dart' show AllChatsWidget;
-export 'chat_page/chat_page_widget.dart' show ChatPageWidget;
-export 'add_chat/add_chat_widget.dart' show AddChatWidget;
-export 'add_user/add_user_widget.dart' show AddUserWidget;
-export 'invite_users/invite_users_widget.dart' show InviteUsersWidget;
-export 'search_shop/search_shop_widget.dart' show SearchShopWidget;
-export 'shop_earnings/shop_earnings_widget.dart' show ShopEarningsWidget;
-export 'order_management/order_management_widget.dart'
-    show OrderManagementWidget;
-export 'shop_earning_details/shop_earning_details_widget.dart'
-    show ShopEarningDetailsWidget;
-export 'remove_user/remove_user_widget.dart' show RemoveUserWidget;
-export 'seller_channels/seller_channels_widget.dart' show SellerChannelsWidget;
-export 'edit_channel/edit_channel_widget.dart' show EditChannelWidget;
-export 'channel_details/channel_details_widget.dart' show ChannelDetailsWidget;
-export 'channel_list/channel_list_widget.dart' show ChannelListWidget;
+export '/pages/profile/user_address_list/user_address_list_widget.dart'
+    show UserAddressListWidget;
+export '/pages/o_k_pages_done/order_history/order_history_widget.dart'
+    show OrderHistoryWidget;
+export '/pages/o_k_pages_done/address_edit_page/address_edit_page_widget.dart'
+    show AddressEditPageWidget;
+export '/pages/o_k_chat/all_chats_page/all_chats_page_widget.dart'
+    show AllChatsPageWidget;
+export '/pages/o_k_chat/create_chat_page/create_chat_page_widget.dart'
+    show CreateChatPageWidget;
+export '/pages/o_k_chat/chat_page/chat_page_widget.dart' show ChatPageWidget;
+export '/pages/o_k_chat/add_user_chat_group_page/add_user_chat_group_page_widget.dart'
+    show AddUserChatGroupPageWidget;
+export '/pages/o_k_chat/invite_user_chat_group_page/invite_user_chat_group_page_widget.dart'
+    show InviteUserChatGroupPageWidget;
+export '/pages/seller/seller_earnings_all/seller_earnings_all_widget.dart'
+    show SellerEarningsAllWidget;
+export '/pages/seller/seller_earnings_details/seller_earnings_details_widget.dart'
+    show SellerEarningsDetailsWidget;
+export '/pages/o_k_chat/remove_user_chat_group_page/remove_user_chat_group_page_widget.dart'
+    show RemoveUserChatGroupPageWidget;
+export '/pages/profile/user_channel_list/user_channel_list_widget.dart'
+    show UserChannelListWidget;
+export '/pages/o_k_pages_done/channel_edit_page/channel_edit_page_widget.dart'
+    show ChannelEditPageWidget;
+export '/pages/o_k_pages_done/channel_detaisl_page/channel_detaisl_page_widget.dart'
+    show ChannelDetaislPageWidget;
+export '/pages/profile/user_channel_subscription/user_channel_subscription_widget.dart'
+    show UserChannelSubscriptionWidget;
+export '/pages/o_k_pages_done/address_add_page/address_add_page_widget.dart'
+    show AddressAddPageWidget;

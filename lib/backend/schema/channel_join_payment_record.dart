@@ -12,28 +12,27 @@ abstract class ChannelJoinPaymentRecord
   static Serializer<ChannelJoinPaymentRecord> get serializer =>
       _$channelJoinPaymentRecordSerializer;
 
-  DateTime? get joinAt;
+  @BuiltValueField(wireName: 'channel_join_at')
+  DateTime? get channelJoinAt;
 
-  DocumentReference? get userRef;
+  @BuiltValueField(wireName: 'channel_join_user_reference')
+  DocumentReference? get channelJoinUserReference;
 
-  DocumentReference? get channelRef;
+  @BuiltValueField(wireName: 'channel_join_reference')
+  DocumentReference? get channelJoinReference;
 
-  String? get paymentID;
-
-  @BuiltValueField(wireName: 'PricePaid')
-  double? get pricePaid;
+  @BuiltValueField(wireName: 'channel_join_payment_id')
+  String? get channelJoinPaymentId;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
 
   static void _initializeBuilder(ChannelJoinPaymentRecordBuilder builder) =>
-      builder
-        ..paymentID = ''
-        ..pricePaid = 0.0;
+      builder..channelJoinPaymentId = '';
 
   static CollectionReference get collection =>
-      FirebaseFirestore.instance.collection('ChannelJoinPayment');
+      FirebaseFirestore.instance.collection('channel_join_payment');
 
   static Stream<ChannelJoinPaymentRecord> getDocument(DocumentReference ref) =>
       ref.snapshots().map(
@@ -56,21 +55,19 @@ abstract class ChannelJoinPaymentRecord
 }
 
 Map<String, dynamic> createChannelJoinPaymentRecordData({
-  DateTime? joinAt,
-  DocumentReference? userRef,
-  DocumentReference? channelRef,
-  String? paymentID,
-  double? pricePaid,
+  DateTime? channelJoinAt,
+  DocumentReference? channelJoinUserReference,
+  DocumentReference? channelJoinReference,
+  String? channelJoinPaymentId,
 }) {
   final firestoreData = serializers.toFirestore(
     ChannelJoinPaymentRecord.serializer,
     ChannelJoinPaymentRecord(
       (c) => c
-        ..joinAt = joinAt
-        ..userRef = userRef
-        ..channelRef = channelRef
-        ..paymentID = paymentID
-        ..pricePaid = pricePaid,
+        ..channelJoinAt = channelJoinAt
+        ..channelJoinUserReference = channelJoinUserReference
+        ..channelJoinReference = channelJoinReference
+        ..channelJoinPaymentId = channelJoinPaymentId,
     ),
   );
 

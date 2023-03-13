@@ -21,91 +21,92 @@ class _$OrderListRecordSerializer
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object?>[];
     Object? value;
-    value = object.orderNo;
+    value = object.orderListNumber;
     if (value != null) {
       result
-        ..add('order_no')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
+        ..add('order_list_number')
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
-    value = object.orderDate;
+    value = object.orderListDate;
     if (value != null) {
       result
-        ..add('order_date')
+        ..add('order_list_date')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(DateTime)));
     }
-    value = object.orderTotal;
+    value = object.orderListTotal;
     if (value != null) {
       result
-        ..add('order_total')
+        ..add('order_list_total')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(double)));
     }
-    value = object.userRef;
+    value = object.orderListUserReference;
     if (value != null) {
       result
-        ..add('user_Ref')
+        ..add('order_list_user_reference')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
     }
-    value = object.shopRef;
+    value = object.orderListAddressReference;
     if (value != null) {
       result
-        ..add('shop_Ref')
+        ..add('order_list_address_reference')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
     }
-    value = object.addressRef;
+    value = object.orderListProductList;
     if (value != null) {
       result
-        ..add('addressRef')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
-    }
-    value = object.productsList;
-    if (value != null) {
-      result
-        ..add('productsList')
+        ..add('order_list_product_list')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(BuiltList, const [
               const FullType(
                   DocumentReference, const [const FullType.nullable(Object)])
             ])));
     }
-    value = object.isPaid;
+    value = object.orderListProductListUnique;
     if (value != null) {
       result
-        ..add('isPaid')
-        ..add(
-            serializers.serialize(value, specifiedType: const FullType(bool)));
-    }
-    value = object.productsListUnique;
-    if (value != null) {
-      result
-        ..add('productsListUnique')
+        ..add('order_list_product_list_unique')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(BuiltList, const [
               const FullType(
                   DocumentReference, const [const FullType.nullable(Object)])
             ])));
     }
-    value = object.shippingTotal;
+    value = object.orderListShippingTotal;
     if (value != null) {
       result
-        ..add('shippingTotal')
+        ..add('order_list_shipping_total')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(double)));
     }
-    value = object.paymentID;
+    value = object.orderListPaymentId;
     if (value != null) {
       result
-        ..add('PaymentID')
+        ..add('order_list_payment_id')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
+    }
+    value = object.orderListSellerReference;
+    if (value != null) {
+      result
+        ..add('order_list_seller_reference')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(BuiltList, const [
+              const FullType(
+                  DocumentReference, const [const FullType.nullable(Object)])
+            ])));
+    }
+    value = object.orderListIsPaid;
+    if (value != null) {
+      result
+        ..add('order_list_is_paid')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
     }
     value = object.ffRef;
     if (value != null) {
@@ -130,61 +131,63 @@ class _$OrderListRecordSerializer
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
-        case 'order_no':
-          result.orderNo = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
+        case 'order_list_number':
+          result.orderListNumber = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int?;
           break;
-        case 'order_date':
-          result.orderDate = serializers.deserialize(value,
+        case 'order_list_date':
+          result.orderListDate = serializers.deserialize(value,
               specifiedType: const FullType(DateTime)) as DateTime?;
           break;
-        case 'order_total':
-          result.orderTotal = serializers.deserialize(value,
+        case 'order_list_total':
+          result.orderListTotal = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double?;
           break;
-        case 'user_Ref':
-          result.userRef = serializers.deserialize(value,
+        case 'order_list_user_reference':
+          result.orderListUserReference = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
           break;
-        case 'shop_Ref':
-          result.shopRef = serializers.deserialize(value,
+        case 'order_list_address_reference':
+          result.orderListAddressReference = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
           break;
-        case 'addressRef':
-          result.addressRef = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
-          break;
-        case 'productsList':
-          result.productsList.replace(serializers.deserialize(value,
+        case 'order_list_product_list':
+          result.orderListProductList.replace(serializers.deserialize(value,
               specifiedType: const FullType(BuiltList, const [
                 const FullType(
                     DocumentReference, const [const FullType.nullable(Object)])
               ]))! as BuiltList<Object?>);
           break;
-        case 'isPaid':
-          result.isPaid = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool?;
+        case 'order_list_product_list_unique':
+          result.orderListProductListUnique
+              .replace(serializers.deserialize(value,
+                  specifiedType: const FullType(BuiltList, const [
+                    const FullType(DocumentReference,
+                        const [const FullType.nullable(Object)])
+                  ]))! as BuiltList<Object?>);
           break;
-        case 'productsListUnique':
-          result.productsListUnique.replace(serializers.deserialize(value,
-              specifiedType: const FullType(BuiltList, const [
-                const FullType(
-                    DocumentReference, const [const FullType.nullable(Object)])
-              ]))! as BuiltList<Object?>);
-          break;
-        case 'shippingTotal':
-          result.shippingTotal = serializers.deserialize(value,
+        case 'order_list_shipping_total':
+          result.orderListShippingTotal = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double?;
           break;
-        case 'PaymentID':
-          result.paymentID = serializers.deserialize(value,
+        case 'order_list_payment_id':
+          result.orderListPaymentId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
+          break;
+        case 'order_list_seller_reference':
+          result.orderListSellerReference.replace(serializers.deserialize(value,
+              specifiedType: const FullType(BuiltList, const [
+                const FullType(
+                    DocumentReference, const [const FullType.nullable(Object)])
+              ]))! as BuiltList<Object?>);
+          break;
+        case 'order_list_is_paid':
+          result.orderListIsPaid = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool?;
           break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
@@ -201,27 +204,27 @@ class _$OrderListRecordSerializer
 
 class _$OrderListRecord extends OrderListRecord {
   @override
-  final String? orderNo;
+  final int? orderListNumber;
   @override
-  final DateTime? orderDate;
+  final DateTime? orderListDate;
   @override
-  final double? orderTotal;
+  final double? orderListTotal;
   @override
-  final DocumentReference<Object?>? userRef;
+  final DocumentReference<Object?>? orderListUserReference;
   @override
-  final DocumentReference<Object?>? shopRef;
+  final DocumentReference<Object?>? orderListAddressReference;
   @override
-  final DocumentReference<Object?>? addressRef;
+  final BuiltList<DocumentReference<Object?>>? orderListProductList;
   @override
-  final BuiltList<DocumentReference<Object?>>? productsList;
+  final BuiltList<DocumentReference<Object?>>? orderListProductListUnique;
   @override
-  final bool? isPaid;
+  final double? orderListShippingTotal;
   @override
-  final BuiltList<DocumentReference<Object?>>? productsListUnique;
+  final String? orderListPaymentId;
   @override
-  final double? shippingTotal;
+  final BuiltList<DocumentReference<Object?>>? orderListSellerReference;
   @override
-  final String? paymentID;
+  final bool? orderListIsPaid;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -229,17 +232,17 @@ class _$OrderListRecord extends OrderListRecord {
       (new OrderListRecordBuilder()..update(updates))._build();
 
   _$OrderListRecord._(
-      {this.orderNo,
-      this.orderDate,
-      this.orderTotal,
-      this.userRef,
-      this.shopRef,
-      this.addressRef,
-      this.productsList,
-      this.isPaid,
-      this.productsListUnique,
-      this.shippingTotal,
-      this.paymentID,
+      {this.orderListNumber,
+      this.orderListDate,
+      this.orderListTotal,
+      this.orderListUserReference,
+      this.orderListAddressReference,
+      this.orderListProductList,
+      this.orderListProductListUnique,
+      this.orderListShippingTotal,
+      this.orderListPaymentId,
+      this.orderListSellerReference,
+      this.orderListIsPaid,
       this.ffRef})
       : super._();
 
@@ -255,17 +258,17 @@ class _$OrderListRecord extends OrderListRecord {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is OrderListRecord &&
-        orderNo == other.orderNo &&
-        orderDate == other.orderDate &&
-        orderTotal == other.orderTotal &&
-        userRef == other.userRef &&
-        shopRef == other.shopRef &&
-        addressRef == other.addressRef &&
-        productsList == other.productsList &&
-        isPaid == other.isPaid &&
-        productsListUnique == other.productsListUnique &&
-        shippingTotal == other.shippingTotal &&
-        paymentID == other.paymentID &&
+        orderListNumber == other.orderListNumber &&
+        orderListDate == other.orderListDate &&
+        orderListTotal == other.orderListTotal &&
+        orderListUserReference == other.orderListUserReference &&
+        orderListAddressReference == other.orderListAddressReference &&
+        orderListProductList == other.orderListProductList &&
+        orderListProductListUnique == other.orderListProductListUnique &&
+        orderListShippingTotal == other.orderListShippingTotal &&
+        orderListPaymentId == other.orderListPaymentId &&
+        orderListSellerReference == other.orderListSellerReference &&
+        orderListIsPaid == other.orderListIsPaid &&
         ffRef == other.ffRef;
   }
 
@@ -281,34 +284,36 @@ class _$OrderListRecord extends OrderListRecord {
                                 $jc(
                                     $jc(
                                         $jc(
-                                            $jc($jc(0, orderNo.hashCode),
-                                                orderDate.hashCode),
-                                            orderTotal.hashCode),
-                                        userRef.hashCode),
-                                    shopRef.hashCode),
-                                addressRef.hashCode),
-                            productsList.hashCode),
-                        isPaid.hashCode),
-                    productsListUnique.hashCode),
-                shippingTotal.hashCode),
-            paymentID.hashCode),
+                                            $jc(
+                                                $jc(0,
+                                                    orderListNumber.hashCode),
+                                                orderListDate.hashCode),
+                                            orderListTotal.hashCode),
+                                        orderListUserReference.hashCode),
+                                    orderListAddressReference.hashCode),
+                                orderListProductList.hashCode),
+                            orderListProductListUnique.hashCode),
+                        orderListShippingTotal.hashCode),
+                    orderListPaymentId.hashCode),
+                orderListSellerReference.hashCode),
+            orderListIsPaid.hashCode),
         ffRef.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper(r'OrderListRecord')
-          ..add('orderNo', orderNo)
-          ..add('orderDate', orderDate)
-          ..add('orderTotal', orderTotal)
-          ..add('userRef', userRef)
-          ..add('shopRef', shopRef)
-          ..add('addressRef', addressRef)
-          ..add('productsList', productsList)
-          ..add('isPaid', isPaid)
-          ..add('productsListUnique', productsListUnique)
-          ..add('shippingTotal', shippingTotal)
-          ..add('paymentID', paymentID)
+          ..add('orderListNumber', orderListNumber)
+          ..add('orderListDate', orderListDate)
+          ..add('orderListTotal', orderListTotal)
+          ..add('orderListUserReference', orderListUserReference)
+          ..add('orderListAddressReference', orderListAddressReference)
+          ..add('orderListProductList', orderListProductList)
+          ..add('orderListProductListUnique', orderListProductListUnique)
+          ..add('orderListShippingTotal', orderListShippingTotal)
+          ..add('orderListPaymentId', orderListPaymentId)
+          ..add('orderListSellerReference', orderListSellerReference)
+          ..add('orderListIsPaid', orderListIsPaid)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -318,57 +323,74 @@ class OrderListRecordBuilder
     implements Builder<OrderListRecord, OrderListRecordBuilder> {
   _$OrderListRecord? _$v;
 
-  String? _orderNo;
-  String? get orderNo => _$this._orderNo;
-  set orderNo(String? orderNo) => _$this._orderNo = orderNo;
+  int? _orderListNumber;
+  int? get orderListNumber => _$this._orderListNumber;
+  set orderListNumber(int? orderListNumber) =>
+      _$this._orderListNumber = orderListNumber;
 
-  DateTime? _orderDate;
-  DateTime? get orderDate => _$this._orderDate;
-  set orderDate(DateTime? orderDate) => _$this._orderDate = orderDate;
+  DateTime? _orderListDate;
+  DateTime? get orderListDate => _$this._orderListDate;
+  set orderListDate(DateTime? orderListDate) =>
+      _$this._orderListDate = orderListDate;
 
-  double? _orderTotal;
-  double? get orderTotal => _$this._orderTotal;
-  set orderTotal(double? orderTotal) => _$this._orderTotal = orderTotal;
+  double? _orderListTotal;
+  double? get orderListTotal => _$this._orderListTotal;
+  set orderListTotal(double? orderListTotal) =>
+      _$this._orderListTotal = orderListTotal;
 
-  DocumentReference<Object?>? _userRef;
-  DocumentReference<Object?>? get userRef => _$this._userRef;
-  set userRef(DocumentReference<Object?>? userRef) => _$this._userRef = userRef;
+  DocumentReference<Object?>? _orderListUserReference;
+  DocumentReference<Object?>? get orderListUserReference =>
+      _$this._orderListUserReference;
+  set orderListUserReference(
+          DocumentReference<Object?>? orderListUserReference) =>
+      _$this._orderListUserReference = orderListUserReference;
 
-  DocumentReference<Object?>? _shopRef;
-  DocumentReference<Object?>? get shopRef => _$this._shopRef;
-  set shopRef(DocumentReference<Object?>? shopRef) => _$this._shopRef = shopRef;
+  DocumentReference<Object?>? _orderListAddressReference;
+  DocumentReference<Object?>? get orderListAddressReference =>
+      _$this._orderListAddressReference;
+  set orderListAddressReference(
+          DocumentReference<Object?>? orderListAddressReference) =>
+      _$this._orderListAddressReference = orderListAddressReference;
 
-  DocumentReference<Object?>? _addressRef;
-  DocumentReference<Object?>? get addressRef => _$this._addressRef;
-  set addressRef(DocumentReference<Object?>? addressRef) =>
-      _$this._addressRef = addressRef;
-
-  ListBuilder<DocumentReference<Object?>>? _productsList;
-  ListBuilder<DocumentReference<Object?>> get productsList =>
-      _$this._productsList ??= new ListBuilder<DocumentReference<Object?>>();
-  set productsList(ListBuilder<DocumentReference<Object?>>? productsList) =>
-      _$this._productsList = productsList;
-
-  bool? _isPaid;
-  bool? get isPaid => _$this._isPaid;
-  set isPaid(bool? isPaid) => _$this._isPaid = isPaid;
-
-  ListBuilder<DocumentReference<Object?>>? _productsListUnique;
-  ListBuilder<DocumentReference<Object?>> get productsListUnique =>
-      _$this._productsListUnique ??=
+  ListBuilder<DocumentReference<Object?>>? _orderListProductList;
+  ListBuilder<DocumentReference<Object?>> get orderListProductList =>
+      _$this._orderListProductList ??=
           new ListBuilder<DocumentReference<Object?>>();
-  set productsListUnique(
-          ListBuilder<DocumentReference<Object?>>? productsListUnique) =>
-      _$this._productsListUnique = productsListUnique;
+  set orderListProductList(
+          ListBuilder<DocumentReference<Object?>>? orderListProductList) =>
+      _$this._orderListProductList = orderListProductList;
 
-  double? _shippingTotal;
-  double? get shippingTotal => _$this._shippingTotal;
-  set shippingTotal(double? shippingTotal) =>
-      _$this._shippingTotal = shippingTotal;
+  ListBuilder<DocumentReference<Object?>>? _orderListProductListUnique;
+  ListBuilder<DocumentReference<Object?>> get orderListProductListUnique =>
+      _$this._orderListProductListUnique ??=
+          new ListBuilder<DocumentReference<Object?>>();
+  set orderListProductListUnique(
+          ListBuilder<DocumentReference<Object?>>?
+              orderListProductListUnique) =>
+      _$this._orderListProductListUnique = orderListProductListUnique;
 
-  String? _paymentID;
-  String? get paymentID => _$this._paymentID;
-  set paymentID(String? paymentID) => _$this._paymentID = paymentID;
+  double? _orderListShippingTotal;
+  double? get orderListShippingTotal => _$this._orderListShippingTotal;
+  set orderListShippingTotal(double? orderListShippingTotal) =>
+      _$this._orderListShippingTotal = orderListShippingTotal;
+
+  String? _orderListPaymentId;
+  String? get orderListPaymentId => _$this._orderListPaymentId;
+  set orderListPaymentId(String? orderListPaymentId) =>
+      _$this._orderListPaymentId = orderListPaymentId;
+
+  ListBuilder<DocumentReference<Object?>>? _orderListSellerReference;
+  ListBuilder<DocumentReference<Object?>> get orderListSellerReference =>
+      _$this._orderListSellerReference ??=
+          new ListBuilder<DocumentReference<Object?>>();
+  set orderListSellerReference(
+          ListBuilder<DocumentReference<Object?>>? orderListSellerReference) =>
+      _$this._orderListSellerReference = orderListSellerReference;
+
+  bool? _orderListIsPaid;
+  bool? get orderListIsPaid => _$this._orderListIsPaid;
+  set orderListIsPaid(bool? orderListIsPaid) =>
+      _$this._orderListIsPaid = orderListIsPaid;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -381,17 +403,17 @@ class OrderListRecordBuilder
   OrderListRecordBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _orderNo = $v.orderNo;
-      _orderDate = $v.orderDate;
-      _orderTotal = $v.orderTotal;
-      _userRef = $v.userRef;
-      _shopRef = $v.shopRef;
-      _addressRef = $v.addressRef;
-      _productsList = $v.productsList?.toBuilder();
-      _isPaid = $v.isPaid;
-      _productsListUnique = $v.productsListUnique?.toBuilder();
-      _shippingTotal = $v.shippingTotal;
-      _paymentID = $v.paymentID;
+      _orderListNumber = $v.orderListNumber;
+      _orderListDate = $v.orderListDate;
+      _orderListTotal = $v.orderListTotal;
+      _orderListUserReference = $v.orderListUserReference;
+      _orderListAddressReference = $v.orderListAddressReference;
+      _orderListProductList = $v.orderListProductList?.toBuilder();
+      _orderListProductListUnique = $v.orderListProductListUnique?.toBuilder();
+      _orderListShippingTotal = $v.orderListShippingTotal;
+      _orderListPaymentId = $v.orderListPaymentId;
+      _orderListSellerReference = $v.orderListSellerReference?.toBuilder();
+      _orderListIsPaid = $v.orderListIsPaid;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -417,26 +439,28 @@ class OrderListRecordBuilder
     try {
       _$result = _$v ??
           new _$OrderListRecord._(
-              orderNo: orderNo,
-              orderDate: orderDate,
-              orderTotal: orderTotal,
-              userRef: userRef,
-              shopRef: shopRef,
-              addressRef: addressRef,
-              productsList: _productsList?.build(),
-              isPaid: isPaid,
-              productsListUnique: _productsListUnique?.build(),
-              shippingTotal: shippingTotal,
-              paymentID: paymentID,
+              orderListNumber: orderListNumber,
+              orderListDate: orderListDate,
+              orderListTotal: orderListTotal,
+              orderListUserReference: orderListUserReference,
+              orderListAddressReference: orderListAddressReference,
+              orderListProductList: _orderListProductList?.build(),
+              orderListProductListUnique: _orderListProductListUnique?.build(),
+              orderListShippingTotal: orderListShippingTotal,
+              orderListPaymentId: orderListPaymentId,
+              orderListSellerReference: _orderListSellerReference?.build(),
+              orderListIsPaid: orderListIsPaid,
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;
       try {
-        _$failedField = 'productsList';
-        _productsList?.build();
+        _$failedField = 'orderListProductList';
+        _orderListProductList?.build();
+        _$failedField = 'orderListProductListUnique';
+        _orderListProductListUnique?.build();
 
-        _$failedField = 'productsListUnique';
-        _productsListUnique?.build();
+        _$failedField = 'orderListSellerReference';
+        _orderListSellerReference?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             r'OrderListRecord', _$failedField, e.toString());

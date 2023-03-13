@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:from_css_color/from_css_color.dart';
-
 import 'index.dart';
 import 'serializers.dart';
 import 'package:built_value/built_value.dart';
@@ -13,20 +11,28 @@ abstract class SubCategoryRecord
   static Serializer<SubCategoryRecord> get serializer =>
       _$subCategoryRecordSerializer;
 
-  DocumentReference? get category;
+  @BuiltValueField(wireName: 'category_reference')
+  DocumentReference? get categoryReference;
 
   @BuiltValueField(wireName: 'sub_category_name')
   String? get subCategoryName;
+
+  @BuiltValueField(wireName: 'sub_category_order')
+  int? get subCategoryOrder;
+
+  @BuiltValueField(wireName: 'created_at')
+  DateTime? get createdAt;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
 
-  static void _initializeBuilder(SubCategoryRecordBuilder builder) =>
-      builder..subCategoryName = '';
+  static void _initializeBuilder(SubCategoryRecordBuilder builder) => builder
+    ..subCategoryName = ''
+    ..subCategoryOrder = 0;
 
   static CollectionReference get collection =>
-      FirebaseFirestore.instance.collection('subCategory');
+      FirebaseFirestore.instance.collection('sub_category');
 
   static Stream<SubCategoryRecord> getDocument(DocumentReference ref) => ref
       .snapshots()
@@ -35,29 +41,6 @@ abstract class SubCategoryRecord
   static Future<SubCategoryRecord> getDocumentOnce(DocumentReference ref) => ref
       .get()
       .then((s) => serializers.deserializeWith(serializer, serializedData(s))!);
-
-  static SubCategoryRecord fromAlgolia(AlgoliaObjectSnapshot snapshot) =>
-      SubCategoryRecord(
-        (c) => c
-          ..category = safeGet(() => toRef(snapshot.data['category']))
-          ..subCategoryName = snapshot.data['sub_category_name']
-          ..ffRef = SubCategoryRecord.collection.doc(snapshot.objectID),
-      );
-
-  static Future<List<SubCategoryRecord>> search(
-          {String? term,
-          FutureOr<LatLng>? location,
-          int? maxResults,
-          double? searchRadiusMeters}) =>
-      FFAlgoliaManager.instance
-          .algoliaQuery(
-            index: 'subCategory',
-            term: term,
-            maxResults: maxResults,
-            location: location,
-            searchRadiusMeters: searchRadiusMeters,
-          )
-          .then((r) => r.map(fromAlgolia).toList());
 
   SubCategoryRecord._();
   factory SubCategoryRecord([void Function(SubCategoryRecordBuilder) updates]) =
@@ -70,15 +53,19 @@ abstract class SubCategoryRecord
 }
 
 Map<String, dynamic> createSubCategoryRecordData({
-  DocumentReference? category,
+  DocumentReference? categoryReference,
   String? subCategoryName,
+  int? subCategoryOrder,
+  DateTime? createdAt,
 }) {
   final firestoreData = serializers.toFirestore(
     SubCategoryRecord.serializer,
     SubCategoryRecord(
       (s) => s
-        ..category = category
-        ..subCategoryName = subCategoryName,
+        ..categoryReference = categoryReference
+        ..subCategoryName = subCategoryName
+        ..subCategoryOrder = subCategoryOrder
+        ..createdAt = createdAt,
     ),
   );
 

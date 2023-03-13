@@ -3,31 +3,19 @@ import 'package:from_css_color/from_css_color.dart';
 
 import 'users_record.dart';
 import 'address_record.dart';
-import 'user_order_record.dart';
 import 'products_record.dart';
-import 'order_no_record.dart';
-import 'order_completed_record.dart';
 import 'streams_record.dart';
-import 'categories_record.dart';
-import 'sub_category_record.dart';
-import 'new_seller_request_record.dart';
-import 'generate_s_k_u_record.dart';
-import 'taxes_record.dart';
-import 'address_types_record.dart';
-import 'shipping_status_record.dart';
 import 'chats_record.dart';
 import 'chat_messages_record.dart';
-import 'email_verification_record.dart';
-import 'orders_record.dart';
-import 'defaul_img_record.dart';
-import 'user_cart_address_record.dart';
+import 'category_record.dart';
+import 'sub_category_record.dart';
+import 'seller_request_record.dart';
 import 'order_list_record.dart';
+import 'order_record.dart';
+import 'streams_comments_record.dart';
 import 'channels_record.dart';
-import 'country_code_record.dart';
-import 'user_skills_record.dart';
-import 'streaming_comments_record.dart';
 import 'channel_join_payment_record.dart';
-import 'deposit_record.dart';
+import 'deposits_record.dart';
 
 import 'index.dart';
 
@@ -41,31 +29,19 @@ const kDocumentReferenceField = 'Document__Reference__Field';
 @SerializersFor(const [
   UsersRecord,
   AddressRecord,
-  UserOrderRecord,
   ProductsRecord,
-  OrderNoRecord,
-  OrderCompletedRecord,
   StreamsRecord,
-  CategoriesRecord,
-  SubCategoryRecord,
-  NewSellerRequestRecord,
-  GenerateSKURecord,
-  TaxesRecord,
-  AddressTypesRecord,
-  ShippingStatusRecord,
   ChatsRecord,
   ChatMessagesRecord,
-  EmailVerificationRecord,
-  OrdersRecord,
-  DefaulImgRecord,
-  UserCartAddressRecord,
+  CategoryRecord,
+  SubCategoryRecord,
+  SellerRequestRecord,
   OrderListRecord,
+  OrderRecord,
+  StreamsCommentsRecord,
   ChannelsRecord,
-  CountryCodeRecord,
-  UserSkillsRecord,
-  StreamingCommentsRecord,
   ChannelJoinPaymentRecord,
-  DepositRecord,
+  DepositsRecord,
   EmailStruct,
 ])
 final Serializers serializers = (_$serializers.toBuilder()

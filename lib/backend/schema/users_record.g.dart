@@ -75,86 +75,72 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    value = object.userVerified;
+    value = object.userVerify;
     if (value != null) {
       result
-        ..add('userVerified')
+        ..add('user_verify')
         ..add(
             serializers.serialize(value, specifiedType: const FullType(bool)));
     }
-    value = object.isSeller;
+    value = object.userRole;
     if (value != null) {
       result
-        ..add('is_Seller')
-        ..add(
-            serializers.serialize(value, specifiedType: const FullType(bool)));
+        ..add('user_role')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
     }
-    value = object.shippingCost;
+    value = object.userInstagram;
     if (value != null) {
       result
-        ..add('shipping_cost')
+        ..add('user_instagram')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.userLine;
+    if (value != null) {
+      result
+        ..add('user_line')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.userPoint;
+    if (value != null) {
+      result
+        ..add('user_point')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(double)));
     }
-    value = object.accountType;
+    value = object.sellerBankName;
     if (value != null) {
       result
-        ..add('account_type')
+        ..add('seller_bank_name')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    value = object.instagram;
+    value = object.sellerBankAccount;
     if (value != null) {
       result
-        ..add('instagram')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.line;
-    if (value != null) {
-      result
-        ..add('line')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.bankName;
-    if (value != null) {
-      result
-        ..add('bank_name')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.bankAccount;
-    if (value != null) {
-      result
-        ..add('bank_account')
+        ..add('seller_bank_account')
         ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
-    value = object.isAdmin;
+    value = object.sellerEarnings;
     if (value != null) {
       result
-        ..add('IsAdmin')
-        ..add(
-            serializers.serialize(value, specifiedType: const FullType(bool)));
-    }
-    value = object.userPoints;
-    if (value != null) {
-      result
-        ..add('userPoints')
+        ..add('seller_earnings')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(double)));
     }
-    value = object.earnings;
+    value = object.sellerPayout;
     if (value != null) {
       result
-        ..add('earnings')
+        ..add('seller_payout')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(double)));
     }
-    value = object.payout;
+    value = object.sellerShippingCost;
     if (value != null) {
       result
-        ..add('payout')
+        ..add('seller_shipping_cost')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(double)));
     }
@@ -212,52 +198,44 @@ class _$UsersRecordSerializer implements StructuredSerializer<UsersRecord> {
           result.userBio = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
-        case 'userVerified':
-          result.userVerified = serializers.deserialize(value,
+        case 'user_verify':
+          result.userVerify = serializers.deserialize(value,
               specifiedType: const FullType(bool)) as bool?;
           break;
-        case 'is_Seller':
-          result.isSeller = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool?;
+        case 'user_role':
+          result.userRole = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
           break;
-        case 'shipping_cost':
-          result.shippingCost = serializers.deserialize(value,
+        case 'user_instagram':
+          result.userInstagram = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'user_line':
+          result.userLine = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'user_point':
+          result.userPoint = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double?;
           break;
-        case 'account_type':
-          result.accountType = serializers.deserialize(value,
+        case 'seller_bank_name':
+          result.sellerBankName = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
-        case 'instagram':
-          result.instagram = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'line':
-          result.line = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'bank_name':
-          result.bankName = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'bank_account':
-          result.bankAccount = serializers.deserialize(value,
+        case 'seller_bank_account':
+          result.sellerBankAccount = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int?;
           break;
-        case 'IsAdmin':
-          result.isAdmin = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool?;
-          break;
-        case 'userPoints':
-          result.userPoints = serializers.deserialize(value,
+        case 'seller_earnings':
+          result.sellerEarnings = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double?;
           break;
-        case 'earnings':
-          result.earnings = serializers.deserialize(value,
+        case 'seller_payout':
+          result.sellerPayout = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double?;
           break;
-        case 'payout':
-          result.payout = serializers.deserialize(value,
+        case 'seller_shipping_cost':
+          result.sellerShippingCost = serializers.deserialize(value,
               specifiedType: const FullType(double)) as double?;
           break;
         case 'Document__Reference__Field':
@@ -291,29 +269,25 @@ class _$UsersRecord extends UsersRecord {
   @override
   final String? userBio;
   @override
-  final bool? userVerified;
+  final bool? userVerify;
   @override
-  final bool? isSeller;
+  final String? userRole;
   @override
-  final double? shippingCost;
+  final String? userInstagram;
   @override
-  final String? accountType;
+  final String? userLine;
   @override
-  final String? instagram;
+  final double? userPoint;
   @override
-  final String? line;
+  final String? sellerBankName;
   @override
-  final String? bankName;
+  final int? sellerBankAccount;
   @override
-  final int? bankAccount;
+  final double? sellerEarnings;
   @override
-  final bool? isAdmin;
+  final double? sellerPayout;
   @override
-  final double? userPoints;
-  @override
-  final double? earnings;
-  @override
-  final double? payout;
+  final double? sellerShippingCost;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -329,18 +303,16 @@ class _$UsersRecord extends UsersRecord {
       this.phoneNumber,
       this.coverPhoto,
       this.userBio,
-      this.userVerified,
-      this.isSeller,
-      this.shippingCost,
-      this.accountType,
-      this.instagram,
-      this.line,
-      this.bankName,
-      this.bankAccount,
-      this.isAdmin,
-      this.userPoints,
-      this.earnings,
-      this.payout,
+      this.userVerify,
+      this.userRole,
+      this.userInstagram,
+      this.userLine,
+      this.userPoint,
+      this.sellerBankName,
+      this.sellerBankAccount,
+      this.sellerEarnings,
+      this.sellerPayout,
+      this.sellerShippingCost,
       this.ffRef})
       : super._();
 
@@ -363,18 +335,16 @@ class _$UsersRecord extends UsersRecord {
         phoneNumber == other.phoneNumber &&
         coverPhoto == other.coverPhoto &&
         userBio == other.userBio &&
-        userVerified == other.userVerified &&
-        isSeller == other.isSeller &&
-        shippingCost == other.shippingCost &&
-        accountType == other.accountType &&
-        instagram == other.instagram &&
-        line == other.line &&
-        bankName == other.bankName &&
-        bankAccount == other.bankAccount &&
-        isAdmin == other.isAdmin &&
-        userPoints == other.userPoints &&
-        earnings == other.earnings &&
-        payout == other.payout &&
+        userVerify == other.userVerify &&
+        userRole == other.userRole &&
+        userInstagram == other.userInstagram &&
+        userLine == other.userLine &&
+        userPoint == other.userPoint &&
+        sellerBankName == other.sellerBankName &&
+        sellerBankAccount == other.sellerBankAccount &&
+        sellerEarnings == other.sellerEarnings &&
+        sellerPayout == other.sellerPayout &&
+        sellerShippingCost == other.sellerShippingCost &&
         ffRef == other.ffRef;
   }
 
@@ -398,25 +368,32 @@ class _$UsersRecord extends UsersRecord {
                                                                 $jc(
                                                                     $jc(
                                                                         $jc(
-                                                                            $jc($jc($jc(0, email.hashCode), displayName.hashCode),
-                                                                                photoUrl.hashCode),
-                                                                            uid.hashCode),
-                                                                        createdTime.hashCode),
-                                                                    phoneNumber.hashCode),
-                                                                coverPhoto.hashCode),
-                                                            userBio.hashCode),
-                                                        userVerified.hashCode),
-                                                    isSeller.hashCode),
-                                                shippingCost.hashCode),
-                                            accountType.hashCode),
-                                        instagram.hashCode),
-                                    line.hashCode),
-                                bankName.hashCode),
-                            bankAccount.hashCode),
-                        isAdmin.hashCode),
-                    userPoints.hashCode),
-                earnings.hashCode),
-            payout.hashCode),
+                                                                            $jc(
+                                                                                0,
+                                                                                email
+                                                                                    .hashCode),
+                                                                            displayName
+                                                                                .hashCode),
+                                                                        photoUrl
+                                                                            .hashCode),
+                                                                    uid
+                                                                        .hashCode),
+                                                                createdTime
+                                                                    .hashCode),
+                                                            phoneNumber
+                                                                .hashCode),
+                                                        coverPhoto.hashCode),
+                                                    userBio.hashCode),
+                                                userVerify.hashCode),
+                                            userRole.hashCode),
+                                        userInstagram.hashCode),
+                                    userLine.hashCode),
+                                userPoint.hashCode),
+                            sellerBankName.hashCode),
+                        sellerBankAccount.hashCode),
+                    sellerEarnings.hashCode),
+                sellerPayout.hashCode),
+            sellerShippingCost.hashCode),
         ffRef.hashCode));
   }
 
@@ -431,18 +408,16 @@ class _$UsersRecord extends UsersRecord {
           ..add('phoneNumber', phoneNumber)
           ..add('coverPhoto', coverPhoto)
           ..add('userBio', userBio)
-          ..add('userVerified', userVerified)
-          ..add('isSeller', isSeller)
-          ..add('shippingCost', shippingCost)
-          ..add('accountType', accountType)
-          ..add('instagram', instagram)
-          ..add('line', line)
-          ..add('bankName', bankName)
-          ..add('bankAccount', bankAccount)
-          ..add('isAdmin', isAdmin)
-          ..add('userPoints', userPoints)
-          ..add('earnings', earnings)
-          ..add('payout', payout)
+          ..add('userVerify', userVerify)
+          ..add('userRole', userRole)
+          ..add('userInstagram', userInstagram)
+          ..add('userLine', userLine)
+          ..add('userPoint', userPoint)
+          ..add('sellerBankName', sellerBankName)
+          ..add('sellerBankAccount', sellerBankAccount)
+          ..add('sellerEarnings', sellerEarnings)
+          ..add('sellerPayout', sellerPayout)
+          ..add('sellerShippingCost', sellerShippingCost)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -483,53 +458,50 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
   String? get userBio => _$this._userBio;
   set userBio(String? userBio) => _$this._userBio = userBio;
 
-  bool? _userVerified;
-  bool? get userVerified => _$this._userVerified;
-  set userVerified(bool? userVerified) => _$this._userVerified = userVerified;
+  bool? _userVerify;
+  bool? get userVerify => _$this._userVerify;
+  set userVerify(bool? userVerify) => _$this._userVerify = userVerify;
 
-  bool? _isSeller;
-  bool? get isSeller => _$this._isSeller;
-  set isSeller(bool? isSeller) => _$this._isSeller = isSeller;
+  String? _userRole;
+  String? get userRole => _$this._userRole;
+  set userRole(String? userRole) => _$this._userRole = userRole;
 
-  double? _shippingCost;
-  double? get shippingCost => _$this._shippingCost;
-  set shippingCost(double? shippingCost) => _$this._shippingCost = shippingCost;
+  String? _userInstagram;
+  String? get userInstagram => _$this._userInstagram;
+  set userInstagram(String? userInstagram) =>
+      _$this._userInstagram = userInstagram;
 
-  String? _accountType;
-  String? get accountType => _$this._accountType;
-  set accountType(String? accountType) => _$this._accountType = accountType;
+  String? _userLine;
+  String? get userLine => _$this._userLine;
+  set userLine(String? userLine) => _$this._userLine = userLine;
 
-  String? _instagram;
-  String? get instagram => _$this._instagram;
-  set instagram(String? instagram) => _$this._instagram = instagram;
+  double? _userPoint;
+  double? get userPoint => _$this._userPoint;
+  set userPoint(double? userPoint) => _$this._userPoint = userPoint;
 
-  String? _line;
-  String? get line => _$this._line;
-  set line(String? line) => _$this._line = line;
+  String? _sellerBankName;
+  String? get sellerBankName => _$this._sellerBankName;
+  set sellerBankName(String? sellerBankName) =>
+      _$this._sellerBankName = sellerBankName;
 
-  String? _bankName;
-  String? get bankName => _$this._bankName;
-  set bankName(String? bankName) => _$this._bankName = bankName;
+  int? _sellerBankAccount;
+  int? get sellerBankAccount => _$this._sellerBankAccount;
+  set sellerBankAccount(int? sellerBankAccount) =>
+      _$this._sellerBankAccount = sellerBankAccount;
 
-  int? _bankAccount;
-  int? get bankAccount => _$this._bankAccount;
-  set bankAccount(int? bankAccount) => _$this._bankAccount = bankAccount;
+  double? _sellerEarnings;
+  double? get sellerEarnings => _$this._sellerEarnings;
+  set sellerEarnings(double? sellerEarnings) =>
+      _$this._sellerEarnings = sellerEarnings;
 
-  bool? _isAdmin;
-  bool? get isAdmin => _$this._isAdmin;
-  set isAdmin(bool? isAdmin) => _$this._isAdmin = isAdmin;
+  double? _sellerPayout;
+  double? get sellerPayout => _$this._sellerPayout;
+  set sellerPayout(double? sellerPayout) => _$this._sellerPayout = sellerPayout;
 
-  double? _userPoints;
-  double? get userPoints => _$this._userPoints;
-  set userPoints(double? userPoints) => _$this._userPoints = userPoints;
-
-  double? _earnings;
-  double? get earnings => _$this._earnings;
-  set earnings(double? earnings) => _$this._earnings = earnings;
-
-  double? _payout;
-  double? get payout => _$this._payout;
-  set payout(double? payout) => _$this._payout = payout;
+  double? _sellerShippingCost;
+  double? get sellerShippingCost => _$this._sellerShippingCost;
+  set sellerShippingCost(double? sellerShippingCost) =>
+      _$this._sellerShippingCost = sellerShippingCost;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -550,18 +522,16 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
       _phoneNumber = $v.phoneNumber;
       _coverPhoto = $v.coverPhoto;
       _userBio = $v.userBio;
-      _userVerified = $v.userVerified;
-      _isSeller = $v.isSeller;
-      _shippingCost = $v.shippingCost;
-      _accountType = $v.accountType;
-      _instagram = $v.instagram;
-      _line = $v.line;
-      _bankName = $v.bankName;
-      _bankAccount = $v.bankAccount;
-      _isAdmin = $v.isAdmin;
-      _userPoints = $v.userPoints;
-      _earnings = $v.earnings;
-      _payout = $v.payout;
+      _userVerify = $v.userVerify;
+      _userRole = $v.userRole;
+      _userInstagram = $v.userInstagram;
+      _userLine = $v.userLine;
+      _userPoint = $v.userPoint;
+      _sellerBankName = $v.sellerBankName;
+      _sellerBankAccount = $v.sellerBankAccount;
+      _sellerEarnings = $v.sellerEarnings;
+      _sellerPayout = $v.sellerPayout;
+      _sellerShippingCost = $v.sellerShippingCost;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -593,18 +563,16 @@ class UsersRecordBuilder implements Builder<UsersRecord, UsersRecordBuilder> {
             phoneNumber: phoneNumber,
             coverPhoto: coverPhoto,
             userBio: userBio,
-            userVerified: userVerified,
-            isSeller: isSeller,
-            shippingCost: shippingCost,
-            accountType: accountType,
-            instagram: instagram,
-            line: line,
-            bankName: bankName,
-            bankAccount: bankAccount,
-            isAdmin: isAdmin,
-            userPoints: userPoints,
-            earnings: earnings,
-            payout: payout,
+            userVerify: userVerify,
+            userRole: userRole,
+            userInstagram: userInstagram,
+            userLine: userLine,
+            userPoint: userPoint,
+            sellerBankName: sellerBankName,
+            sellerBankAccount: sellerBankAccount,
+            sellerEarnings: sellerEarnings,
+            sellerPayout: sellerPayout,
+            sellerShippingCost: sellerShippingCost,
             ffRef: ffRef);
     replace(_$result);
     return _$result;

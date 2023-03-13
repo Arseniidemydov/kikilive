@@ -10,61 +10,65 @@ abstract class AddressRecord
     implements Built<AddressRecord, AddressRecordBuilder> {
   static Serializer<AddressRecord> get serializer => _$addressRecordSerializer;
 
-  String? get addressLabel;
-
-  String? get address;
-
-  String? get deliveryInstruction;
-
-  DocumentReference? get userInfo;
-
   @BuiltValueField(wireName: 'created_at')
   DateTime? get createdAt;
-
-  String? get address2;
-
-  String? get city;
-
-  int? get zipcode;
 
   @BuiltValueField(wireName: 'address_type')
   BuiltList<String>? get addressType;
 
-  bool? get isActive;
+  @BuiltValueField(wireName: 'address_label_name')
+  String? get addressLabelName;
 
-  @BuiltValueField(wireName: 'default_address')
-  bool? get defaultAddress;
+  @BuiltValueField(wireName: 'address_line_1')
+  String? get addressLine1;
 
-  @BuiltValueField(wireName: 'ship_to')
-  String? get shipTo;
+  @BuiltValueField(wireName: 'address_line_2')
+  String? get addressLine2;
 
-  @BuiltValueField(wireName: 'ship_to_phone')
-  int? get shipToPhone;
+  @BuiltValueField(wireName: 'address_city')
+  String? get addressCity;
 
-  @BuiltValueField(wireName: 'ship_user')
-  String? get shipUser;
+  @BuiltValueField(wireName: 'address_zipcode')
+  int? get addressZipcode;
 
-  @BuiltValueField(wireName: 'ship_phone')
-  int? get shipPhone;
+  @BuiltValueField(wireName: 'address_is_default')
+  bool? get addressIsDefault;
+
+  @BuiltValueField(wireName: 'address_ship_to_name')
+  String? get addressShipToName;
+
+  @BuiltValueField(wireName: 'address_ship_to_phone')
+  int? get addressShipToPhone;
+
+  @BuiltValueField(wireName: 'address_ship_user_name')
+  String? get addressShipUserName;
+
+  @BuiltValueField(wireName: 'address_ship_user_phone')
+  int? get addressShipUserPhone;
+
+  @BuiltValueField(wireName: 'address_delivery_instruction')
+  String? get addressDeliveryInstruction;
+
+  @BuiltValueField(wireName: 'user_reference')
+  DocumentReference? get userReference;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
 
   static void _initializeBuilder(AddressRecordBuilder builder) => builder
-    ..addressLabel = ''
-    ..address = ''
-    ..deliveryInstruction = ''
-    ..address2 = ''
-    ..city = ''
-    ..zipcode = 0
     ..addressType = ListBuilder()
-    ..isActive = false
-    ..defaultAddress = false
-    ..shipTo = ''
-    ..shipToPhone = 0
-    ..shipUser = ''
-    ..shipPhone = 0;
+    ..addressLabelName = ''
+    ..addressLine1 = ''
+    ..addressLine2 = ''
+    ..addressCity = ''
+    ..addressZipcode = 0
+    ..addressIsDefault = false
+    ..addressShipToName = ''
+    ..addressShipToPhone = 0
+    ..addressShipUserName = ''
+    ..addressShipUserPhone = 0
+    ..addressDeliveryInstruction = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('address');
@@ -88,40 +92,38 @@ abstract class AddressRecord
 }
 
 Map<String, dynamic> createAddressRecordData({
-  String? addressLabel,
-  String? address,
-  String? deliveryInstruction,
-  DocumentReference? userInfo,
   DateTime? createdAt,
-  String? address2,
-  String? city,
-  int? zipcode,
-  bool? isActive,
-  bool? defaultAddress,
-  String? shipTo,
-  int? shipToPhone,
-  String? shipUser,
-  int? shipPhone,
+  String? addressLabelName,
+  String? addressLine1,
+  String? addressLine2,
+  String? addressCity,
+  int? addressZipcode,
+  bool? addressIsDefault,
+  String? addressShipToName,
+  int? addressShipToPhone,
+  String? addressShipUserName,
+  int? addressShipUserPhone,
+  String? addressDeliveryInstruction,
+  DocumentReference? userReference,
 }) {
   final firestoreData = serializers.toFirestore(
     AddressRecord.serializer,
     AddressRecord(
       (a) => a
-        ..addressLabel = addressLabel
-        ..address = address
-        ..deliveryInstruction = deliveryInstruction
-        ..userInfo = userInfo
         ..createdAt = createdAt
-        ..address2 = address2
-        ..city = city
-        ..zipcode = zipcode
         ..addressType = null
-        ..isActive = isActive
-        ..defaultAddress = defaultAddress
-        ..shipTo = shipTo
-        ..shipToPhone = shipToPhone
-        ..shipUser = shipUser
-        ..shipPhone = shipPhone,
+        ..addressLabelName = addressLabelName
+        ..addressLine1 = addressLine1
+        ..addressLine2 = addressLine2
+        ..addressCity = addressCity
+        ..addressZipcode = addressZipcode
+        ..addressIsDefault = addressIsDefault
+        ..addressShipToName = addressShipToName
+        ..addressShipToPhone = addressShipToPhone
+        ..addressShipUserName = addressShipUserName
+        ..addressShipUserPhone = addressShipUserPhone
+        ..addressDeliveryInstruction = addressDeliveryInstruction
+        ..userReference = userReference,
     ),
   );
 

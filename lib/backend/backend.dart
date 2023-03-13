@@ -7,31 +7,19 @@ import '../flutter_flow/flutter_flow_util.dart';
 
 import 'schema/users_record.dart';
 import 'schema/address_record.dart';
-import 'schema/user_order_record.dart';
 import 'schema/products_record.dart';
-import 'schema/order_no_record.dart';
-import 'schema/order_completed_record.dart';
 import 'schema/streams_record.dart';
-import 'schema/categories_record.dart';
-import 'schema/sub_category_record.dart';
-import 'schema/new_seller_request_record.dart';
-import 'schema/generate_s_k_u_record.dart';
-import 'schema/taxes_record.dart';
-import 'schema/address_types_record.dart';
-import 'schema/shipping_status_record.dart';
 import 'schema/chats_record.dart';
 import 'schema/chat_messages_record.dart';
-import 'schema/email_verification_record.dart';
-import 'schema/orders_record.dart';
-import 'schema/defaul_img_record.dart';
-import 'schema/user_cart_address_record.dart';
+import 'schema/category_record.dart';
+import 'schema/sub_category_record.dart';
+import 'schema/seller_request_record.dart';
 import 'schema/order_list_record.dart';
+import 'schema/order_record.dart';
+import 'schema/streams_comments_record.dart';
 import 'schema/channels_record.dart';
-import 'schema/country_code_record.dart';
-import 'schema/user_skills_record.dart';
-import 'schema/streaming_comments_record.dart';
 import 'schema/channel_join_payment_record.dart';
-import 'schema/deposit_record.dart';
+import 'schema/deposits_record.dart';
 import 'schema/serializers.dart';
 
 export 'dart:async' show StreamSubscription;
@@ -41,31 +29,19 @@ export 'schema/serializers.dart';
 
 export 'schema/users_record.dart';
 export 'schema/address_record.dart';
-export 'schema/user_order_record.dart';
 export 'schema/products_record.dart';
-export 'schema/order_no_record.dart';
-export 'schema/order_completed_record.dart';
 export 'schema/streams_record.dart';
-export 'schema/categories_record.dart';
-export 'schema/sub_category_record.dart';
-export 'schema/new_seller_request_record.dart';
-export 'schema/generate_s_k_u_record.dart';
-export 'schema/taxes_record.dart';
-export 'schema/address_types_record.dart';
-export 'schema/shipping_status_record.dart';
 export 'schema/chats_record.dart';
 export 'schema/chat_messages_record.dart';
-export 'schema/email_verification_record.dart';
-export 'schema/orders_record.dart';
-export 'schema/defaul_img_record.dart';
-export 'schema/user_cart_address_record.dart';
+export 'schema/category_record.dart';
+export 'schema/sub_category_record.dart';
+export 'schema/seller_request_record.dart';
 export 'schema/order_list_record.dart';
+export 'schema/order_record.dart';
+export 'schema/streams_comments_record.dart';
 export 'schema/channels_record.dart';
-export 'schema/country_code_record.dart';
-export 'schema/user_skills_record.dart';
-export 'schema/streaming_comments_record.dart';
 export 'schema/channel_join_payment_record.dart';
-export 'schema/deposit_record.dart';
+export 'schema/deposits_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Future<int> queryUsersRecordCount({
@@ -171,62 +147,6 @@ Future<FFFirestorePage<AddressRecord>> queryAddressRecordPage({
       isStream: isStream,
     );
 
-/// Functions to query UserOrderRecords (as a Stream and as a Future).
-Future<int> queryUserOrderRecordCount({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      UserOrderRecord.collection(parent),
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<UserOrderRecord>> queryUserOrderRecord({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      UserOrderRecord.collection(parent),
-      UserOrderRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<UserOrderRecord>> queryUserOrderRecordOnce({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      UserOrderRecord.collection(parent),
-      UserOrderRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<UserOrderRecord>> queryUserOrderRecordPage({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-    queryCollectionPage(
-      UserOrderRecord.collection(parent),
-      UserOrderRecord.serializer,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
-    );
-
 /// Functions to query ProductsRecords (as a Stream and as a Future).
 Future<int> queryProductsRecordCount({
   Query Function(Query)? queryBuilder,
@@ -279,114 +199,6 @@ Future<FFFirestorePage<ProductsRecord>> queryProductsRecordPage({
       isStream: isStream,
     );
 
-/// Functions to query OrderNoRecords (as a Stream and as a Future).
-Future<int> queryOrderNoRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      OrderNoRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<OrderNoRecord>> queryOrderNoRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      OrderNoRecord.collection,
-      OrderNoRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<OrderNoRecord>> queryOrderNoRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      OrderNoRecord.collection,
-      OrderNoRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<OrderNoRecord>> queryOrderNoRecordPage({
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-    queryCollectionPage(
-      OrderNoRecord.collection,
-      OrderNoRecord.serializer,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
-    );
-
-/// Functions to query OrderCompletedRecords (as a Stream and as a Future).
-Future<int> queryOrderCompletedRecordCount({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      OrderCompletedRecord.collection(parent),
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<OrderCompletedRecord>> queryOrderCompletedRecord({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      OrderCompletedRecord.collection(parent),
-      OrderCompletedRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<OrderCompletedRecord>> queryOrderCompletedRecordOnce({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      OrderCompletedRecord.collection(parent),
-      OrderCompletedRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<OrderCompletedRecord>> queryOrderCompletedRecordPage({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-    queryCollectionPage(
-      OrderCompletedRecord.collection(parent),
-      OrderCompletedRecord.serializer,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
-    );
-
 /// Functions to query StreamsRecords (as a Stream and as a Future).
 Future<int> queryStreamsRecordCount({
   Query Function(Query)? queryBuilder,
@@ -433,371 +245,6 @@ Future<FFFirestorePage<StreamsRecord>> queryStreamsRecordPage({
     queryCollectionPage(
       StreamsRecord.collection,
       StreamsRecord.serializer,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
-    );
-
-/// Functions to query CategoriesRecords (as a Stream and as a Future).
-Future<int> queryCategoriesRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      CategoriesRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<CategoriesRecord>> queryCategoriesRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      CategoriesRecord.collection,
-      CategoriesRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<CategoriesRecord>> queryCategoriesRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      CategoriesRecord.collection,
-      CategoriesRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<CategoriesRecord>> queryCategoriesRecordPage({
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-    queryCollectionPage(
-      CategoriesRecord.collection,
-      CategoriesRecord.serializer,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
-    );
-
-/// Functions to query SubCategoryRecords (as a Stream and as a Future).
-Future<int> querySubCategoryRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      SubCategoryRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<SubCategoryRecord>> querySubCategoryRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      SubCategoryRecord.collection,
-      SubCategoryRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<SubCategoryRecord>> querySubCategoryRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      SubCategoryRecord.collection,
-      SubCategoryRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<SubCategoryRecord>> querySubCategoryRecordPage({
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-    queryCollectionPage(
-      SubCategoryRecord.collection,
-      SubCategoryRecord.serializer,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
-    );
-
-/// Functions to query NewSellerRequestRecords (as a Stream and as a Future).
-Future<int> queryNewSellerRequestRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      NewSellerRequestRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<NewSellerRequestRecord>> queryNewSellerRequestRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      NewSellerRequestRecord.collection,
-      NewSellerRequestRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<NewSellerRequestRecord>> queryNewSellerRequestRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      NewSellerRequestRecord.collection,
-      NewSellerRequestRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<NewSellerRequestRecord>>
-    queryNewSellerRequestRecordPage({
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-        queryCollectionPage(
-          NewSellerRequestRecord.collection,
-          NewSellerRequestRecord.serializer,
-          queryBuilder: queryBuilder,
-          nextPageMarker: nextPageMarker,
-          pageSize: pageSize,
-          isStream: isStream,
-        );
-
-/// Functions to query GenerateSKURecords (as a Stream and as a Future).
-Future<int> queryGenerateSKURecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      GenerateSKURecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<GenerateSKURecord>> queryGenerateSKURecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      GenerateSKURecord.collection,
-      GenerateSKURecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<GenerateSKURecord>> queryGenerateSKURecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      GenerateSKURecord.collection,
-      GenerateSKURecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<GenerateSKURecord>> queryGenerateSKURecordPage({
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-    queryCollectionPage(
-      GenerateSKURecord.collection,
-      GenerateSKURecord.serializer,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
-    );
-
-/// Functions to query TaxesRecords (as a Stream and as a Future).
-Future<int> queryTaxesRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      TaxesRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<TaxesRecord>> queryTaxesRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      TaxesRecord.collection,
-      TaxesRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<TaxesRecord>> queryTaxesRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      TaxesRecord.collection,
-      TaxesRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<TaxesRecord>> queryTaxesRecordPage({
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-    queryCollectionPage(
-      TaxesRecord.collection,
-      TaxesRecord.serializer,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
-    );
-
-/// Functions to query AddressTypesRecords (as a Stream and as a Future).
-Future<int> queryAddressTypesRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      AddressTypesRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<AddressTypesRecord>> queryAddressTypesRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      AddressTypesRecord.collection,
-      AddressTypesRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<AddressTypesRecord>> queryAddressTypesRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      AddressTypesRecord.collection,
-      AddressTypesRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<AddressTypesRecord>> queryAddressTypesRecordPage({
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-    queryCollectionPage(
-      AddressTypesRecord.collection,
-      AddressTypesRecord.serializer,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
-    );
-
-/// Functions to query ShippingStatusRecords (as a Stream and as a Future).
-Future<int> queryShippingStatusRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      ShippingStatusRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<ShippingStatusRecord>> queryShippingStatusRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      ShippingStatusRecord.collection,
-      ShippingStatusRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<ShippingStatusRecord>> queryShippingStatusRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      ShippingStatusRecord.collection,
-      ShippingStatusRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<ShippingStatusRecord>> queryShippingStatusRecordPage({
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-    queryCollectionPage(
-      ShippingStatusRecord.collection,
-      ShippingStatusRecord.serializer,
       queryBuilder: queryBuilder,
       nextPageMarker: nextPageMarker,
       pageSize: pageSize,
@@ -908,213 +355,156 @@ Future<FFFirestorePage<ChatMessagesRecord>> queryChatMessagesRecordPage({
       isStream: isStream,
     );
 
-/// Functions to query EmailVerificationRecords (as a Stream and as a Future).
-Future<int> queryEmailVerificationRecordCount({
+/// Functions to query CategoryRecords (as a Stream and as a Future).
+Future<int> queryCategoryRecordCount({
   Query Function(Query)? queryBuilder,
   int limit = -1,
 }) =>
     queryCollectionCount(
-      EmailVerificationRecord.collection,
+      CategoryRecord.collection,
       queryBuilder: queryBuilder,
       limit: limit,
     );
 
-Stream<List<EmailVerificationRecord>> queryEmailVerificationRecord({
+Stream<List<CategoryRecord>> queryCategoryRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
   bool singleRecord = false,
 }) =>
     queryCollection(
-      EmailVerificationRecord.collection,
-      EmailVerificationRecord.serializer,
+      CategoryRecord.collection,
+      CategoryRecord.serializer,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,
     );
 
-Future<List<EmailVerificationRecord>> queryEmailVerificationRecordOnce({
+Future<List<CategoryRecord>> queryCategoryRecordOnce({
   Query Function(Query)? queryBuilder,
   int limit = -1,
   bool singleRecord = false,
 }) =>
     queryCollectionOnce(
-      EmailVerificationRecord.collection,
-      EmailVerificationRecord.serializer,
+      CategoryRecord.collection,
+      CategoryRecord.serializer,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,
     );
 
-Future<FFFirestorePage<EmailVerificationRecord>>
-    queryEmailVerificationRecordPage({
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-        queryCollectionPage(
-          EmailVerificationRecord.collection,
-          EmailVerificationRecord.serializer,
-          queryBuilder: queryBuilder,
-          nextPageMarker: nextPageMarker,
-          pageSize: pageSize,
-          isStream: isStream,
-        );
-
-/// Functions to query OrdersRecords (as a Stream and as a Future).
-Future<int> queryOrdersRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      OrdersRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<OrdersRecord>> queryOrdersRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      OrdersRecord.collection,
-      OrdersRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<OrdersRecord>> queryOrdersRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      OrdersRecord.collection,
-      OrdersRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<OrdersRecord>> queryOrdersRecordPage({
+Future<FFFirestorePage<CategoryRecord>> queryCategoryRecordPage({
   Query Function(Query)? queryBuilder,
   DocumentSnapshot? nextPageMarker,
   required int pageSize,
   required bool isStream,
 }) =>
     queryCollectionPage(
-      OrdersRecord.collection,
-      OrdersRecord.serializer,
+      CategoryRecord.collection,
+      CategoryRecord.serializer,
       queryBuilder: queryBuilder,
       nextPageMarker: nextPageMarker,
       pageSize: pageSize,
       isStream: isStream,
     );
 
-/// Functions to query DefaulImgRecords (as a Stream and as a Future).
-Future<int> queryDefaulImgRecordCount({
+/// Functions to query SubCategoryRecords (as a Stream and as a Future).
+Future<int> querySubCategoryRecordCount({
   Query Function(Query)? queryBuilder,
   int limit = -1,
 }) =>
     queryCollectionCount(
-      DefaulImgRecord.collection,
+      SubCategoryRecord.collection,
       queryBuilder: queryBuilder,
       limit: limit,
     );
 
-Stream<List<DefaulImgRecord>> queryDefaulImgRecord({
+Stream<List<SubCategoryRecord>> querySubCategoryRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
   bool singleRecord = false,
 }) =>
     queryCollection(
-      DefaulImgRecord.collection,
-      DefaulImgRecord.serializer,
+      SubCategoryRecord.collection,
+      SubCategoryRecord.serializer,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,
     );
 
-Future<List<DefaulImgRecord>> queryDefaulImgRecordOnce({
+Future<List<SubCategoryRecord>> querySubCategoryRecordOnce({
   Query Function(Query)? queryBuilder,
   int limit = -1,
   bool singleRecord = false,
 }) =>
     queryCollectionOnce(
-      DefaulImgRecord.collection,
-      DefaulImgRecord.serializer,
+      SubCategoryRecord.collection,
+      SubCategoryRecord.serializer,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,
     );
 
-Future<FFFirestorePage<DefaulImgRecord>> queryDefaulImgRecordPage({
+Future<FFFirestorePage<SubCategoryRecord>> querySubCategoryRecordPage({
   Query Function(Query)? queryBuilder,
   DocumentSnapshot? nextPageMarker,
   required int pageSize,
   required bool isStream,
 }) =>
     queryCollectionPage(
-      DefaulImgRecord.collection,
-      DefaulImgRecord.serializer,
+      SubCategoryRecord.collection,
+      SubCategoryRecord.serializer,
       queryBuilder: queryBuilder,
       nextPageMarker: nextPageMarker,
       pageSize: pageSize,
       isStream: isStream,
     );
 
-/// Functions to query UserCartAddressRecords (as a Stream and as a Future).
-Future<int> queryUserCartAddressRecordCount({
-  DocumentReference? parent,
+/// Functions to query SellerRequestRecords (as a Stream and as a Future).
+Future<int> querySellerRequestRecordCount({
   Query Function(Query)? queryBuilder,
   int limit = -1,
 }) =>
     queryCollectionCount(
-      UserCartAddressRecord.collection(parent),
+      SellerRequestRecord.collection,
       queryBuilder: queryBuilder,
       limit: limit,
     );
 
-Stream<List<UserCartAddressRecord>> queryUserCartAddressRecord({
-  DocumentReference? parent,
+Stream<List<SellerRequestRecord>> querySellerRequestRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
   bool singleRecord = false,
 }) =>
     queryCollection(
-      UserCartAddressRecord.collection(parent),
-      UserCartAddressRecord.serializer,
+      SellerRequestRecord.collection,
+      SellerRequestRecord.serializer,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,
     );
 
-Future<List<UserCartAddressRecord>> queryUserCartAddressRecordOnce({
-  DocumentReference? parent,
+Future<List<SellerRequestRecord>> querySellerRequestRecordOnce({
   Query Function(Query)? queryBuilder,
   int limit = -1,
   bool singleRecord = false,
 }) =>
     queryCollectionOnce(
-      UserCartAddressRecord.collection(parent),
-      UserCartAddressRecord.serializer,
+      SellerRequestRecord.collection,
+      SellerRequestRecord.serializer,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,
     );
 
-Future<FFFirestorePage<UserCartAddressRecord>> queryUserCartAddressRecordPage({
-  DocumentReference? parent,
+Future<FFFirestorePage<SellerRequestRecord>> querySellerRequestRecordPage({
   Query Function(Query)? queryBuilder,
   DocumentSnapshot? nextPageMarker,
   required int pageSize,
   required bool isStream,
 }) =>
     queryCollectionPage(
-      UserCartAddressRecord.collection(parent),
-      UserCartAddressRecord.serializer,
+      SellerRequestRecord.collection,
+      SellerRequestRecord.serializer,
       queryBuilder: queryBuilder,
       nextPageMarker: nextPageMarker,
       pageSize: pageSize,
@@ -1173,6 +563,110 @@ Future<FFFirestorePage<OrderListRecord>> queryOrderListRecordPage({
       isStream: isStream,
     );
 
+/// Functions to query OrderRecords (as a Stream and as a Future).
+Future<int> queryOrderRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      OrderRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<OrderRecord>> queryOrderRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      OrderRecord.collection,
+      OrderRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<OrderRecord>> queryOrderRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      OrderRecord.collection,
+      OrderRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<OrderRecord>> queryOrderRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+    queryCollectionPage(
+      OrderRecord.collection,
+      OrderRecord.serializer,
+      queryBuilder: queryBuilder,
+      nextPageMarker: nextPageMarker,
+      pageSize: pageSize,
+      isStream: isStream,
+    );
+
+/// Functions to query StreamsCommentsRecords (as a Stream and as a Future).
+Future<int> queryStreamsCommentsRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      StreamsCommentsRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<StreamsCommentsRecord>> queryStreamsCommentsRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      StreamsCommentsRecord.collection,
+      StreamsCommentsRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<StreamsCommentsRecord>> queryStreamsCommentsRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      StreamsCommentsRecord.collection,
+      StreamsCommentsRecord.serializer,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<FFFirestorePage<StreamsCommentsRecord>> queryStreamsCommentsRecordPage({
+  Query Function(Query)? queryBuilder,
+  DocumentSnapshot? nextPageMarker,
+  required int pageSize,
+  required bool isStream,
+}) =>
+    queryCollectionPage(
+      StreamsCommentsRecord.collection,
+      StreamsCommentsRecord.serializer,
+      queryBuilder: queryBuilder,
+      nextPageMarker: nextPageMarker,
+      pageSize: pageSize,
+      isStream: isStream,
+    );
+
 /// Functions to query ChannelsRecords (as a Stream and as a Future).
 Future<int> queryChannelsRecordCount({
   Query Function(Query)? queryBuilder,
@@ -1224,167 +718,6 @@ Future<FFFirestorePage<ChannelsRecord>> queryChannelsRecordPage({
       pageSize: pageSize,
       isStream: isStream,
     );
-
-/// Functions to query CountryCodeRecords (as a Stream and as a Future).
-Future<int> queryCountryCodeRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      CountryCodeRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<CountryCodeRecord>> queryCountryCodeRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      CountryCodeRecord.collection,
-      CountryCodeRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<CountryCodeRecord>> queryCountryCodeRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      CountryCodeRecord.collection,
-      CountryCodeRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<CountryCodeRecord>> queryCountryCodeRecordPage({
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-    queryCollectionPage(
-      CountryCodeRecord.collection,
-      CountryCodeRecord.serializer,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
-    );
-
-/// Functions to query UserSkillsRecords (as a Stream and as a Future).
-Future<int> queryUserSkillsRecordCount({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      UserSkillsRecord.collection(parent),
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<UserSkillsRecord>> queryUserSkillsRecord({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      UserSkillsRecord.collection(parent),
-      UserSkillsRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<UserSkillsRecord>> queryUserSkillsRecordOnce({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      UserSkillsRecord.collection(parent),
-      UserSkillsRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<UserSkillsRecord>> queryUserSkillsRecordPage({
-  DocumentReference? parent,
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-    queryCollectionPage(
-      UserSkillsRecord.collection(parent),
-      UserSkillsRecord.serializer,
-      queryBuilder: queryBuilder,
-      nextPageMarker: nextPageMarker,
-      pageSize: pageSize,
-      isStream: isStream,
-    );
-
-/// Functions to query StreamingCommentsRecords (as a Stream and as a Future).
-Future<int> queryStreamingCommentsRecordCount({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-}) =>
-    queryCollectionCount(
-      StreamingCommentsRecord.collection,
-      queryBuilder: queryBuilder,
-      limit: limit,
-    );
-
-Stream<List<StreamingCommentsRecord>> queryStreamingCommentsRecord({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollection(
-      StreamingCommentsRecord.collection,
-      StreamingCommentsRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<List<StreamingCommentsRecord>> queryStreamingCommentsRecordOnce({
-  Query Function(Query)? queryBuilder,
-  int limit = -1,
-  bool singleRecord = false,
-}) =>
-    queryCollectionOnce(
-      StreamingCommentsRecord.collection,
-      StreamingCommentsRecord.serializer,
-      queryBuilder: queryBuilder,
-      limit: limit,
-      singleRecord: singleRecord,
-    );
-
-Future<FFFirestorePage<StreamingCommentsRecord>>
-    queryStreamingCommentsRecordPage({
-  Query Function(Query)? queryBuilder,
-  DocumentSnapshot? nextPageMarker,
-  required int pageSize,
-  required bool isStream,
-}) =>
-        queryCollectionPage(
-          StreamingCommentsRecord.collection,
-          StreamingCommentsRecord.serializer,
-          queryBuilder: queryBuilder,
-          nextPageMarker: nextPageMarker,
-          pageSize: pageSize,
-          isStream: isStream,
-        );
 
 /// Functions to query ChannelJoinPaymentRecords (as a Stream and as a Future).
 Future<int> queryChannelJoinPaymentRecordCount({
@@ -1439,52 +772,52 @@ Future<FFFirestorePage<ChannelJoinPaymentRecord>>
           isStream: isStream,
         );
 
-/// Functions to query DepositRecords (as a Stream and as a Future).
-Future<int> queryDepositRecordCount({
+/// Functions to query DepositsRecords (as a Stream and as a Future).
+Future<int> queryDepositsRecordCount({
   Query Function(Query)? queryBuilder,
   int limit = -1,
 }) =>
     queryCollectionCount(
-      DepositRecord.collection,
+      DepositsRecord.collection,
       queryBuilder: queryBuilder,
       limit: limit,
     );
 
-Stream<List<DepositRecord>> queryDepositRecord({
+Stream<List<DepositsRecord>> queryDepositsRecord({
   Query Function(Query)? queryBuilder,
   int limit = -1,
   bool singleRecord = false,
 }) =>
     queryCollection(
-      DepositRecord.collection,
-      DepositRecord.serializer,
+      DepositsRecord.collection,
+      DepositsRecord.serializer,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,
     );
 
-Future<List<DepositRecord>> queryDepositRecordOnce({
+Future<List<DepositsRecord>> queryDepositsRecordOnce({
   Query Function(Query)? queryBuilder,
   int limit = -1,
   bool singleRecord = false,
 }) =>
     queryCollectionOnce(
-      DepositRecord.collection,
-      DepositRecord.serializer,
+      DepositsRecord.collection,
+      DepositsRecord.serializer,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,
     );
 
-Future<FFFirestorePage<DepositRecord>> queryDepositRecordPage({
+Future<FFFirestorePage<DepositsRecord>> queryDepositsRecordPage({
   Query Function(Query)? queryBuilder,
   DocumentSnapshot? nextPageMarker,
   required int pageSize,
   required bool isStream,
 }) =>
     queryCollectionPage(
-      DepositRecord.collection,
-      DepositRecord.serializer,
+      DepositsRecord.collection,
+      DepositsRecord.serializer,
       queryBuilder: queryBuilder,
       nextPageMarker: nextPageMarker,
       pageSize: pageSize,

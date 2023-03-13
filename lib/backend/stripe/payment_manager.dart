@@ -14,7 +14,8 @@ import '../cloud_functions/cloud_functions.dart';
 final _isProd = false;
 
 // Stripe Credentials
-const _kProdStripePublishableKey = '';
+const _kProdStripePublishableKey =
+    'pk_live_51Lp5LJK7iPOYYR5ng92WuGpuAdsMq2K4QxFJ0DtXVtxJXtHtTEMlimr2zCMrCZBw2KNKrf18S5wk7jLqype6yxN000A9ZOUOC2';
 const _kTestStripePublishableKey =
     'pk_test_51Lp5LJK7iPOYYR5nkjZtjh24mLNlIKQN1EAKBTx9IjK4vylJuyuhrmRIMrhyweOvlpofBEX9GQCr2ohAohX75BSB00ycEqewX6';
 const _kAppleMerchantId = '';
@@ -91,7 +92,7 @@ Future<StripePaymentResponse> processStripePayment(
         paymentIntentClientSecret: response['paymentIntent'],
         customerEphemeralKeySecret: response['ephemeralKey'],
         customerId: response['customer'],
-        merchantDisplayName: 'Bryan',
+        merchantDisplayName: 'Kiki',
         googlePay: allowGooglePay
             ? PaymentSheetGooglePay(
                 merchantCountryCode: 'Thailand',

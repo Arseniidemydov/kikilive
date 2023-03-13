@@ -365,12 +365,6 @@ class FFAppState extends ChangeNotifier {
     _chatOpen = _value;
   }
 
-  DocumentReference? _isOrderOpen;
-  DocumentReference? get isOrderOpen => _isOrderOpen;
-  set isOrderOpen(DocumentReference? _value) {
-    _isOrderOpen = _value;
-  }
-
   List<DocumentReference> _ChatUser = [];
   List<DocumentReference> get ChatUser => _ChatUser;
   set ChatUser(List<DocumentReference> _value) {
@@ -405,6 +399,30 @@ class FFAppState extends ChangeNotifier {
 
   void removeAtIndexFromProductListCart(int _index) {
     _ProductListCart.removeAt(_index);
+  }
+
+  List<DocumentReference> _ListOfChannels = [];
+  List<DocumentReference> get ListOfChannels => _ListOfChannels;
+  set ListOfChannels(List<DocumentReference> _value) {
+    _ListOfChannels = _value;
+  }
+
+  void addToListOfChannels(DocumentReference _value) {
+    _ListOfChannels.add(_value);
+  }
+
+  void removeFromListOfChannels(DocumentReference _value) {
+    _ListOfChannels.remove(_value);
+  }
+
+  void removeAtIndexFromListOfChannels(int _index) {
+    _ListOfChannels.removeAt(_index);
+  }
+
+  DocumentReference? _isOrderOpen;
+  DocumentReference? get isOrderOpen => _isOrderOpen;
+  set isOrderOpen(DocumentReference? _value) {
+    _isOrderOpen = _value;
   }
 }
 

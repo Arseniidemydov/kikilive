@@ -17,38 +17,32 @@ abstract class ChannelsRecord
   @BuiltValueField(wireName: 'channel_type')
   String? get channelType;
 
-  @BuiltValueField(wireName: 'channel_owner')
-  DocumentReference? get channelOwner;
+  @BuiltValueField(wireName: 'channel_user_reference')
+  DocumentReference? get channelUserReference;
 
-  @BuiltValueField(wireName: 'shop_type')
-  String? get shopType;
-
-  @BuiltValueField(wireName: 'channel_desc')
-  String? get channelDesc;
-
-  @BuiltValueField(wireName: 'channel_views')
-  int? get channelViews;
-
-  @BuiltValueField(wireName: 'channel_video_url')
-  String? get channelVideoUrl;
-
-  @BuiltValueField(wireName: 'channel_created_on')
-  DateTime? get channelCreatedOn;
-
-  @BuiltValueField(wireName: 'channel_price')
-  double? get channelPrice;
-
-  @BuiltValueField(wireName: 'channel_status')
-  bool? get channelStatus;
+  @BuiltValueField(wireName: 'channel_description')
+  String? get channelDescription;
 
   @BuiltValueField(wireName: 'channel_image')
   String? get channelImage;
 
-  @BuiltValueField(wireName: 'message_reason')
-  String? get messageReason;
+  @BuiltValueField(wireName: 'channel_status')
+  bool? get channelStatus;
+
+  @BuiltValueField(wireName: 'channel_price')
+  double? get channelPrice;
+
+  @BuiltValueField(wireName: 'channel_approval_message')
+  String? get channelApprovalMessage;
 
   @BuiltValueField(wireName: 'channel_members')
   BuiltList<DocumentReference>? get channelMembers;
+
+  @BuiltValueField(wireName: 'channel_is_main')
+  bool? get channelIsMain;
+
+  @BuiltValueField(wireName: 'created_at')
+  DateTime? get createdAt;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
@@ -57,15 +51,13 @@ abstract class ChannelsRecord
   static void _initializeBuilder(ChannelsRecordBuilder builder) => builder
     ..channelName = ''
     ..channelType = ''
-    ..shopType = ''
-    ..channelDesc = ''
-    ..channelViews = 0
-    ..channelVideoUrl = ''
-    ..channelPrice = 0.0
-    ..channelStatus = false
+    ..channelDescription = ''
     ..channelImage = ''
-    ..messageReason = ''
-    ..channelMembers = ListBuilder();
+    ..channelStatus = false
+    ..channelPrice = 0.0
+    ..channelApprovalMessage = ''
+    ..channelMembers = ListBuilder()
+    ..channelIsMain = false;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('channels');
@@ -91,16 +83,14 @@ abstract class ChannelsRecord
 Map<String, dynamic> createChannelsRecordData({
   String? channelName,
   String? channelType,
-  DocumentReference? channelOwner,
-  String? shopType,
-  String? channelDesc,
-  int? channelViews,
-  String? channelVideoUrl,
-  DateTime? channelCreatedOn,
-  double? channelPrice,
-  bool? channelStatus,
+  DocumentReference? channelUserReference,
+  String? channelDescription,
   String? channelImage,
-  String? messageReason,
+  bool? channelStatus,
+  double? channelPrice,
+  String? channelApprovalMessage,
+  bool? channelIsMain,
+  DateTime? createdAt,
 }) {
   final firestoreData = serializers.toFirestore(
     ChannelsRecord.serializer,
@@ -108,17 +98,15 @@ Map<String, dynamic> createChannelsRecordData({
       (c) => c
         ..channelName = channelName
         ..channelType = channelType
-        ..channelOwner = channelOwner
-        ..shopType = shopType
-        ..channelDesc = channelDesc
-        ..channelViews = channelViews
-        ..channelVideoUrl = channelVideoUrl
-        ..channelCreatedOn = channelCreatedOn
-        ..channelPrice = channelPrice
-        ..channelStatus = channelStatus
+        ..channelUserReference = channelUserReference
+        ..channelDescription = channelDescription
         ..channelImage = channelImage
-        ..messageReason = messageReason
-        ..channelMembers = null,
+        ..channelStatus = channelStatus
+        ..channelPrice = channelPrice
+        ..channelApprovalMessage = channelApprovalMessage
+        ..channelMembers = null
+        ..channelIsMain = channelIsMain
+        ..createdAt = createdAt,
     ),
   );
 

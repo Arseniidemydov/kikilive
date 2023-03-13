@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:page_transition/page_transition.dart';
 import '../flutter_flow_theme.dart';
@@ -24,8 +25,8 @@ export '../../backend/firebase_dynamic_links/firebase_dynamic_links.dart'
 const kTransitionInfoKey = '__transition_info__';
 
 class AppStateNotifier extends ChangeNotifier {
-  BryanFirebaseUser? initialUser;
-  BryanFirebaseUser? user;
+  KikiFirebaseUser? initialUser;
+  KikiFirebaseUser? user;
   bool showSplashImage = true;
   String? _redirectLocation;
 
@@ -50,7 +51,7 @@ class AppStateNotifier extends ChangeNotifier {
   /// to perform subsequent actions (such as navigation) afterwards.
   void updateNotifyOnAuthChange(bool notify) => notifyOnAuthChange = notify;
 
-  void update(BryanFirebaseUser newUser) {
+  void update(KikiFirebaseUser newUser) {
     initialUser ??= newUser;
     user = newUser;
     // Refresh the app on auth change unless explicitly marked otherwise.
@@ -73,244 +74,196 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       errorBuilder: (context, _) =>
-          appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
+          appStateNotifier.loggedIn ? NavBarPage() : LoginPageWidget(),
       navigatorBuilder: (_, __, child) => DynamicLinksHandler(child: child),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? NavBarPage() : LoginWidget(),
+              appStateNotifier.loggedIn ? NavBarPage() : LoginPageWidget(),
           routes: [
             FFRoute(
-              name: 'getStarted',
-              path: 'getStarted',
-              builder: (context, params) => GetStartedWidget(),
+              name: 'signin_phone_page',
+              path: 'signinPhonePage',
+              builder: (context, params) => SigninPhonePageWidget(),
             ),
             FFRoute(
-              name: 'phoneSignIn',
-              path: 'phoneSignIn',
-              builder: (context, params) => PhoneSignInWidget(),
+              name: 'register_page',
+              path: 'registerPage',
+              builder: (context, params) => RegisterPageWidget(),
             ),
             FFRoute(
-              name: 'loginCopy',
-              path: 'loginCopy',
-              builder: (context, params) => LoginCopyWidget(),
+              name: 'signin_otp_page',
+              path: 'signinOtpPage',
+              builder: (context, params) => SigninOtpPageWidget(),
             ),
             FFRoute(
-              name: 'userProfileCopy',
-              path: 'userProfileCopy',
-              builder: (context, params) => UserProfileCopyWidget(),
+              name: 'login_page',
+              path: 'loginPage',
+              builder: (context, params) => LoginPageWidget(),
             ),
             FFRoute(
-              name: 'register',
-              path: 'register',
-              builder: (context, params) => RegisterWidget(),
+              name: 'forgot_password_page',
+              path: 'forgotPasswordPage',
+              builder: (context, params) => ForgotPasswordPageWidget(),
             ),
             FFRoute(
-              name: 'orderMgmtAdminCopy',
-              path: 'orderMgmtAdminCopy',
-              builder: (context, params) => OrderMgmtAdminCopyWidget(),
+              name: 'terms_and_condition',
+              path: 'termsAndCondition',
+              requireAuth: true,
+              builder: (context, params) => TermsAndConditionWidget(),
             ),
             FFRoute(
-              name: 'userProfileViewCopy',
-              path: 'userProfileViewCopy',
-              builder: (context, params) => UserProfileViewCopyWidget(
-                shopReference: params.getParam('shopReference',
-                    ParamType.DocumentReference, false, ['users']),
-              ),
-            ),
-            FFRoute(
-              name: 'verifyOTP',
-              path: 'verifyOTP',
-              builder: (context, params) => VerifyOTPWidget(),
-            ),
-            FFRoute(
-              name: 'login',
-              path: 'login',
-              builder: (context, params) => LoginWidget(),
-            ),
-            FFRoute(
-              name: 'searchResults',
-              path: 'searchResults',
-              builder: (context, params) => SearchResultsWidget(),
-            ),
-            FFRoute(
-              name: 'shops',
-              path: 'shops',
-              builder: (context, params) => ShopsWidget(
-                shopDetails: params.getParam('shopDetails',
-                    ParamType.DocumentReference, false, ['users']),
-              ),
-            ),
-            FFRoute(
-              name: 'Products',
-              path: 'products',
+              name: 'products_page',
+              path: 'productsPage',
+              requireAuth: true,
               builder: (context, params) => params.isEmpty
-                  ? NavBarPage(initialPage: 'Products')
-                  : ProductsWidget(),
+                  ? NavBarPage(initialPage: 'products_page')
+                  : ProductsPageWidget(),
             ),
             FFRoute(
-              name: 'forgotPassword',
-              path: 'forgotPassword',
-              builder: (context, params) => ForgotPasswordWidget(),
+              name: 'search_results_page',
+              path: 'searchResultsPage',
+              requireAuth: true,
+              builder: (context, params) => SearchResultsPageWidget(
+                tab: params.getParam('tab', ParamType.int),
+              ),
             ),
             FFRoute(
-              name: 'productDetails',
-              path: 'productDetails',
-              builder: (context, params) => ProductDetailsWidget(
+              name: 'shopping_cart_page',
+              path: 'shoppingCartPage',
+              requireAuth: true,
+              builder: (context, params) => ShoppingCartPageWidget(),
+            ),
+            FFRoute(
+              name: 'product_details_page',
+              path: 'productDetailsPage',
+              requireAuth: true,
+              builder: (context, params) => ProductDetailsPageWidget(
                 productDetails: params.getParam('productDetails',
                     ParamType.DocumentReference, false, ['products']),
               ),
             ),
             FFRoute(
-              name: 'termsConditions',
-              path: 'termsConditions',
-              builder: (context, params) => TermsConditionsWidget(),
-            ),
-            FFRoute(
-              name: 'shoppingCart',
-              path: 'shoppingCart',
-              builder: (context, params) => ShoppingCartWidget(),
-            ),
-            FFRoute(
-              name: 'paymentSuccess',
-              path: 'paymentSuccess',
-              builder: (context, params) => PaymentSuccessWidget(
+              name: 'payment_success_page',
+              path: 'paymentSuccessPage',
+              requireAuth: true,
+              builder: (context, params) => PaymentSuccessPageWidget(
                 paymentStatus: params.getParam('paymentStatus', ParamType.bool),
                 transactionId:
                     params.getParam('transactionId', ParamType.String),
                 orderlist: params.getParam('orderlist',
-                    ParamType.DocumentReference, false, ['orderList']),
+                    ParamType.DocumentReference, false, ['order_list']),
               ),
             ),
             FFRoute(
-              name: 'sellerSettings',
-              path: 'sellerSettings',
-              builder: (context, params) => SellerSettingsWidget(),
+              name: 'user_profile_page',
+              path: 'userProfilePage',
+              requireAuth: true,
+              builder: (context, params) => UserProfilePageWidget(),
             ),
             FFRoute(
-              name: 'sellersDetails',
-              path: 'sellersDetails',
-              builder: (context, params) => SellersDetailsWidget(),
+              name: 'seller_get_verified',
+              path: 'sellerGetVerified',
+              requireAuth: true,
+              builder: (context, params) => SellerGetVerifiedWidget(),
             ),
             FFRoute(
-              name: 'sellersDetailsPreview',
-              path: 'sellersDetailsPreview',
-              builder: (context, params) => SellersDetailsPreviewWidget(
-                userReference: params.getParam('userReference',
-                    ParamType.DocumentReference, false, ['users']),
-              ),
-            ),
-            FFRoute(
-              name: 'orderDetailsEdit',
-              path: 'orderDetailsEdit',
-              builder: (context, params) => OrderDetailsEditWidget(
-                orderReference: params.getParam('orderReference',
-                    ParamType.DocumentReference, false, ['orders']),
-              ),
-            ),
-            FFRoute(
-              name: 'sellersDetailsEdit',
-              path: 'sellersDetailsEdit',
-              builder: (context, params) => SellersDetailsEditWidget(
-                userReference: params.getParam('userReference',
-                    ParamType.DocumentReference, false, ['users']),
-              ),
-            ),
-            FFRoute(
-              name: 'adminSettings',
-              path: 'adminSettings',
-              builder: (context, params) => AdminSettingsWidget(),
-            ),
-            FFRoute(
-              name: 'AdminShopEarnings',
-              path: 'adminShopEarnings',
-              builder: (context, params) => AdminShopEarningsWidget(
+              name: 'admin_seller_earnings',
+              path: 'adminSellerEarnings',
+              requireAuth: true,
+              builder: (context, params) => AdminSellerEarningsWidget(
                 userRef: params.getParam(
                     'userRef', ParamType.DocumentReference, false, ['users']),
               ),
             ),
             FFRoute(
-              name: 'orderDetailsPreview',
-              path: 'orderDetailsPreview',
-              builder: (context, params) => OrderDetailsPreviewWidget(
-                orderNo: params.getParam('orderNo', ParamType.String),
-                shopRef: params.getParam(
-                    'shopRef', ParamType.DocumentReference, false, ['users']),
-                userRef: params.getParam(
-                    'userRef', ParamType.DocumentReference, false, ['users']),
-                addressRef: params.getParam('addressRef',
-                    ParamType.DocumentReference, false, ['address']),
+              name: 'order_list_details',
+              path: 'orderListDetails',
+              requireAuth: true,
+              builder: (context, params) => OrderListDetailsWidget(
                 orderList: params.getParam('orderList',
-                    ParamType.DocumentReference, false, ['orderList']),
+                    ParamType.DocumentReference, false, ['order_list']),
+                sellerRef: params.getParam(
+                    'sellerRef', ParamType.DocumentReference, false, ['users']),
               ),
             ),
             FFRoute(
-              name: 'sellerApproval',
-              path: 'sellerApproval',
-              builder: (context, params) => SellerApprovalWidget(
-                newSellerApprovalRef: params.getParam('newSellerApprovalRef',
-                    ParamType.DocumentReference, false, ['newSellerRequest']),
+              name: 'admin_seller_approval',
+              path: 'adminSellerApproval',
+              requireAuth: true,
+              builder: (context, params) => AdminSellerApprovalWidget(
+                userRef: params.getParam(
+                    'userRef', ParamType.DocumentReference, false, ['users']),
               ),
             ),
             FFRoute(
-              name: 'AdminCreateChannel',
-              path: 'adminCreateChannel',
-              builder: (context, params) => AdminCreateChannelWidget(),
+              name: 'admin_seller_approval_list',
+              path: 'adminSellerApprovalList',
+              requireAuth: true,
+              builder: (context, params) => AdminSellerApprovalListWidget(),
             ),
             FFRoute(
-              name: 'SellerApprovalList',
-              path: 'sellerApprovalList',
-              builder: (context, params) => SellerApprovalListWidget(),
+              name: 'admin_channel_approval_list',
+              path: 'adminChannelApprovalList',
+              requireAuth: true,
+              builder: (context, params) => AdminChannelApprovalListWidget(),
             ),
             FFRoute(
-              name: 'ChannelApprovalList',
-              path: 'channelApprovalList',
-              builder: (context, params) => ChannelApprovalListWidget(),
-            ),
-            FFRoute(
-              name: 'VerifyChannel',
-              path: 'verifyChannel',
-              builder: (context, params) => VerifyChannelWidget(
+              name: 'admin_verify_channel',
+              path: 'adminVerifyChannel',
+              requireAuth: true,
+              builder: (context, params) => AdminVerifyChannelWidget(
                 channelReference: params.getParam('channelReference',
                     ParamType.DocumentReference, false, ['channels']),
               ),
             ),
             FFRoute(
-              name: 'AdminEarningsDeposit',
-              path: 'adminEarningsDeposit',
-              builder: (context, params) => AdminEarningsDepositWidget(
-                userRef: params.getParam(
-                    'userRef', ParamType.DocumentReference, false, ['users']),
+              name: 'order_admin_mgmt_list',
+              path: 'orderAdminMgmtList',
+              requireAuth: true,
+              builder: (context, params) => OrderAdminMgmtListWidget(),
+            ),
+            FFRoute(
+              name: 'order_mgmt_list',
+              path: 'orderMgmtList',
+              requireAuth: true,
+              builder: (context, params) => OrderMgmtListWidget(
+                shopRef: params.getParam(
+                    'shopRef', ParamType.DocumentReference, false, ['users']),
               ),
             ),
             FFRoute(
-              name: 'orderMgmtAdminList',
-              path: 'orderMgmtAdminList',
-              builder: (context, params) => OrderMgmtAdminListWidget(),
+              name: 'admin_seller_earnings_list',
+              path: 'adminSellerEarningsList',
+              requireAuth: true,
+              builder: (context, params) => AdminSellerEarningsListWidget(),
             ),
             FFRoute(
-              name: 'orderMgmtAdmin',
-              path: 'orderMgmtAdmin',
-              builder: (context, params) => OrderMgmtAdminWidget(),
-            ),
-            FFRoute(
-              name: 'AdminShopEarningsList',
-              path: 'adminShopEarningsList',
-              builder: (context, params) => AdminShopEarningsListWidget(),
-            ),
-            FFRoute(
-              name: 'orderDetailsPreviewAdmin',
-              path: 'orderDetailsPreviewAdmin',
-              builder: (context, params) => OrderDetailsPreviewAdminWidget(
-                orderNo: params.getParam('orderNo', ParamType.String),
+              name: 'order_update_page',
+              path: 'orderUpdatePage',
+              requireAuth: true,
+              builder: (context, params) => OrderUpdatePageWidget(
+                orderReference: params.getParam('orderReference',
+                    ParamType.DocumentReference, false, ['order']),
               ),
             ),
             FFRoute(
-              name: 'livestreamViewer',
-              path: 'livestreamViewer',
-              builder: (context, params) => LivestreamViewerWidget(
+              name: 'live_broadcaster_page',
+              path: 'liveBroadcasterPage',
+              requireAuth: true,
+              builder: (context, params) => LiveBroadcasterPageWidget(
+                videoName: params.getParam('videoName', ParamType.String),
+                channelRef: params.getParam<DocumentReference>('channelRef',
+                    ParamType.DocumentReference, true, ['channels']),
+              ),
+            ),
+            FFRoute(
+              name: 'live_watcher_page',
+              path: 'liveWatcherPage',
+              requireAuth: true,
+              builder: (context, params) => LiveWatcherPageWidget(
                 url: params.getParam('url', ParamType.String),
                 streamID: params.getParam('streamID',
                     ParamType.DocumentReference, false, ['streams']),
@@ -319,132 +272,123 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ),
             ),
             FFRoute(
-              name: 'liveBroadcast',
-              path: 'liveBroadcast',
-              builder: (context, params) => LiveBroadcastWidget(
-                videoName: params.getParam('videoName', ParamType.String),
-                channelRef: params.getParam<DocumentReference>('channelRef',
-                    ParamType.DocumentReference, true, ['channels']),
-              ),
+              name: 'privacy_policy',
+              path: 'privacyPolicy',
+              requireAuth: true,
+              builder: (context, params) => PrivacyPolicyWidget(),
             ),
             FFRoute(
-              name: 'privacyPol',
-              path: 'privacyPol',
-              builder: (context, params) => PrivacyPolWidget(),
-            ),
-            FFRoute(
-              name: 'userProfile',
+              name: 'user_profile',
               path: 'userProfile',
+              requireAuth: true,
               builder: (context, params) => params.isEmpty
-                  ? NavBarPage(initialPage: 'userProfile')
+                  ? NavBarPage(initialPage: 'user_profile')
                   : UserProfileWidget(),
             ),
             FFRoute(
-              name: 'userProfileView',
+              name: 'user_profile_view',
               path: 'userProfileView',
+              requireAuth: true,
               builder: (context, params) => UserProfileViewWidget(
-                shopReference: params.getParam('shopReference',
-                    ParamType.DocumentReference, false, ['users']),
+                userRef: params.getParam(
+                    'userRef', ParamType.DocumentReference, false, ['users']),
               ),
             ),
             FFRoute(
-              name: 'live',
-              path: 'live',
-              builder: (context, params) => params.isEmpty
-                  ? NavBarPage(initialPage: 'live')
-                  : LiveWidget(),
+              name: 'product_add_page',
+              path: 'productAddPage',
+              requireAuth: true,
+              builder: (context, params) => ProductAddPageWidget(),
             ),
             FFRoute(
-              name: 'addProduct',
-              path: 'addProduct',
-              builder: (context, params) => AddProductWidget(),
-            ),
-            FFRoute(
-              name: 'editProduct',
-              path: 'editProduct',
-              builder: (context, params) => EditProductWidget(
+              name: 'product_edit_page',
+              path: 'productEditPage',
+              requireAuth: true,
+              builder: (context, params) => ProductEditPageWidget(
                 productRef: params.getParam('productRef',
                     ParamType.DocumentReference, false, ['products']),
               ),
             ),
             FFRoute(
-              name: 'createChannels',
-              path: 'createChannels',
-              builder: (context, params) => CreateChannelsWidget(),
+              name: 'user_create_channel',
+              path: 'userCreateChannel',
+              requireAuth: true,
+              builder: (context, params) => UserCreateChannelWidget(),
             ),
             FFRoute(
-              name: 'userSettings',
-              path: 'userSettings',
-              builder: (context, params) => UserSettingsWidget(),
+              name: 'live_home_page',
+              path: 'liveHomePage',
+              requireAuth: true,
+              builder: (context, params) => params.isEmpty
+                  ? NavBarPage(initialPage: 'live_home_page')
+                  : LiveHomePageWidget(),
             ),
             FFRoute(
-              name: 'editSellerChannels',
-              path: 'editSellerChannels',
-              builder: (context, params) => EditSellerChannelsWidget(
+              name: 'user_channel_edit',
+              path: 'userChannelEdit',
+              requireAuth: true,
+              builder: (context, params) => UserChannelEditWidget(
                 channelRef: params.getParam('channelRef',
                     ParamType.DocumentReference, false, ['channels']),
               ),
             ),
             FFRoute(
-              name: 'accountSettings',
-              path: 'accountSettings',
-              builder: (context, params) => AccountSettingsWidget(),
+              name: 'user_account_settings',
+              path: 'userAccountSettings',
+              requireAuth: true,
+              builder: (context, params) => UserAccountSettingsWidget(),
             ),
             FFRoute(
-              name: 'orderHistoryList',
+              name: 'order_history_list',
               path: 'orderHistoryList',
+              requireAuth: true,
               builder: (context, params) => OrderHistoryListWidget(),
             ),
             FFRoute(
-              name: 'orderHistory',
+              name: 'user_address_list',
+              path: 'userAddressList',
+              requireAuth: true,
+              builder: (context, params) => UserAddressListWidget(),
+            ),
+            FFRoute(
+              name: 'order_history',
               path: 'orderHistory',
+              requireAuth: true,
               builder: (context, params) => OrderHistoryWidget(
                 orderNo: params.getParam('orderNo', ParamType.String),
                 userRef: params.getParam(
                     'userRef', ParamType.DocumentReference, false, ['users']),
                 orderList: params.getParam('orderList',
-                    ParamType.DocumentReference, false, ['orderList']),
+                    ParamType.DocumentReference, false, ['order_list']),
               ),
             ),
             FFRoute(
-              name: 'addressList',
-              path: 'addressList',
-              builder: (context, params) => AddressListWidget(),
-            ),
-            FFRoute(
-              name: 'addressDetails',
-              path: 'addressDetails',
-              builder: (context, params) => AddressDetailsWidget(
+              name: 'address_edit_page',
+              path: 'addressEditPage',
+              requireAuth: true,
+              builder: (context, params) => AddressEditPageWidget(
                 addressReference: params.getParam('addressReference',
                     ParamType.DocumentReference, false, ['address']),
               ),
             ),
             FFRoute(
-              name: 'UpdateAddressDetails',
-              path: 'updateAddressDetails',
-              builder: (context, params) => UpdateAddressDetailsWidget(
-                addressReference: params.getParam('addressReference',
-                    ParamType.DocumentReference, false, ['address']),
-              ),
-            ),
-            FFRoute(
-              name: 'cartAddress',
-              path: 'cartAddress',
-              builder: (context, params) => CartAddressWidget(
-                addressReference: params.getParam('addressReference',
-                    ParamType.DocumentReference, false, ['address']),
-              ),
-            ),
-            FFRoute(
-              name: 'allChats',
-              path: 'allChats',
+              name: 'all_chats_page',
+              path: 'allChatsPage',
+              requireAuth: true,
               builder: (context, params) => params.isEmpty
-                  ? NavBarPage(initialPage: 'allChats')
-                  : AllChatsWidget(),
+                  ? NavBarPage(initialPage: 'all_chats_page')
+                  : AllChatsPageWidget(),
             ),
             FFRoute(
-              name: 'chatPage',
+              name: 'create_chat_page',
+              path: 'createChatPage',
+              requireAuth: true,
+              builder: (context, params) => CreateChatPageWidget(),
+            ),
+            FFRoute(
+              name: 'chat_page',
               path: 'chatPage',
+              requireAuth: true,
               asyncParams: {
                 'chatUser': getDoc(['users'], UsersRecord.serializer),
               },
@@ -452,94 +396,100 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
                 chatUser: params.getParam('chatUser', ParamType.Document),
                 chatRef: params.getParam(
                     'chatRef', ParamType.DocumentReference, false, ['chats']),
+                isGroup: params.getParam('isGroup', ParamType.bool),
               ),
             ),
             FFRoute(
-              name: 'addChat',
-              path: 'addChat',
-              builder: (context, params) => AddChatWidget(),
-            ),
-            FFRoute(
-              name: 'AddUser',
-              path: 'addUser',
-              builder: (context, params) => AddUserWidget(
+              name: 'add_user_chat_group_page',
+              path: 'addUserChatGroupPage',
+              requireAuth: true,
+              builder: (context, params) => AddUserChatGroupPageWidget(
                 chat: params.getParam(
                     'chat', ParamType.DocumentReference, false, ['chats']),
               ),
             ),
             FFRoute(
-              name: 'inviteUsers',
-              path: 'inviteUsers',
-              builder: (context, params) => InviteUsersWidget(
+              name: 'invite_user_chat_group_page',
+              path: 'inviteUserChatGroupPage',
+              requireAuth: true,
+              builder: (context, params) => InviteUserChatGroupPageWidget(
                 chatRef: params.getParam(
                     'chatRef', ParamType.DocumentReference, false, ['chats']),
               ),
             ),
             FFRoute(
-              name: 'searchShop',
-              path: 'searchShop',
-              builder: (context, params) => SearchShopWidget(
-                searchValue: params.getParam('searchValue', ParamType.String),
+              name: 'seller_earnings_all',
+              path: 'sellerEarningsAll',
+              requireAuth: true,
+              builder: (context, params) => SellerEarningsAllWidget(
+                orderListID: params.getParam('orderListID',
+                    ParamType.DocumentReference, false, ['order_list']),
+                sellerRef: params.getParam(
+                    'sellerRef', ParamType.DocumentReference, false, ['users']),
               ),
             ),
             FFRoute(
-              name: 'ShopEarnings',
-              path: 'shopEarnings',
-              builder: (context, params) => ShopEarningsWidget(),
-            ),
-            FFRoute(
-              name: 'orderManagement',
-              path: 'orderManagement',
-              builder: (context, params) => OrderManagementWidget(),
-            ),
-            FFRoute(
-              name: 'shopEarningDetails',
-              path: 'shopEarningDetails',
-              builder: (context, params) => ShopEarningDetailsWidget(
-                orderDate: params.getParam('orderDate', ParamType.String),
+              name: 'seller_earnings_details',
+              path: 'sellerEarningsDetails',
+              requireAuth: true,
+              builder: (context, params) => SellerEarningsDetailsWidget(
+                sellerRef: params.getParam(
+                    'sellerRef', ParamType.DocumentReference, false, ['users']),
               ),
             ),
             FFRoute(
-              name: 'RemoveUser',
-              path: 'removeUser',
+              name: 'remove_user_chat_group_page',
+              path: 'removeUserChatGroupPage',
+              requireAuth: true,
               asyncParams: {
                 'chat': getDoc(['chats'], ChatsRecord.serializer),
               },
-              builder: (context, params) => RemoveUserWidget(
+              builder: (context, params) => RemoveUserChatGroupPageWidget(
                 chat: params.getParam('chat', ParamType.Document),
               ),
             ),
             FFRoute(
-              name: 'SellerChannels',
-              path: 'sellerChannels',
-              builder: (context, params) => SellerChannelsWidget(),
+              name: 'user_channel_list',
+              path: 'userChannelList',
+              requireAuth: true,
+              builder: (context, params) => UserChannelListWidget(),
             ),
             FFRoute(
-              name: 'EditChannel',
-              path: 'editChannel',
-              builder: (context, params) => EditChannelWidget(
+              name: 'channel_edit_page',
+              path: 'channelEditPage',
+              requireAuth: true,
+              builder: (context, params) => ChannelEditPageWidget(
                 channelReference: params.getParam('channelReference',
                     ParamType.DocumentReference, false, ['channels']),
               ),
             ),
             FFRoute(
-              name: 'channelDetails',
-              path: 'channelDetails',
-              builder: (context, params) => ChannelDetailsWidget(
+              name: 'channel_detaisl_page',
+              path: 'channelDetaislPage',
+              requireAuth: true,
+              builder: (context, params) => ChannelDetaislPageWidget(
                 channelRef: params.getParam('channelRef',
                     ParamType.DocumentReference, false, ['channels']),
               ),
             ),
             FFRoute(
-              name: 'channelList',
-              path: 'channelList',
-              builder: (context, params) => ChannelListWidget(
-                url: params.getParam('url', ParamType.String),
+              name: 'user_channel_subscription',
+              path: 'userChannelSubscription',
+              requireAuth: true,
+              builder: (context, params) => UserChannelSubscriptionWidget(),
+            ),
+            FFRoute(
+              name: 'address_add_page',
+              path: 'addressAddPage',
+              requireAuth: true,
+              builder: (context, params) => AddressAddPageWidget(
+                addressReference: params.getParam('addressReference',
+                    ParamType.DocumentReference, false, ['address']),
               ),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
-        ).toRoute(appStateNotifier),
-      ],
+        ),
+      ].map((r) => r.toRoute(appStateNotifier)).toList(),
       urlPathStrategy: UrlPathStrategy.path,
     );
 
@@ -585,6 +535,16 @@ extension NavigationExtensions on BuildContext {
               queryParams: queryParams,
               extra: extra,
             );
+
+  void safePop() {
+    // If there is only one route on the stack, navigate to the initial
+    // page instead of popping.
+    if (GoRouter.of(this).routerDelegate.matches.length <= 1) {
+      go('/');
+    } else {
+      pop();
+    }
+  }
 }
 
 extension GoRouterExtensions on GoRouter {
@@ -695,7 +655,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.location);
-            return '/login';
+            return '/loginPage';
           }
           return null;
         },
@@ -709,12 +669,11 @@ class FFRoute {
               : builder(context, ffParams);
           final child = appStateNotifier.loading
               ? Container(
-                  color: FlutterFlowTheme.of(context).primaryBackground,
+                  color: Color(0xFF9BCEF9),
                   child: Center(
                     child: Image.asset(
-                      'assets/images/Sem_ttulo.png',
-                      width: 80,
-                      height: 80,
+                      'assets/images/51E84C83-FE68-48E6-B522-B418230842DB.gif',
+                      width: MediaQuery.of(context).size.width * 0.5,
                       fit: BoxFit.contain,
                     ),
                   ),

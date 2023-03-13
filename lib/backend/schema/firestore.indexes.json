@@ -5,25 +5,11 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "shop_ref",
+          "fieldPath": "product_status",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "created_at",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "products",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "product_name",
+          "fieldPath": "product_inventory",
           "order": "ASCENDING"
         }
       ]
@@ -33,7 +19,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "status",
+          "fieldPath": "product_status",
           "order": "ASCENDING"
         },
         {
@@ -41,8 +27,8 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "created_at",
-          "order": "DESCENDING"
+          "fieldPath": "product_inventory",
+          "order": "ASCENDING"
         }
       ]
     },
@@ -55,7 +41,7 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "channel_reference",
+          "fieldPath": "stream_channel_reference",
           "arrayConfig": "CONTAINS"
         }
       ]
@@ -65,25 +51,11 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "channel_reference",
+          "fieldPath": "stream_channel_reference",
           "arrayConfig": "CONTAINS"
         },
         {
           "fieldPath": "stream_view_online",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "chat_messages",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "chat",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "timestamp",
           "order": "DESCENDING"
         }
       ]
@@ -103,140 +75,20 @@
       ]
     },
     {
-      "collectionGroup": "streaming_comments",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "streamID",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "created_at",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
       "collectionGroup": "products",
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "status",
+          "fieldPath": "product_seller_reference",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "created_at",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "shippingStatus",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "isActive",
+          "fieldPath": "product_status",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "status_name",
+          "fieldPath": "product_inventory",
           "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "orders",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "order_number",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "order_date",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "orders",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "shop_ref",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "order_number",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "orders",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "shop_ref",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "order_number",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "order_status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "product_price",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "deposit",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "userRef",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "depositDate",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "orderList",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "isPaid",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "order_no",
-          "order": "DESCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "orderList",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "user_Ref",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "isPaid",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "order_no",
-          "order": "DESCENDING"
         }
       ]
     },
@@ -255,6 +107,226 @@
       ]
     },
     {
+      "collectionGroup": "order_list",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "order_list_is_paid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "order_list_seller_reference",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "order_list_date",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "deposits",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "deposit_seller_reference",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created_at",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "users",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user_role",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "display_name",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "channels",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "channel_status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created_at",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "products",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "product_seller_reference",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "product_inventory",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "order_list",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "order_list_user_reference",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "order_list_is_paid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "order_list_number",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "order_list",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "order_list_is_paid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "order_list_seller_reference",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "order_list_number",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "address",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user_reference",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created_at",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "channels",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "channel_user_reference",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created_at",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "channels",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "channel_members",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "created_at",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "order_list",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "order_list_is_paid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "order_list_seller_reference",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "order_list_date",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "order",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "order_seller_reference",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "order_list_reference",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "order_date",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "address",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "user_reference",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "address_is_default",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created_at",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "channels",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "channel_status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "created_at",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
       "collectionGroup": "chats",
       "queryScope": "COLLECTION",
       "fields": [
@@ -269,43 +341,29 @@
       ]
     },
     {
-      "collectionGroup": "products",
+      "collectionGroup": "streams_comments",
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "user_ref",
+          "fieldPath": "stream_reference",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "product_name",
-          "order": "ASCENDING"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "channels",
-      "queryScope": "COLLECTION",
-      "fields": [
-        {
-          "fieldPath": "channel_status",
-          "order": "ASCENDING"
-        },
-        {
-          "fieldPath": "channel_created_on",
+          "fieldPath": "created_at",
           "order": "DESCENDING"
         }
       ]
     },
     {
-      "collectionGroup": "channels",
+      "collectionGroup": "chat_messages",
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "channel_owner",
+          "fieldPath": "chat",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "channel_created_on",
+          "fieldPath": "timestamp",
           "order": "DESCENDING"
         }
       ]

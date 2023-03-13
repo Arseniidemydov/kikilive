@@ -49,6 +49,34 @@ class _$ProductsRecordSerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
+    value = object.productStatus;
+    if (value != null) {
+      result
+        ..add('product_status')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.productSellerReference;
+    if (value != null) {
+      result
+        ..add('product_seller_reference')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(
+                DocumentReference, const [const FullType.nullable(Object)])));
+    }
+    value = object.productInventory;
+    if (value != null) {
+      result
+        ..add('product_inventory')
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
+    }
+    value = object.productSku;
+    if (value != null) {
+      result
+        ..add('product_sku')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
     value = object.createdAt;
     if (value != null) {
       result
@@ -56,85 +84,19 @@ class _$ProductsRecordSerializer
         ..add(serializers.serialize(value,
             specifiedType: const FullType(DateTime)));
     }
-    value = object.shopName;
+    value = object.productCategory;
     if (value != null) {
       result
-        ..add('shop_name')
+        ..add('product_category')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    value = object.itemTotal;
+    value = object.productSubCategory;
     if (value != null) {
       result
-        ..add('item_total')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(double)));
-    }
-    value = object.sku;
-    if (value != null) {
-      result
-        ..add('sku')
+        ..add('product_sub_category')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
-    }
-    value = object.subCategory;
-    if (value != null) {
-      result
-        ..add('sub_category')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
-    }
-    value = object.categoryName;
-    if (value != null) {
-      result
-        ..add('category_name')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
-    }
-    value = object.status;
-    if (value != null) {
-      result
-        ..add('status')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.shopRef;
-    if (value != null) {
-      result
-        ..add('shop_ref')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
-    }
-    value = object.category;
-    if (value != null) {
-      result
-        ..add('category')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.subCat;
-    if (value != null) {
-      result
-        ..add('sub_cat')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.userRef;
-    if (value != null) {
-      result
-        ..add('user_ref')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
-    }
-    value = object.inventory;
-    if (value != null) {
-      result
-        ..add('inventory')
-        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
     value = object.ffRef;
     if (value != null) {
@@ -175,61 +137,35 @@ class _$ProductsRecordSerializer
           result.productPhoto = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
+        case 'product_status':
+          result.productStatus = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'product_seller_reference':
+          result.productSellerReference = serializers.deserialize(value,
+              specifiedType: const FullType(DocumentReference, const [
+                const FullType.nullable(Object)
+              ])) as DocumentReference<Object?>?;
+          break;
+        case 'product_inventory':
+          result.productInventory = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int?;
+          break;
+        case 'product_sku':
+          result.productSku = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
         case 'created_at':
           result.createdAt = serializers.deserialize(value,
               specifiedType: const FullType(DateTime)) as DateTime?;
           break;
-        case 'shop_name':
-          result.shopName = serializers.deserialize(value,
+        case 'product_category':
+          result.productCategory = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
-        case 'item_total':
-          result.itemTotal = serializers.deserialize(value,
-              specifiedType: const FullType(double)) as double?;
-          break;
-        case 'sku':
-          result.sku = serializers.deserialize(value,
+        case 'product_sub_category':
+          result.productSubCategory = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
-          break;
-        case 'sub_category':
-          result.subCategory = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
-          break;
-        case 'category_name':
-          result.categoryName = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
-          break;
-        case 'status':
-          result.status = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'shop_ref':
-          result.shopRef = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
-          break;
-        case 'category':
-          result.category = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'sub_cat':
-          result.subCat = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'user_ref':
-          result.userRef = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
-          break;
-        case 'inventory':
-          result.inventory = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int?;
           break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
@@ -254,29 +190,19 @@ class _$ProductsRecord extends ProductsRecord {
   @override
   final String? productPhoto;
   @override
+  final String? productStatus;
+  @override
+  final DocumentReference<Object?>? productSellerReference;
+  @override
+  final int? productInventory;
+  @override
+  final String? productSku;
+  @override
   final DateTime? createdAt;
   @override
-  final String? shopName;
+  final String? productCategory;
   @override
-  final double? itemTotal;
-  @override
-  final String? sku;
-  @override
-  final DocumentReference<Object?>? subCategory;
-  @override
-  final DocumentReference<Object?>? categoryName;
-  @override
-  final String? status;
-  @override
-  final DocumentReference<Object?>? shopRef;
-  @override
-  final String? category;
-  @override
-  final String? subCat;
-  @override
-  final DocumentReference<Object?>? userRef;
-  @override
-  final int? inventory;
+  final String? productSubCategory;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -288,18 +214,13 @@ class _$ProductsRecord extends ProductsRecord {
       this.productPrice,
       this.productDesc,
       this.productPhoto,
+      this.productStatus,
+      this.productSellerReference,
+      this.productInventory,
+      this.productSku,
       this.createdAt,
-      this.shopName,
-      this.itemTotal,
-      this.sku,
-      this.subCategory,
-      this.categoryName,
-      this.status,
-      this.shopRef,
-      this.category,
-      this.subCat,
-      this.userRef,
-      this.inventory,
+      this.productCategory,
+      this.productSubCategory,
       this.ffRef})
       : super._();
 
@@ -319,18 +240,13 @@ class _$ProductsRecord extends ProductsRecord {
         productPrice == other.productPrice &&
         productDesc == other.productDesc &&
         productPhoto == other.productPhoto &&
+        productStatus == other.productStatus &&
+        productSellerReference == other.productSellerReference &&
+        productInventory == other.productInventory &&
+        productSku == other.productSku &&
         createdAt == other.createdAt &&
-        shopName == other.shopName &&
-        itemTotal == other.itemTotal &&
-        sku == other.sku &&
-        subCategory == other.subCategory &&
-        categoryName == other.categoryName &&
-        status == other.status &&
-        shopRef == other.shopRef &&
-        category == other.category &&
-        subCat == other.subCat &&
-        userRef == other.userRef &&
-        inventory == other.inventory &&
+        productCategory == other.productCategory &&
+        productSubCategory == other.productSubCategory &&
         ffRef == other.ffRef;
   }
 
@@ -346,34 +262,17 @@ class _$ProductsRecord extends ProductsRecord {
                                 $jc(
                                     $jc(
                                         $jc(
-                                            $jc(
-                                                $jc(
-                                                    $jc(
-                                                        $jc(
-                                                            $jc(
-                                                                $jc(
-                                                                    $jc(
-                                                                        0,
-                                                                        productName
-                                                                            .hashCode),
-                                                                    productPrice
-                                                                        .hashCode),
-                                                                productDesc
-                                                                    .hashCode),
-                                                            productPhoto
-                                                                .hashCode),
-                                                        createdAt.hashCode),
-                                                    shopName.hashCode),
-                                                itemTotal.hashCode),
-                                            sku.hashCode),
-                                        subCategory.hashCode),
-                                    categoryName.hashCode),
-                                status.hashCode),
-                            shopRef.hashCode),
-                        category.hashCode),
-                    subCat.hashCode),
-                userRef.hashCode),
-            inventory.hashCode),
+                                            $jc($jc(0, productName.hashCode),
+                                                productPrice.hashCode),
+                                            productDesc.hashCode),
+                                        productPhoto.hashCode),
+                                    productStatus.hashCode),
+                                productSellerReference.hashCode),
+                            productInventory.hashCode),
+                        productSku.hashCode),
+                    createdAt.hashCode),
+                productCategory.hashCode),
+            productSubCategory.hashCode),
         ffRef.hashCode));
   }
 
@@ -384,18 +283,13 @@ class _$ProductsRecord extends ProductsRecord {
           ..add('productPrice', productPrice)
           ..add('productDesc', productDesc)
           ..add('productPhoto', productPhoto)
+          ..add('productStatus', productStatus)
+          ..add('productSellerReference', productSellerReference)
+          ..add('productInventory', productInventory)
+          ..add('productSku', productSku)
           ..add('createdAt', createdAt)
-          ..add('shopName', shopName)
-          ..add('itemTotal', itemTotal)
-          ..add('sku', sku)
-          ..add('subCategory', subCategory)
-          ..add('categoryName', categoryName)
-          ..add('status', status)
-          ..add('shopRef', shopRef)
-          ..add('category', category)
-          ..add('subCat', subCat)
-          ..add('userRef', userRef)
-          ..add('inventory', inventory)
+          ..add('productCategory', productCategory)
+          ..add('productSubCategory', productSubCategory)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -421,55 +315,40 @@ class ProductsRecordBuilder
   String? get productPhoto => _$this._productPhoto;
   set productPhoto(String? productPhoto) => _$this._productPhoto = productPhoto;
 
+  String? _productStatus;
+  String? get productStatus => _$this._productStatus;
+  set productStatus(String? productStatus) =>
+      _$this._productStatus = productStatus;
+
+  DocumentReference<Object?>? _productSellerReference;
+  DocumentReference<Object?>? get productSellerReference =>
+      _$this._productSellerReference;
+  set productSellerReference(
+          DocumentReference<Object?>? productSellerReference) =>
+      _$this._productSellerReference = productSellerReference;
+
+  int? _productInventory;
+  int? get productInventory => _$this._productInventory;
+  set productInventory(int? productInventory) =>
+      _$this._productInventory = productInventory;
+
+  String? _productSku;
+  String? get productSku => _$this._productSku;
+  set productSku(String? productSku) => _$this._productSku = productSku;
+
   DateTime? _createdAt;
   DateTime? get createdAt => _$this._createdAt;
   set createdAt(DateTime? createdAt) => _$this._createdAt = createdAt;
 
-  String? _shopName;
-  String? get shopName => _$this._shopName;
-  set shopName(String? shopName) => _$this._shopName = shopName;
+  String? _productCategory;
+  String? get productCategory => _$this._productCategory;
+  set productCategory(String? productCategory) =>
+      _$this._productCategory = productCategory;
 
-  double? _itemTotal;
-  double? get itemTotal => _$this._itemTotal;
-  set itemTotal(double? itemTotal) => _$this._itemTotal = itemTotal;
-
-  String? _sku;
-  String? get sku => _$this._sku;
-  set sku(String? sku) => _$this._sku = sku;
-
-  DocumentReference<Object?>? _subCategory;
-  DocumentReference<Object?>? get subCategory => _$this._subCategory;
-  set subCategory(DocumentReference<Object?>? subCategory) =>
-      _$this._subCategory = subCategory;
-
-  DocumentReference<Object?>? _categoryName;
-  DocumentReference<Object?>? get categoryName => _$this._categoryName;
-  set categoryName(DocumentReference<Object?>? categoryName) =>
-      _$this._categoryName = categoryName;
-
-  String? _status;
-  String? get status => _$this._status;
-  set status(String? status) => _$this._status = status;
-
-  DocumentReference<Object?>? _shopRef;
-  DocumentReference<Object?>? get shopRef => _$this._shopRef;
-  set shopRef(DocumentReference<Object?>? shopRef) => _$this._shopRef = shopRef;
-
-  String? _category;
-  String? get category => _$this._category;
-  set category(String? category) => _$this._category = category;
-
-  String? _subCat;
-  String? get subCat => _$this._subCat;
-  set subCat(String? subCat) => _$this._subCat = subCat;
-
-  DocumentReference<Object?>? _userRef;
-  DocumentReference<Object?>? get userRef => _$this._userRef;
-  set userRef(DocumentReference<Object?>? userRef) => _$this._userRef = userRef;
-
-  int? _inventory;
-  int? get inventory => _$this._inventory;
-  set inventory(int? inventory) => _$this._inventory = inventory;
+  String? _productSubCategory;
+  String? get productSubCategory => _$this._productSubCategory;
+  set productSubCategory(String? productSubCategory) =>
+      _$this._productSubCategory = productSubCategory;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -486,18 +365,13 @@ class ProductsRecordBuilder
       _productPrice = $v.productPrice;
       _productDesc = $v.productDesc;
       _productPhoto = $v.productPhoto;
+      _productStatus = $v.productStatus;
+      _productSellerReference = $v.productSellerReference;
+      _productInventory = $v.productInventory;
+      _productSku = $v.productSku;
       _createdAt = $v.createdAt;
-      _shopName = $v.shopName;
-      _itemTotal = $v.itemTotal;
-      _sku = $v.sku;
-      _subCategory = $v.subCategory;
-      _categoryName = $v.categoryName;
-      _status = $v.status;
-      _shopRef = $v.shopRef;
-      _category = $v.category;
-      _subCat = $v.subCat;
-      _userRef = $v.userRef;
-      _inventory = $v.inventory;
+      _productCategory = $v.productCategory;
+      _productSubCategory = $v.productSubCategory;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -525,18 +399,13 @@ class ProductsRecordBuilder
             productPrice: productPrice,
             productDesc: productDesc,
             productPhoto: productPhoto,
+            productStatus: productStatus,
+            productSellerReference: productSellerReference,
+            productInventory: productInventory,
+            productSku: productSku,
             createdAt: createdAt,
-            shopName: shopName,
-            itemTotal: itemTotal,
-            sku: sku,
-            subCategory: subCategory,
-            categoryName: categoryName,
-            status: status,
-            shopRef: shopRef,
-            category: category,
-            subCat: subCat,
-            userRef: userRef,
-            inventory: inventory,
+            productCategory: productCategory,
+            productSubCategory: productSubCategory,
             ffRef: ffRef);
     replace(_$result);
     return _$result;

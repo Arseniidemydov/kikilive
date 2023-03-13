@@ -8,32 +8,20 @@ part of 'serializers.dart';
 
 Serializers _$serializers = (new Serializers().toBuilder()
       ..add(AddressRecord.serializer)
-      ..add(AddressTypesRecord.serializer)
-      ..add(CategoriesRecord.serializer)
+      ..add(CategoryRecord.serializer)
       ..add(ChannelJoinPaymentRecord.serializer)
       ..add(ChannelsRecord.serializer)
       ..add(ChatMessagesRecord.serializer)
       ..add(ChatsRecord.serializer)
-      ..add(CountryCodeRecord.serializer)
-      ..add(DefaulImgRecord.serializer)
-      ..add(DepositRecord.serializer)
+      ..add(DepositsRecord.serializer)
       ..add(EmailStruct.serializer)
-      ..add(EmailVerificationRecord.serializer)
-      ..add(GenerateSKURecord.serializer)
-      ..add(NewSellerRequestRecord.serializer)
-      ..add(OrderCompletedRecord.serializer)
       ..add(OrderListRecord.serializer)
-      ..add(OrderNoRecord.serializer)
-      ..add(OrdersRecord.serializer)
+      ..add(OrderRecord.serializer)
       ..add(ProductsRecord.serializer)
-      ..add(ShippingStatusRecord.serializer)
-      ..add(StreamingCommentsRecord.serializer)
+      ..add(SellerRequestRecord.serializer)
+      ..add(StreamsCommentsRecord.serializer)
       ..add(StreamsRecord.serializer)
       ..add(SubCategoryRecord.serializer)
-      ..add(TaxesRecord.serializer)
-      ..add(UserCartAddressRecord.serializer)
-      ..add(UserOrderRecord.serializer)
-      ..add(UserSkillsRecord.serializer)
       ..add(UsersRecord.serializer)
       ..addBuilderFactory(
           const FullType(BuiltList, const [
@@ -72,11 +60,11 @@ Serializers _$serializers = (new Serializers().toBuilder()
           ]),
           () => new ListBuilder<DocumentReference<Object?>>())
       ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(String)]),
-          () => new ListBuilder<String>())
-      ..addBuilderFactory(
-          const FullType(BuiltList, const [const FullType(String)]),
-          () => new ListBuilder<String>())
+          const FullType(BuiltList, const [
+            const FullType(
+                DocumentReference, const [const FullType.nullable(Object)])
+          ]),
+          () => new ListBuilder<DocumentReference<Object?>>())
       ..addBuilderFactory(
           const FullType(BuiltList, const [const FullType(String)]),
           () => new ListBuilder<String>()))

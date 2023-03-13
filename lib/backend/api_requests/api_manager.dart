@@ -3,8 +3,11 @@ import 'dart:io';
 import 'dart:core';
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:http/http.dart' as http;
 import 'package:equatable/equatable.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:mime_type/mime_type.dart';
 
 import '../../flutter_flow/uploaded_file.dart';
 
@@ -162,17 +165,30 @@ class ApiManager {
       {ApiCallType.POST, ApiCallType.PUT, ApiCallType.PATCH}.contains(type),
       'Invalid ApiCallType $type for request with body',
     );
-    final nonFileParams = toStringMap(Map.fromEntries(
-        params.entries.where((e) => e.value is! FFUploadedFile)));
-    final files =
-        params.entries.where((e) => e.value is FFUploadedFile).map((e) {
-      final uploadedFile = e.value as FFUploadedFile;
-      return http.MultipartFile.fromBytes(
-        e.key,
-        uploadedFile.bytes ?? Uint8List.fromList([]),
-        filename: uploadedFile.name,
-      );
+    bool Function(dynamic) _isFile = (e) =>
+        e is FFUploadedFile ||
+        e is List<FFUploadedFile> ||
+        (e is List && e.firstOrNull is FFUploadedFile);
+
+    final nonFileParams = toStringMap(
+        Map.fromEntries(params.entries.where((e) => !_isFile(e.value))));
+
+    List<http.MultipartFile> files = [];
+    params.entries.where((e) => _isFile(e.value)).forEach((e) {
+      final param = e.value;
+      final uploadedFiles = param is List
+          ? param as List<FFUploadedFile>
+          : [param as FFUploadedFile];
+      uploadedFiles.forEach((uploadedFile) => files.add(
+            http.MultipartFile.fromBytes(
+              e.key,
+              uploadedFile.bytes ?? Uint8List.fromList([]),
+              filename: uploadedFile.name,
+              contentType: _getMediaType(uploadedFile.name),
+            ),
+          ));
     });
+
     final request = http.MultipartRequest(
         type.toString().split('.').last, Uri.parse(apiUrl))
       ..headers.addAll(toStringMap(headers))
@@ -181,6 +197,18 @@ class ApiManager {
 
     final response = await http.Response.fromStream(await request.send());
     return ApiCallResponse.fromHttpResponse(response, returnBody, decodeUtf8);
+  }
+
+  static MediaType? _getMediaType(String? filename) {
+    final contentType = mime(filename);
+    if (contentType == null) {
+      return null;
+    }
+    final parts = contentType.split('/');
+    if (parts.length != 2) {
+      return null;
+    }
+    return MediaType(parts.first, parts.last);
   }
 
   static dynamic createBody(

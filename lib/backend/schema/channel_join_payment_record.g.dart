@@ -25,42 +25,35 @@ class _$ChannelJoinPaymentRecordSerializer
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object?>[];
     Object? value;
-    value = object.joinAt;
+    value = object.channelJoinAt;
     if (value != null) {
       result
-        ..add('joinAt')
+        ..add('channel_join_at')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(DateTime)));
     }
-    value = object.userRef;
+    value = object.channelJoinUserReference;
     if (value != null) {
       result
-        ..add('userRef')
+        ..add('channel_join_user_reference')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
     }
-    value = object.channelRef;
+    value = object.channelJoinReference;
     if (value != null) {
       result
-        ..add('channelRef')
+        ..add('channel_join_reference')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
     }
-    value = object.paymentID;
+    value = object.channelJoinPaymentId;
     if (value != null) {
       result
-        ..add('paymentID')
+        ..add('channel_join_payment_id')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
-    }
-    value = object.pricePaid;
-    if (value != null) {
-      result
-        ..add('PricePaid')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(double)));
     }
     value = object.ffRef;
     if (value != null) {
@@ -85,29 +78,25 @@ class _$ChannelJoinPaymentRecordSerializer
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
-        case 'joinAt':
-          result.joinAt = serializers.deserialize(value,
+        case 'channel_join_at':
+          result.channelJoinAt = serializers.deserialize(value,
               specifiedType: const FullType(DateTime)) as DateTime?;
           break;
-        case 'userRef':
-          result.userRef = serializers.deserialize(value,
+        case 'channel_join_user_reference':
+          result.channelJoinUserReference = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
           break;
-        case 'channelRef':
-          result.channelRef = serializers.deserialize(value,
+        case 'channel_join_reference':
+          result.channelJoinReference = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
           break;
-        case 'paymentID':
-          result.paymentID = serializers.deserialize(value,
+        case 'channel_join_payment_id':
+          result.channelJoinPaymentId = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
-          break;
-        case 'PricePaid':
-          result.pricePaid = serializers.deserialize(value,
-              specifiedType: const FullType(double)) as double?;
           break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
@@ -124,15 +113,13 @@ class _$ChannelJoinPaymentRecordSerializer
 
 class _$ChannelJoinPaymentRecord extends ChannelJoinPaymentRecord {
   @override
-  final DateTime? joinAt;
+  final DateTime? channelJoinAt;
   @override
-  final DocumentReference<Object?>? userRef;
+  final DocumentReference<Object?>? channelJoinUserReference;
   @override
-  final DocumentReference<Object?>? channelRef;
+  final DocumentReference<Object?>? channelJoinReference;
   @override
-  final String? paymentID;
-  @override
-  final double? pricePaid;
+  final String? channelJoinPaymentId;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -141,11 +128,10 @@ class _$ChannelJoinPaymentRecord extends ChannelJoinPaymentRecord {
       (new ChannelJoinPaymentRecordBuilder()..update(updates))._build();
 
   _$ChannelJoinPaymentRecord._(
-      {this.joinAt,
-      this.userRef,
-      this.channelRef,
-      this.paymentID,
-      this.pricePaid,
+      {this.channelJoinAt,
+      this.channelJoinUserReference,
+      this.channelJoinReference,
+      this.channelJoinPaymentId,
       this.ffRef})
       : super._();
 
@@ -162,11 +148,10 @@ class _$ChannelJoinPaymentRecord extends ChannelJoinPaymentRecord {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is ChannelJoinPaymentRecord &&
-        joinAt == other.joinAt &&
-        userRef == other.userRef &&
-        channelRef == other.channelRef &&
-        paymentID == other.paymentID &&
-        pricePaid == other.pricePaid &&
+        channelJoinAt == other.channelJoinAt &&
+        channelJoinUserReference == other.channelJoinUserReference &&
+        channelJoinReference == other.channelJoinReference &&
+        channelJoinPaymentId == other.channelJoinPaymentId &&
         ffRef == other.ffRef;
   }
 
@@ -175,21 +160,20 @@ class _$ChannelJoinPaymentRecord extends ChannelJoinPaymentRecord {
     return $jf($jc(
         $jc(
             $jc(
-                $jc($jc($jc(0, joinAt.hashCode), userRef.hashCode),
-                    channelRef.hashCode),
-                paymentID.hashCode),
-            pricePaid.hashCode),
+                $jc($jc(0, channelJoinAt.hashCode),
+                    channelJoinUserReference.hashCode),
+                channelJoinReference.hashCode),
+            channelJoinPaymentId.hashCode),
         ffRef.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper(r'ChannelJoinPaymentRecord')
-          ..add('joinAt', joinAt)
-          ..add('userRef', userRef)
-          ..add('channelRef', channelRef)
-          ..add('paymentID', paymentID)
-          ..add('pricePaid', pricePaid)
+          ..add('channelJoinAt', channelJoinAt)
+          ..add('channelJoinUserReference', channelJoinUserReference)
+          ..add('channelJoinReference', channelJoinReference)
+          ..add('channelJoinPaymentId', channelJoinPaymentId)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -200,26 +184,28 @@ class ChannelJoinPaymentRecordBuilder
         Builder<ChannelJoinPaymentRecord, ChannelJoinPaymentRecordBuilder> {
   _$ChannelJoinPaymentRecord? _$v;
 
-  DateTime? _joinAt;
-  DateTime? get joinAt => _$this._joinAt;
-  set joinAt(DateTime? joinAt) => _$this._joinAt = joinAt;
+  DateTime? _channelJoinAt;
+  DateTime? get channelJoinAt => _$this._channelJoinAt;
+  set channelJoinAt(DateTime? channelJoinAt) =>
+      _$this._channelJoinAt = channelJoinAt;
 
-  DocumentReference<Object?>? _userRef;
-  DocumentReference<Object?>? get userRef => _$this._userRef;
-  set userRef(DocumentReference<Object?>? userRef) => _$this._userRef = userRef;
+  DocumentReference<Object?>? _channelJoinUserReference;
+  DocumentReference<Object?>? get channelJoinUserReference =>
+      _$this._channelJoinUserReference;
+  set channelJoinUserReference(
+          DocumentReference<Object?>? channelJoinUserReference) =>
+      _$this._channelJoinUserReference = channelJoinUserReference;
 
-  DocumentReference<Object?>? _channelRef;
-  DocumentReference<Object?>? get channelRef => _$this._channelRef;
-  set channelRef(DocumentReference<Object?>? channelRef) =>
-      _$this._channelRef = channelRef;
+  DocumentReference<Object?>? _channelJoinReference;
+  DocumentReference<Object?>? get channelJoinReference =>
+      _$this._channelJoinReference;
+  set channelJoinReference(DocumentReference<Object?>? channelJoinReference) =>
+      _$this._channelJoinReference = channelJoinReference;
 
-  String? _paymentID;
-  String? get paymentID => _$this._paymentID;
-  set paymentID(String? paymentID) => _$this._paymentID = paymentID;
-
-  double? _pricePaid;
-  double? get pricePaid => _$this._pricePaid;
-  set pricePaid(double? pricePaid) => _$this._pricePaid = pricePaid;
+  String? _channelJoinPaymentId;
+  String? get channelJoinPaymentId => _$this._channelJoinPaymentId;
+  set channelJoinPaymentId(String? channelJoinPaymentId) =>
+      _$this._channelJoinPaymentId = channelJoinPaymentId;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -232,11 +218,10 @@ class ChannelJoinPaymentRecordBuilder
   ChannelJoinPaymentRecordBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _joinAt = $v.joinAt;
-      _userRef = $v.userRef;
-      _channelRef = $v.channelRef;
-      _paymentID = $v.paymentID;
-      _pricePaid = $v.pricePaid;
+      _channelJoinAt = $v.channelJoinAt;
+      _channelJoinUserReference = $v.channelJoinUserReference;
+      _channelJoinReference = $v.channelJoinReference;
+      _channelJoinPaymentId = $v.channelJoinPaymentId;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -260,11 +245,10 @@ class ChannelJoinPaymentRecordBuilder
   _$ChannelJoinPaymentRecord _build() {
     final _$result = _$v ??
         new _$ChannelJoinPaymentRecord._(
-            joinAt: joinAt,
-            userRef: userRef,
-            channelRef: channelRef,
-            paymentID: paymentID,
-            pricePaid: pricePaid,
+            channelJoinAt: channelJoinAt,
+            channelJoinUserReference: channelJoinUserReference,
+            channelJoinReference: channelJoinReference,
+            channelJoinPaymentId: channelJoinPaymentId,
             ffRef: ffRef);
     replace(_$result);
     return _$result;

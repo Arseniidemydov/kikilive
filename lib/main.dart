@@ -11,6 +11,7 @@ import 'backend/firebase/firebase_config.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
 import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/internationalization.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
@@ -46,7 +47,7 @@ class _MyAppState extends State<MyApp> {
   Locale? _locale;
   ThemeMode _themeMode = FlutterFlowTheme.themeMode;
 
-  late Stream<BryanFirebaseUser> userStream;
+  late Stream<KikiFirebaseUser> userStream;
 
   late AppStateNotifier _appStateNotifier;
   late GoRouter _router;
@@ -58,7 +59,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     _appStateNotifier = AppStateNotifier();
     _router = createRouter(_appStateNotifier);
-    userStream = bryanFirebaseUserStream()
+    userStream = kikiFirebaseUserStream()
       ..listen((user) => _appStateNotifier.update(user));
     jwtTokenStream.listen((_) {});
     Future.delayed(
@@ -86,7 +87,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Bryan',
+      title: 'Kiki',
       localizationsDelegates: [
         FFLocalizationsDelegate(),
         GlobalMaterialLocalizations.delegate,
@@ -118,7 +119,7 @@ class NavBarPage extends StatefulWidget {
 
 /// This is the private State class that goes with NavBarPage.
 class _NavBarPageState extends State<NavBarPage> {
-  String _currentPageName = 'live';
+  String _currentPageName = 'live_home_page';
   late Widget? _currentPage;
 
   @override
@@ -131,10 +132,10 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      'live': LiveWidget(),
-      'Products': ProductsWidget(),
-      'allChats': AllChatsWidget(),
-      'userProfile': UserProfileWidget(),
+      'live_home_page': LiveHomePageWidget(),
+      'products_page': ProductsPageWidget(),
+      'all_chats_page': AllChatsPageWidget(),
+      'user_profile': UserProfileWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
     return Scaffold(
@@ -161,11 +162,11 @@ class _NavBarPageState extends State<NavBarPage> {
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.home_filled,
-                size: 24,
+                size: 24.0,
               ),
               activeIcon: Icon(
                 Icons.home_filled,
-                size: 24,
+                size: 24.0,
               ),
               label: 'Home',
               tooltip: '',
@@ -173,11 +174,11 @@ class _NavBarPageState extends State<NavBarPage> {
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.shopping_basket_rounded,
-                size: 20,
+                size: 20.0,
               ),
               activeIcon: Icon(
                 Icons.shopping_basket,
-                size: 20,
+                size: 20.0,
               ),
               label: 'Shop',
               tooltip: '',
@@ -185,11 +186,11 @@ class _NavBarPageState extends State<NavBarPage> {
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.chat_bubble_outline_rounded,
-                size: 24,
+                size: 24.0,
               ),
               activeIcon: Icon(
                 Icons.chat_bubble_rounded,
-                size: 24,
+                size: 24.0,
               ),
               label: 'Chat',
               tooltip: '',
@@ -197,7 +198,7 @@ class _NavBarPageState extends State<NavBarPage> {
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.person,
-                size: 24,
+                size: 24.0,
               ),
               label: 'Profile',
               tooltip: '',

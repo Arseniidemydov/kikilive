@@ -11,49 +11,55 @@ abstract class OrderListRecord
   static Serializer<OrderListRecord> get serializer =>
       _$orderListRecordSerializer;
 
-  @BuiltValueField(wireName: 'order_no')
-  String? get orderNo;
+  @BuiltValueField(wireName: 'order_list_number')
+  int? get orderListNumber;
 
-  @BuiltValueField(wireName: 'order_date')
-  DateTime? get orderDate;
+  @BuiltValueField(wireName: 'order_list_date')
+  DateTime? get orderListDate;
 
-  @BuiltValueField(wireName: 'order_total')
-  double? get orderTotal;
+  @BuiltValueField(wireName: 'order_list_total')
+  double? get orderListTotal;
 
-  @BuiltValueField(wireName: 'user_Ref')
-  DocumentReference? get userRef;
+  @BuiltValueField(wireName: 'order_list_user_reference')
+  DocumentReference? get orderListUserReference;
 
-  @BuiltValueField(wireName: 'shop_Ref')
-  DocumentReference? get shopRef;
+  @BuiltValueField(wireName: 'order_list_address_reference')
+  DocumentReference? get orderListAddressReference;
 
-  DocumentReference? get addressRef;
+  @BuiltValueField(wireName: 'order_list_product_list')
+  BuiltList<DocumentReference>? get orderListProductList;
 
-  BuiltList<DocumentReference>? get productsList;
+  @BuiltValueField(wireName: 'order_list_product_list_unique')
+  BuiltList<DocumentReference>? get orderListProductListUnique;
 
-  bool? get isPaid;
+  @BuiltValueField(wireName: 'order_list_shipping_total')
+  double? get orderListShippingTotal;
 
-  BuiltList<DocumentReference>? get productsListUnique;
+  @BuiltValueField(wireName: 'order_list_payment_id')
+  String? get orderListPaymentId;
 
-  double? get shippingTotal;
+  @BuiltValueField(wireName: 'order_list_seller_reference')
+  BuiltList<DocumentReference>? get orderListSellerReference;
 
-  @BuiltValueField(wireName: 'PaymentID')
-  String? get paymentID;
+  @BuiltValueField(wireName: 'order_list_is_paid')
+  bool? get orderListIsPaid;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
 
   static void _initializeBuilder(OrderListRecordBuilder builder) => builder
-    ..orderNo = ''
-    ..orderTotal = 0.0
-    ..productsList = ListBuilder()
-    ..isPaid = false
-    ..productsListUnique = ListBuilder()
-    ..shippingTotal = 0.0
-    ..paymentID = '';
+    ..orderListNumber = 0
+    ..orderListTotal = 0.0
+    ..orderListProductList = ListBuilder()
+    ..orderListProductListUnique = ListBuilder()
+    ..orderListShippingTotal = 0.0
+    ..orderListPaymentId = ''
+    ..orderListSellerReference = ListBuilder()
+    ..orderListIsPaid = false;
 
   static CollectionReference get collection =>
-      FirebaseFirestore.instance.collection('orderList');
+      FirebaseFirestore.instance.collection('order_list');
 
   static Stream<OrderListRecord> getDocument(DocumentReference ref) => ref
       .snapshots()
@@ -74,31 +80,30 @@ abstract class OrderListRecord
 }
 
 Map<String, dynamic> createOrderListRecordData({
-  String? orderNo,
-  DateTime? orderDate,
-  double? orderTotal,
-  DocumentReference? userRef,
-  DocumentReference? shopRef,
-  DocumentReference? addressRef,
-  bool? isPaid,
-  double? shippingTotal,
-  String? paymentID,
+  int? orderListNumber,
+  DateTime? orderListDate,
+  double? orderListTotal,
+  DocumentReference? orderListUserReference,
+  DocumentReference? orderListAddressReference,
+  double? orderListShippingTotal,
+  String? orderListPaymentId,
+  bool? orderListIsPaid,
 }) {
   final firestoreData = serializers.toFirestore(
     OrderListRecord.serializer,
     OrderListRecord(
       (o) => o
-        ..orderNo = orderNo
-        ..orderDate = orderDate
-        ..orderTotal = orderTotal
-        ..userRef = userRef
-        ..shopRef = shopRef
-        ..addressRef = addressRef
-        ..productsList = null
-        ..isPaid = isPaid
-        ..productsListUnique = null
-        ..shippingTotal = shippingTotal
-        ..paymentID = paymentID,
+        ..orderListNumber = orderListNumber
+        ..orderListDate = orderListDate
+        ..orderListTotal = orderListTotal
+        ..orderListUserReference = orderListUserReference
+        ..orderListAddressReference = orderListAddressReference
+        ..orderListProductList = null
+        ..orderListProductListUnique = null
+        ..orderListShippingTotal = orderListShippingTotal
+        ..orderListPaymentId = orderListPaymentId
+        ..orderListSellerReference = null
+        ..orderListIsPaid = orderListIsPaid,
     ),
   );
 

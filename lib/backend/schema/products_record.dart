@@ -25,37 +25,26 @@ abstract class ProductsRecord
   @BuiltValueField(wireName: 'product_photo')
   String? get productPhoto;
 
+  @BuiltValueField(wireName: 'product_status')
+  String? get productStatus;
+
+  @BuiltValueField(wireName: 'product_seller_reference')
+  DocumentReference? get productSellerReference;
+
+  @BuiltValueField(wireName: 'product_inventory')
+  int? get productInventory;
+
+  @BuiltValueField(wireName: 'product_sku')
+  String? get productSku;
+
   @BuiltValueField(wireName: 'created_at')
   DateTime? get createdAt;
 
-  @BuiltValueField(wireName: 'shop_name')
-  String? get shopName;
+  @BuiltValueField(wireName: 'product_category')
+  String? get productCategory;
 
-  @BuiltValueField(wireName: 'item_total')
-  double? get itemTotal;
-
-  String? get sku;
-
-  @BuiltValueField(wireName: 'sub_category')
-  DocumentReference? get subCategory;
-
-  @BuiltValueField(wireName: 'category_name')
-  DocumentReference? get categoryName;
-
-  String? get status;
-
-  @BuiltValueField(wireName: 'shop_ref')
-  DocumentReference? get shopRef;
-
-  String? get category;
-
-  @BuiltValueField(wireName: 'sub_cat')
-  String? get subCat;
-
-  @BuiltValueField(wireName: 'user_ref')
-  DocumentReference? get userRef;
-
-  int? get inventory;
+  @BuiltValueField(wireName: 'product_sub_category')
+  String? get productSubCategory;
 
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
@@ -66,13 +55,11 @@ abstract class ProductsRecord
     ..productPrice = 0.0
     ..productDesc = ''
     ..productPhoto = ''
-    ..shopName = ''
-    ..itemTotal = 0.0
-    ..sku = ''
-    ..status = ''
-    ..category = ''
-    ..subCat = ''
-    ..inventory = 0;
+    ..productStatus = ''
+    ..productInventory = 0
+    ..productSku = ''
+    ..productCategory = ''
+    ..productSubCategory = '';
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('products');
@@ -92,19 +79,15 @@ abstract class ProductsRecord
           ..productPrice = snapshot.data['product_price']?.toDouble()
           ..productDesc = snapshot.data['product_desc']
           ..productPhoto = snapshot.data['product_photo']
+          ..productStatus = snapshot.data['product_status']
+          ..productSellerReference =
+              safeGet(() => toRef(snapshot.data['product_seller_reference']))
+          ..productInventory = snapshot.data['product_inventory']?.round()
+          ..productSku = snapshot.data['product_sku']
           ..createdAt = safeGet(() =>
               DateTime.fromMillisecondsSinceEpoch(snapshot.data['created_at']))
-          ..shopName = snapshot.data['shop_name']
-          ..itemTotal = snapshot.data['item_total']?.toDouble()
-          ..sku = snapshot.data['sku']
-          ..subCategory = safeGet(() => toRef(snapshot.data['sub_category']))
-          ..categoryName = safeGet(() => toRef(snapshot.data['category_name']))
-          ..status = snapshot.data['status']
-          ..shopRef = safeGet(() => toRef(snapshot.data['shop_ref']))
-          ..category = snapshot.data['category']
-          ..subCat = snapshot.data['sub_cat']
-          ..userRef = safeGet(() => toRef(snapshot.data['user_ref']))
-          ..inventory = snapshot.data['inventory']?.round()
+          ..productCategory = snapshot.data['product_category']
+          ..productSubCategory = snapshot.data['product_sub_category']
           ..ffRef = ProductsRecord.collection.doc(snapshot.objectID),
       );
 
@@ -138,18 +121,13 @@ Map<String, dynamic> createProductsRecordData({
   double? productPrice,
   String? productDesc,
   String? productPhoto,
+  String? productStatus,
+  DocumentReference? productSellerReference,
+  int? productInventory,
+  String? productSku,
   DateTime? createdAt,
-  String? shopName,
-  double? itemTotal,
-  String? sku,
-  DocumentReference? subCategory,
-  DocumentReference? categoryName,
-  String? status,
-  DocumentReference? shopRef,
-  String? category,
-  String? subCat,
-  DocumentReference? userRef,
-  int? inventory,
+  String? productCategory,
+  String? productSubCategory,
 }) {
   final firestoreData = serializers.toFirestore(
     ProductsRecord.serializer,
@@ -159,18 +137,13 @@ Map<String, dynamic> createProductsRecordData({
         ..productPrice = productPrice
         ..productDesc = productDesc
         ..productPhoto = productPhoto
+        ..productStatus = productStatus
+        ..productSellerReference = productSellerReference
+        ..productInventory = productInventory
+        ..productSku = productSku
         ..createdAt = createdAt
-        ..shopName = shopName
-        ..itemTotal = itemTotal
-        ..sku = sku
-        ..subCategory = subCategory
-        ..categoryName = categoryName
-        ..status = status
-        ..shopRef = shopRef
-        ..category = category
-        ..subCat = subCat
-        ..userRef = userRef
-        ..inventory = inventory,
+        ..productCategory = productCategory
+        ..productSubCategory = productSubCategory,
     ),
   );
 

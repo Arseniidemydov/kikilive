@@ -1,22 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:rxdart/rxdart.dart';
 
-class BryanFirebaseUser {
-  BryanFirebaseUser(this.user);
+class KikiFirebaseUser {
+  KikiFirebaseUser(this.user);
   User? user;
   bool get loggedIn => user != null;
 }
 
-BryanFirebaseUser? currentUser;
+KikiFirebaseUser? currentUser;
 bool get loggedIn => currentUser?.loggedIn ?? false;
-Stream<BryanFirebaseUser> bryanFirebaseUserStream() => FirebaseAuth.instance
+Stream<KikiFirebaseUser> kikiFirebaseUserStream() => FirebaseAuth.instance
         .authStateChanges()
         .debounce((user) => user == null && !loggedIn
             ? TimerStream(true, const Duration(seconds: 1))
             : Stream.value(user))
-        .map<BryanFirebaseUser>(
+        .map<KikiFirebaseUser>(
       (user) {
-        currentUser = BryanFirebaseUser(user);
+        currentUser = KikiFirebaseUser(user);
         return currentUser!;
       },
     );

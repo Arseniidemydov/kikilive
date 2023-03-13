@@ -85,6 +85,13 @@ class _$ChatsRecordSerializer implements StructuredSerializer<ChatsRecord> {
             specifiedType: const FullType(
                 DocumentReference, const [const FullType.nullable(Object)])));
     }
+    value = object.isGroup;
+    if (value != null) {
+      result
+        ..add('isGroup')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
     value = object.ffRef;
     if (value != null) {
       result
@@ -153,6 +160,10 @@ class _$ChatsRecordSerializer implements StructuredSerializer<ChatsRecord> {
                 const FullType.nullable(Object)
               ])) as DocumentReference<Object?>?;
           break;
+        case 'isGroup':
+          result.isGroup = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool?;
+          break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
               specifiedType: const FullType(DocumentReference, const [
@@ -184,6 +195,8 @@ class _$ChatsRecord extends ChatsRecord {
   @override
   final DocumentReference<Object?>? channelRef;
   @override
+  final bool? isGroup;
+  @override
   final DocumentReference<Object?>? ffRef;
 
   factory _$ChatsRecord([void Function(ChatsRecordBuilder)? updates]) =>
@@ -198,6 +211,7 @@ class _$ChatsRecord extends ChatsRecord {
       this.lastMessageSentBy,
       this.lastMessageSeenBy,
       this.channelRef,
+      this.isGroup,
       this.ffRef})
       : super._();
 
@@ -220,6 +234,7 @@ class _$ChatsRecord extends ChatsRecord {
         lastMessageSentBy == other.lastMessageSentBy &&
         lastMessageSeenBy == other.lastMessageSeenBy &&
         channelRef == other.channelRef &&
+        isGroup == other.isGroup &&
         ffRef == other.ffRef;
   }
 
@@ -231,13 +246,15 @@ class _$ChatsRecord extends ChatsRecord {
                 $jc(
                     $jc(
                         $jc(
-                            $jc($jc($jc(0, users.hashCode), userA.hashCode),
-                                userB.hashCode),
-                            lastMessage.hashCode),
-                        lastMessageTime.hashCode),
-                    lastMessageSentBy.hashCode),
-                lastMessageSeenBy.hashCode),
-            channelRef.hashCode),
+                            $jc(
+                                $jc($jc($jc(0, users.hashCode), userA.hashCode),
+                                    userB.hashCode),
+                                lastMessage.hashCode),
+                            lastMessageTime.hashCode),
+                        lastMessageSentBy.hashCode),
+                    lastMessageSeenBy.hashCode),
+                channelRef.hashCode),
+            isGroup.hashCode),
         ffRef.hashCode));
   }
 
@@ -252,6 +269,7 @@ class _$ChatsRecord extends ChatsRecord {
           ..add('lastMessageSentBy', lastMessageSentBy)
           ..add('lastMessageSeenBy', lastMessageSeenBy)
           ..add('channelRef', channelRef)
+          ..add('isGroup', isGroup)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -302,6 +320,10 @@ class ChatsRecordBuilder implements Builder<ChatsRecord, ChatsRecordBuilder> {
   set channelRef(DocumentReference<Object?>? channelRef) =>
       _$this._channelRef = channelRef;
 
+  bool? _isGroup;
+  bool? get isGroup => _$this._isGroup;
+  set isGroup(bool? isGroup) => _$this._isGroup = isGroup;
+
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
   set ffRef(DocumentReference<Object?>? ffRef) => _$this._ffRef = ffRef;
@@ -321,6 +343,7 @@ class ChatsRecordBuilder implements Builder<ChatsRecord, ChatsRecordBuilder> {
       _lastMessageSentBy = $v.lastMessageSentBy;
       _lastMessageSeenBy = $v.lastMessageSeenBy?.toBuilder();
       _channelRef = $v.channelRef;
+      _isGroup = $v.isGroup;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -354,6 +377,7 @@ class ChatsRecordBuilder implements Builder<ChatsRecord, ChatsRecordBuilder> {
               lastMessageSentBy: lastMessageSentBy,
               lastMessageSeenBy: _lastMessageSeenBy?.build(),
               channelRef: channelRef,
+              isGroup: isGroup,
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;

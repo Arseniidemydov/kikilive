@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Bryan</string>
+	<string>Kiki</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Bryan</string>
+	<string>Kiki</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 
@@ -37,7 +37,7 @@
         <key>CFBundleTypeRole</key>
         <string>Editor</string>
         <key>CFBundleURLName</key>
-        <string>bryan</string>
+        <string>kiki</string>
         <key>CFBundleURLSchemes</key>
         <array>
         <string>com.kiki.liveprod</string>
@@ -55,10 +55,10 @@
 
 	<key>NSCameraUsageDescription</key>
     <string>In order to stream a video, this app requires permission to access the camera.</string>
-	<key>NSMicrophoneUsageDescription</key>
-    <string>In order to record audio for video stream, this app requires permission to access the microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>In order to upload media, this app requires permission to access the photo library.</string>
+	<key>NSMicrophoneUsageDescription</key>
+    <string>In order to record audio for video stream, this app requires permission to access the microphone.</string>
 
 
 

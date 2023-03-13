@@ -20,61 +20,12 @@ class _$AddressRecordSerializer implements StructuredSerializer<AddressRecord> {
       {FullType specifiedType = FullType.unspecified}) {
     final result = <Object?>[];
     Object? value;
-    value = object.addressLabel;
-    if (value != null) {
-      result
-        ..add('addressLabel')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.address;
-    if (value != null) {
-      result
-        ..add('address')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.deliveryInstruction;
-    if (value != null) {
-      result
-        ..add('deliveryInstruction')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.userInfo;
-    if (value != null) {
-      result
-        ..add('userInfo')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                DocumentReference, const [const FullType.nullable(Object)])));
-    }
     value = object.createdAt;
     if (value != null) {
       result
         ..add('created_at')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(DateTime)));
-    }
-    value = object.address2;
-    if (value != null) {
-      result
-        ..add('address2')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.city;
-    if (value != null) {
-      result
-        ..add('city')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
-    }
-    value = object.zipcode;
-    if (value != null) {
-      result
-        ..add('zipcode')
-        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
     }
     value = object.addressType;
     if (value != null) {
@@ -84,45 +35,87 @@ class _$AddressRecordSerializer implements StructuredSerializer<AddressRecord> {
             specifiedType:
                 const FullType(BuiltList, const [const FullType(String)])));
     }
-    value = object.isActive;
+    value = object.addressLabelName;
     if (value != null) {
       result
-        ..add('isActive')
-        ..add(
-            serializers.serialize(value, specifiedType: const FullType(bool)));
-    }
-    value = object.defaultAddress;
-    if (value != null) {
-      result
-        ..add('default_address')
-        ..add(
-            serializers.serialize(value, specifiedType: const FullType(bool)));
-    }
-    value = object.shipTo;
-    if (value != null) {
-      result
-        ..add('ship_to')
+        ..add('address_label_name')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    value = object.shipToPhone;
+    value = object.addressLine1;
     if (value != null) {
       result
-        ..add('ship_to_phone')
-        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
-    }
-    value = object.shipUser;
-    if (value != null) {
-      result
-        ..add('ship_user')
+        ..add('address_line_1')
         ..add(serializers.serialize(value,
             specifiedType: const FullType(String)));
     }
-    value = object.shipPhone;
+    value = object.addressLine2;
     if (value != null) {
       result
-        ..add('ship_phone')
+        ..add('address_line_2')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.addressCity;
+    if (value != null) {
+      result
+        ..add('address_city')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.addressZipcode;
+    if (value != null) {
+      result
+        ..add('address_zipcode')
         ..add(serializers.serialize(value, specifiedType: const FullType(int)));
+    }
+    value = object.addressIsDefault;
+    if (value != null) {
+      result
+        ..add('address_is_default')
+        ..add(
+            serializers.serialize(value, specifiedType: const FullType(bool)));
+    }
+    value = object.addressShipToName;
+    if (value != null) {
+      result
+        ..add('address_ship_to_name')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.addressShipToPhone;
+    if (value != null) {
+      result
+        ..add('address_ship_to_phone')
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
+    }
+    value = object.addressShipUserName;
+    if (value != null) {
+      result
+        ..add('address_ship_user_name')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.addressShipUserPhone;
+    if (value != null) {
+      result
+        ..add('address_ship_user_phone')
+        ..add(serializers.serialize(value, specifiedType: const FullType(int)));
+    }
+    value = object.addressDeliveryInstruction;
+    if (value != null) {
+      result
+        ..add('address_delivery_instruction')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(String)));
+    }
+    value = object.userReference;
+    if (value != null) {
+      result
+        ..add('user_reference')
+        ..add(serializers.serialize(value,
+            specifiedType: const FullType(
+                DocumentReference, const [const FullType.nullable(Object)])));
     }
     value = object.ffRef;
     if (value != null) {
@@ -147,39 +140,9 @@ class _$AddressRecordSerializer implements StructuredSerializer<AddressRecord> {
       iterator.moveNext();
       final Object? value = iterator.current;
       switch (key) {
-        case 'addressLabel':
-          result.addressLabel = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'address':
-          result.address = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'deliveryInstruction':
-          result.deliveryInstruction = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'userInfo':
-          result.userInfo = serializers.deserialize(value,
-              specifiedType: const FullType(DocumentReference, const [
-                const FullType.nullable(Object)
-              ])) as DocumentReference<Object?>?;
-          break;
         case 'created_at':
           result.createdAt = serializers.deserialize(value,
               specifiedType: const FullType(DateTime)) as DateTime?;
-          break;
-        case 'address2':
-          result.address2 = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'city':
-          result.city = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
-          break;
-        case 'zipcode':
-          result.zipcode = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int?;
           break;
         case 'address_type':
           result.addressType.replace(serializers.deserialize(value,
@@ -187,29 +150,55 @@ class _$AddressRecordSerializer implements StructuredSerializer<AddressRecord> {
                       BuiltList, const [const FullType(String)]))!
               as BuiltList<Object?>);
           break;
-        case 'isActive':
-          result.isActive = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool?;
-          break;
-        case 'default_address':
-          result.defaultAddress = serializers.deserialize(value,
-              specifiedType: const FullType(bool)) as bool?;
-          break;
-        case 'ship_to':
-          result.shipTo = serializers.deserialize(value,
+        case 'address_label_name':
+          result.addressLabelName = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
-        case 'ship_to_phone':
-          result.shipToPhone = serializers.deserialize(value,
-              specifiedType: const FullType(int)) as int?;
-          break;
-        case 'ship_user':
-          result.shipUser = serializers.deserialize(value,
+        case 'address_line_1':
+          result.addressLine1 = serializers.deserialize(value,
               specifiedType: const FullType(String)) as String?;
           break;
-        case 'ship_phone':
-          result.shipPhone = serializers.deserialize(value,
+        case 'address_line_2':
+          result.addressLine2 = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'address_city':
+          result.addressCity = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'address_zipcode':
+          result.addressZipcode = serializers.deserialize(value,
               specifiedType: const FullType(int)) as int?;
+          break;
+        case 'address_is_default':
+          result.addressIsDefault = serializers.deserialize(value,
+              specifiedType: const FullType(bool)) as bool?;
+          break;
+        case 'address_ship_to_name':
+          result.addressShipToName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'address_ship_to_phone':
+          result.addressShipToPhone = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int?;
+          break;
+        case 'address_ship_user_name':
+          result.addressShipUserName = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'address_ship_user_phone':
+          result.addressShipUserPhone = serializers.deserialize(value,
+              specifiedType: const FullType(int)) as int?;
+          break;
+        case 'address_delivery_instruction':
+          result.addressDeliveryInstruction = serializers.deserialize(value,
+              specifiedType: const FullType(String)) as String?;
+          break;
+        case 'user_reference':
+          result.userReference = serializers.deserialize(value,
+              specifiedType: const FullType(DocumentReference, const [
+                const FullType.nullable(Object)
+              ])) as DocumentReference<Object?>?;
           break;
         case 'Document__Reference__Field':
           result.ffRef = serializers.deserialize(value,
@@ -226,35 +215,33 @@ class _$AddressRecordSerializer implements StructuredSerializer<AddressRecord> {
 
 class _$AddressRecord extends AddressRecord {
   @override
-  final String? addressLabel;
-  @override
-  final String? address;
-  @override
-  final String? deliveryInstruction;
-  @override
-  final DocumentReference<Object?>? userInfo;
-  @override
   final DateTime? createdAt;
-  @override
-  final String? address2;
-  @override
-  final String? city;
-  @override
-  final int? zipcode;
   @override
   final BuiltList<String>? addressType;
   @override
-  final bool? isActive;
+  final String? addressLabelName;
   @override
-  final bool? defaultAddress;
+  final String? addressLine1;
   @override
-  final String? shipTo;
+  final String? addressLine2;
   @override
-  final int? shipToPhone;
+  final String? addressCity;
   @override
-  final String? shipUser;
+  final int? addressZipcode;
   @override
-  final int? shipPhone;
+  final bool? addressIsDefault;
+  @override
+  final String? addressShipToName;
+  @override
+  final int? addressShipToPhone;
+  @override
+  final String? addressShipUserName;
+  @override
+  final int? addressShipUserPhone;
+  @override
+  final String? addressDeliveryInstruction;
+  @override
+  final DocumentReference<Object?>? userReference;
   @override
   final DocumentReference<Object?>? ffRef;
 
@@ -262,21 +249,20 @@ class _$AddressRecord extends AddressRecord {
       (new AddressRecordBuilder()..update(updates))._build();
 
   _$AddressRecord._(
-      {this.addressLabel,
-      this.address,
-      this.deliveryInstruction,
-      this.userInfo,
-      this.createdAt,
-      this.address2,
-      this.city,
-      this.zipcode,
+      {this.createdAt,
       this.addressType,
-      this.isActive,
-      this.defaultAddress,
-      this.shipTo,
-      this.shipToPhone,
-      this.shipUser,
-      this.shipPhone,
+      this.addressLabelName,
+      this.addressLine1,
+      this.addressLine2,
+      this.addressCity,
+      this.addressZipcode,
+      this.addressIsDefault,
+      this.addressShipToName,
+      this.addressShipToPhone,
+      this.addressShipUserName,
+      this.addressShipUserPhone,
+      this.addressDeliveryInstruction,
+      this.userReference,
       this.ffRef})
       : super._();
 
@@ -291,21 +277,20 @@ class _$AddressRecord extends AddressRecord {
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
     return other is AddressRecord &&
-        addressLabel == other.addressLabel &&
-        address == other.address &&
-        deliveryInstruction == other.deliveryInstruction &&
-        userInfo == other.userInfo &&
         createdAt == other.createdAt &&
-        address2 == other.address2 &&
-        city == other.city &&
-        zipcode == other.zipcode &&
         addressType == other.addressType &&
-        isActive == other.isActive &&
-        defaultAddress == other.defaultAddress &&
-        shipTo == other.shipTo &&
-        shipToPhone == other.shipToPhone &&
-        shipUser == other.shipUser &&
-        shipPhone == other.shipPhone &&
+        addressLabelName == other.addressLabelName &&
+        addressLine1 == other.addressLine1 &&
+        addressLine2 == other.addressLine2 &&
+        addressCity == other.addressCity &&
+        addressZipcode == other.addressZipcode &&
+        addressIsDefault == other.addressIsDefault &&
+        addressShipToName == other.addressShipToName &&
+        addressShipToPhone == other.addressShipToPhone &&
+        addressShipUserName == other.addressShipUserName &&
+        addressShipUserPhone == other.addressShipUserPhone &&
+        addressDeliveryInstruction == other.addressDeliveryInstruction &&
+        userReference == other.userReference &&
         ffRef == other.ffRef;
   }
 
@@ -326,47 +311,44 @@ class _$AddressRecord extends AddressRecord {
                                                     $jc(
                                                         $jc(
                                                             $jc(
-                                                                $jc(
-                                                                    0,
-                                                                    addressLabel
-                                                                        .hashCode),
-                                                                address
+                                                                0,
+                                                                createdAt
                                                                     .hashCode),
-                                                            deliveryInstruction
+                                                            addressType
                                                                 .hashCode),
-                                                        userInfo.hashCode),
-                                                    createdAt.hashCode),
-                                                address2.hashCode),
-                                            city.hashCode),
-                                        zipcode.hashCode),
-                                    addressType.hashCode),
-                                isActive.hashCode),
-                            defaultAddress.hashCode),
-                        shipTo.hashCode),
-                    shipToPhone.hashCode),
-                shipUser.hashCode),
-            shipPhone.hashCode),
+                                                        addressLabelName
+                                                            .hashCode),
+                                                    addressLine1.hashCode),
+                                                addressLine2.hashCode),
+                                            addressCity.hashCode),
+                                        addressZipcode.hashCode),
+                                    addressIsDefault.hashCode),
+                                addressShipToName.hashCode),
+                            addressShipToPhone.hashCode),
+                        addressShipUserName.hashCode),
+                    addressShipUserPhone.hashCode),
+                addressDeliveryInstruction.hashCode),
+            userReference.hashCode),
         ffRef.hashCode));
   }
 
   @override
   String toString() {
     return (newBuiltValueToStringHelper(r'AddressRecord')
-          ..add('addressLabel', addressLabel)
-          ..add('address', address)
-          ..add('deliveryInstruction', deliveryInstruction)
-          ..add('userInfo', userInfo)
           ..add('createdAt', createdAt)
-          ..add('address2', address2)
-          ..add('city', city)
-          ..add('zipcode', zipcode)
           ..add('addressType', addressType)
-          ..add('isActive', isActive)
-          ..add('defaultAddress', defaultAddress)
-          ..add('shipTo', shipTo)
-          ..add('shipToPhone', shipToPhone)
-          ..add('shipUser', shipUser)
-          ..add('shipPhone', shipPhone)
+          ..add('addressLabelName', addressLabelName)
+          ..add('addressLine1', addressLine1)
+          ..add('addressLine2', addressLine2)
+          ..add('addressCity', addressCity)
+          ..add('addressZipcode', addressZipcode)
+          ..add('addressIsDefault', addressIsDefault)
+          ..add('addressShipToName', addressShipToName)
+          ..add('addressShipToPhone', addressShipToPhone)
+          ..add('addressShipUserName', addressShipUserName)
+          ..add('addressShipUserPhone', addressShipUserPhone)
+          ..add('addressDeliveryInstruction', addressDeliveryInstruction)
+          ..add('userReference', userReference)
           ..add('ffRef', ffRef))
         .toString();
   }
@@ -376,39 +358,9 @@ class AddressRecordBuilder
     implements Builder<AddressRecord, AddressRecordBuilder> {
   _$AddressRecord? _$v;
 
-  String? _addressLabel;
-  String? get addressLabel => _$this._addressLabel;
-  set addressLabel(String? addressLabel) => _$this._addressLabel = addressLabel;
-
-  String? _address;
-  String? get address => _$this._address;
-  set address(String? address) => _$this._address = address;
-
-  String? _deliveryInstruction;
-  String? get deliveryInstruction => _$this._deliveryInstruction;
-  set deliveryInstruction(String? deliveryInstruction) =>
-      _$this._deliveryInstruction = deliveryInstruction;
-
-  DocumentReference<Object?>? _userInfo;
-  DocumentReference<Object?>? get userInfo => _$this._userInfo;
-  set userInfo(DocumentReference<Object?>? userInfo) =>
-      _$this._userInfo = userInfo;
-
   DateTime? _createdAt;
   DateTime? get createdAt => _$this._createdAt;
   set createdAt(DateTime? createdAt) => _$this._createdAt = createdAt;
-
-  String? _address2;
-  String? get address2 => _$this._address2;
-  set address2(String? address2) => _$this._address2 = address2;
-
-  String? _city;
-  String? get city => _$this._city;
-  set city(String? city) => _$this._city = city;
-
-  int? _zipcode;
-  int? get zipcode => _$this._zipcode;
-  set zipcode(int? zipcode) => _$this._zipcode = zipcode;
 
   ListBuilder<String>? _addressType;
   ListBuilder<String> get addressType =>
@@ -416,30 +368,62 @@ class AddressRecordBuilder
   set addressType(ListBuilder<String>? addressType) =>
       _$this._addressType = addressType;
 
-  bool? _isActive;
-  bool? get isActive => _$this._isActive;
-  set isActive(bool? isActive) => _$this._isActive = isActive;
+  String? _addressLabelName;
+  String? get addressLabelName => _$this._addressLabelName;
+  set addressLabelName(String? addressLabelName) =>
+      _$this._addressLabelName = addressLabelName;
 
-  bool? _defaultAddress;
-  bool? get defaultAddress => _$this._defaultAddress;
-  set defaultAddress(bool? defaultAddress) =>
-      _$this._defaultAddress = defaultAddress;
+  String? _addressLine1;
+  String? get addressLine1 => _$this._addressLine1;
+  set addressLine1(String? addressLine1) => _$this._addressLine1 = addressLine1;
 
-  String? _shipTo;
-  String? get shipTo => _$this._shipTo;
-  set shipTo(String? shipTo) => _$this._shipTo = shipTo;
+  String? _addressLine2;
+  String? get addressLine2 => _$this._addressLine2;
+  set addressLine2(String? addressLine2) => _$this._addressLine2 = addressLine2;
 
-  int? _shipToPhone;
-  int? get shipToPhone => _$this._shipToPhone;
-  set shipToPhone(int? shipToPhone) => _$this._shipToPhone = shipToPhone;
+  String? _addressCity;
+  String? get addressCity => _$this._addressCity;
+  set addressCity(String? addressCity) => _$this._addressCity = addressCity;
 
-  String? _shipUser;
-  String? get shipUser => _$this._shipUser;
-  set shipUser(String? shipUser) => _$this._shipUser = shipUser;
+  int? _addressZipcode;
+  int? get addressZipcode => _$this._addressZipcode;
+  set addressZipcode(int? addressZipcode) =>
+      _$this._addressZipcode = addressZipcode;
 
-  int? _shipPhone;
-  int? get shipPhone => _$this._shipPhone;
-  set shipPhone(int? shipPhone) => _$this._shipPhone = shipPhone;
+  bool? _addressIsDefault;
+  bool? get addressIsDefault => _$this._addressIsDefault;
+  set addressIsDefault(bool? addressIsDefault) =>
+      _$this._addressIsDefault = addressIsDefault;
+
+  String? _addressShipToName;
+  String? get addressShipToName => _$this._addressShipToName;
+  set addressShipToName(String? addressShipToName) =>
+      _$this._addressShipToName = addressShipToName;
+
+  int? _addressShipToPhone;
+  int? get addressShipToPhone => _$this._addressShipToPhone;
+  set addressShipToPhone(int? addressShipToPhone) =>
+      _$this._addressShipToPhone = addressShipToPhone;
+
+  String? _addressShipUserName;
+  String? get addressShipUserName => _$this._addressShipUserName;
+  set addressShipUserName(String? addressShipUserName) =>
+      _$this._addressShipUserName = addressShipUserName;
+
+  int? _addressShipUserPhone;
+  int? get addressShipUserPhone => _$this._addressShipUserPhone;
+  set addressShipUserPhone(int? addressShipUserPhone) =>
+      _$this._addressShipUserPhone = addressShipUserPhone;
+
+  String? _addressDeliveryInstruction;
+  String? get addressDeliveryInstruction => _$this._addressDeliveryInstruction;
+  set addressDeliveryInstruction(String? addressDeliveryInstruction) =>
+      _$this._addressDeliveryInstruction = addressDeliveryInstruction;
+
+  DocumentReference<Object?>? _userReference;
+  DocumentReference<Object?>? get userReference => _$this._userReference;
+  set userReference(DocumentReference<Object?>? userReference) =>
+      _$this._userReference = userReference;
 
   DocumentReference<Object?>? _ffRef;
   DocumentReference<Object?>? get ffRef => _$this._ffRef;
@@ -452,21 +436,20 @@ class AddressRecordBuilder
   AddressRecordBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
-      _addressLabel = $v.addressLabel;
-      _address = $v.address;
-      _deliveryInstruction = $v.deliveryInstruction;
-      _userInfo = $v.userInfo;
       _createdAt = $v.createdAt;
-      _address2 = $v.address2;
-      _city = $v.city;
-      _zipcode = $v.zipcode;
       _addressType = $v.addressType?.toBuilder();
-      _isActive = $v.isActive;
-      _defaultAddress = $v.defaultAddress;
-      _shipTo = $v.shipTo;
-      _shipToPhone = $v.shipToPhone;
-      _shipUser = $v.shipUser;
-      _shipPhone = $v.shipPhone;
+      _addressLabelName = $v.addressLabelName;
+      _addressLine1 = $v.addressLine1;
+      _addressLine2 = $v.addressLine2;
+      _addressCity = $v.addressCity;
+      _addressZipcode = $v.addressZipcode;
+      _addressIsDefault = $v.addressIsDefault;
+      _addressShipToName = $v.addressShipToName;
+      _addressShipToPhone = $v.addressShipToPhone;
+      _addressShipUserName = $v.addressShipUserName;
+      _addressShipUserPhone = $v.addressShipUserPhone;
+      _addressDeliveryInstruction = $v.addressDeliveryInstruction;
+      _userReference = $v.userReference;
       _ffRef = $v.ffRef;
       _$v = null;
     }
@@ -492,21 +475,20 @@ class AddressRecordBuilder
     try {
       _$result = _$v ??
           new _$AddressRecord._(
-              addressLabel: addressLabel,
-              address: address,
-              deliveryInstruction: deliveryInstruction,
-              userInfo: userInfo,
               createdAt: createdAt,
-              address2: address2,
-              city: city,
-              zipcode: zipcode,
               addressType: _addressType?.build(),
-              isActive: isActive,
-              defaultAddress: defaultAddress,
-              shipTo: shipTo,
-              shipToPhone: shipToPhone,
-              shipUser: shipUser,
-              shipPhone: shipPhone,
+              addressLabelName: addressLabelName,
+              addressLine1: addressLine1,
+              addressLine2: addressLine2,
+              addressCity: addressCity,
+              addressZipcode: addressZipcode,
+              addressIsDefault: addressIsDefault,
+              addressShipToName: addressShipToName,
+              addressShipToPhone: addressShipToPhone,
+              addressShipUserName: addressShipUserName,
+              addressShipUserPhone: addressShipUserPhone,
+              addressDeliveryInstruction: addressDeliveryInstruction,
+              userReference: userReference,
               ffRef: ffRef);
     } catch (_) {
       late String _$failedField;

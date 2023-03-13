@@ -146,54 +146,54 @@ class ThemeTypography extends Typography {
 
   final FlutterFlowTheme theme;
 
-  String get title1Family => 'Roboto';
+  String get title1Family => 'Plus Jakarta Sans';
   TextStyle get title1 => GoogleFonts.getFont(
-        'Roboto',
+        'Plus Jakarta Sans',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
-        fontSize: 24,
+        fontSize: 24.0,
       );
-  String get title2Family => 'Roboto';
+  String get title2Family => 'Plus Jakarta Sans';
   TextStyle get title2 => GoogleFonts.getFont(
-        'Roboto',
+        'Plus Jakarta Sans',
         color: theme.secondaryText,
         fontWeight: FontWeight.normal,
-        fontSize: 22,
+        fontSize: 22.0,
       );
-  String get title3Family => 'Roboto';
+  String get title3Family => 'Plus Jakarta Sans';
   TextStyle get title3 => GoogleFonts.getFont(
-        'Roboto',
+        'Plus Jakarta Sans',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
-        fontSize: 20,
+        fontSize: 20.0,
       );
-  String get subtitle1Family => 'Roboto';
+  String get subtitle1Family => 'Plus Jakarta Sans';
   TextStyle get subtitle1 => GoogleFonts.getFont(
-        'Roboto',
+        'Plus Jakarta Sans',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
-        fontSize: 18,
+        fontSize: 18.0,
       );
-  String get subtitle2Family => 'Roboto';
+  String get subtitle2Family => 'Plus Jakarta Sans';
   TextStyle get subtitle2 => GoogleFonts.getFont(
-        'Roboto',
+        'Plus Jakarta Sans',
         color: theme.secondaryText,
         fontWeight: FontWeight.normal,
-        fontSize: 16,
+        fontSize: 16.0,
       );
-  String get bodyText1Family => 'Roboto';
+  String get bodyText1Family => 'Plus Jakarta Sans';
   TextStyle get bodyText1 => GoogleFonts.getFont(
-        'Roboto',
+        'Plus Jakarta Sans',
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
-        fontSize: 14,
+        fontSize: 14.0,
       );
-  String get bodyText2Family => 'Roboto';
+  String get bodyText2Family => 'Plus Jakarta Sans';
   TextStyle get bodyText2 => GoogleFonts.getFont(
-        'Roboto',
+        'Plus Jakarta Sans',
         color: theme.secondaryText,
         fontWeight: FontWeight.normal,
-        fontSize: 14,
+        fontSize: 14.0,
       );
 }
 

@@ -32,6 +32,8 @@ abstract class ChatsRecord implements Built<ChatsRecord, ChatsRecordBuilder> {
   @BuiltValueField(wireName: 'ChannelRef')
   DocumentReference? get channelRef;
 
+  bool? get isGroup;
+
   @BuiltValueField(wireName: kDocumentReferenceField)
   DocumentReference? get ffRef;
   DocumentReference get reference => ffRef!;
@@ -39,7 +41,8 @@ abstract class ChatsRecord implements Built<ChatsRecord, ChatsRecordBuilder> {
   static void _initializeBuilder(ChatsRecordBuilder builder) => builder
     ..users = ListBuilder()
     ..lastMessage = ''
-    ..lastMessageSeenBy = ListBuilder();
+    ..lastMessageSeenBy = ListBuilder()
+    ..isGroup = false;
 
   static CollectionReference get collection =>
       FirebaseFirestore.instance.collection('chats');
@@ -69,6 +72,7 @@ Map<String, dynamic> createChatsRecordData({
   DateTime? lastMessageTime,
   DocumentReference? lastMessageSentBy,
   DocumentReference? channelRef,
+  bool? isGroup,
 }) {
   final firestoreData = serializers.toFirestore(
     ChatsRecord.serializer,
@@ -81,7 +85,8 @@ Map<String, dynamic> createChatsRecordData({
         ..lastMessageTime = lastMessageTime
         ..lastMessageSentBy = lastMessageSentBy
         ..lastMessageSeenBy = null
-        ..channelRef = channelRef,
+        ..channelRef = channelRef
+        ..isGroup = isGroup,
     ),
   );
 
